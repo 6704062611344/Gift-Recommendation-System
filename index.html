@@ -1,481 +1,606 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Giver – Gift Recommendation System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --cream: #F5F0E8;
-      --warm-white: #FDFAF4;
-      --dark-brown: #3D2E22;
-      --mid-brown: #6B4F3A;
-      --accent-red: #C0392B;
-      --gold: #C9A84C;
-      --text-body: #5A4A3A;
-      --step-bg: #EDE5D8;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--warm-white);
-      color: var(--text-body);
-      overflow-x: hidden;
-    }
-
-    /* ─── NAVBAR ─── */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 48px;
-      background: var(--warm-white);
-      border-bottom: 1px solid rgba(61,46,34,.08);
-      position: sticky; top: 0; z-index: 100;
-    }
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--dark-brown);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .nav-logo svg { width: 22px; height: 22px; }
-    .nav-links { display: flex; gap: 24px; align-items: center; }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-body);
-      font-size: .88rem;
-      display: flex; align-items: center; gap: 5px;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--dark-brown); }
-    .btn-register {
-      background: var(--dark-brown);
-      color: #fff !important;
-      padding: 8px 18px;
-      border-radius: 4px;
-      font-size: .85rem !important;
-    }
-
-    /* ─── HERO ─── */
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 560px;
-      background: var(--cream);
-      overflow: hidden;
-    }
-    .hero-left {
-      padding: 72px 56px 64px;
-      display: flex; flex-direction: column; justify-content: center;
-      animation: fadeUp .9s ease both;
-    }
-    .hero-badge {
-      font-size: .72rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--mid-brown);
-      border-bottom: 1.5px solid var(--mid-brown);
-      display: inline-block;
-      padding-bottom: 2px;
-      margin-bottom: 28px;
-    }
-    .hero-left h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      line-height: 1.2;
-      color: var(--dark-brown);
-      margin-bottom: 20px;
-    }
-    .hero-left h1 em {
-      font-style: italic;
-      color: var(--mid-brown);
-    }
-    .hero-left p {
-      font-size: .92rem;
-      line-height: 1.7;
-      color: var(--text-body);
-      max-width: 380px;
-      margin-bottom: 36px;
-    }
-    .hero-ctas { display: flex; gap: 14px; align-items: center; margin-bottom: 48px; }
-    .btn-primary {
-      background: var(--dark-brown);
-      color: #fff;
-      padding: 12px 24px;
-      border: none; cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .88rem;
-      letter-spacing: .04em;
-      display: flex; align-items: center; gap: 8px;
-      transition: background .2s, transform .15s;
-    }
-    .btn-primary:hover { background: var(--mid-brown); transform: translateY(-1px); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-body);
-      border: none; cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .88rem;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .hero-stats { display: flex; gap: 36px; }
-    .stat-item { display: flex; flex-direction: column; }
-    .stat-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      color: var(--dark-brown);
-      font-weight: 600;
-    }
-    .stat-label { font-size: .72rem; color: var(--mid-brown); margin-top: 2px; }
-
-    /* hero right – photo collage */
-    .hero-right {
-      position: relative;
-      overflow: hidden;
-    }
-    .collage {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      height: 100%;
-      gap: 3px;
-    }
-    .collage-cell {
-      overflow: hidden;
-      background: #D4C5B0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .collage-cell img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform .5s ease;
-    }
-    .collage-cell:hover img { transform: scale(1.05); }
-    /* placeholder gift SVG shown if images don't load */
-    .collage-cell svg { width: 60px; height: 60px; opacity: .3; }
-
-    /* ─── HOW IT WORKS ─── */
-    .how-section {
-      background: var(--dark-brown);
-      padding: 80px 48px;
-      animation: fadeUp .9s ease both;
-    }
-    .section-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .section-eyebrow span {
-      font-size: .75rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.5);
-    }
-    .eyebrow-line {
-      width: 48px; height: 1px;
-      background: rgba(255,255,255,.3);
-    }
-    .how-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      color: var(--cream);
-      margin-bottom: 56px;
-    }
-    .how-section h2 em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-    .step-card {
-      background: var(--step-bg);
-      border-radius: 4px;
-      padding: 32px 24px;
-      position: relative;
-      transition: transform .25s, box-shadow .25s;
-    }
-    .step-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,.2);
-    }
-    .step-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      color: rgba(61,46,34,.15);
-      font-weight: 600;
-      position: absolute;
-      top: 16px; right: 20px;
-      line-height: 1;
-    }
-    .step-icon {
-      width: 44px; height: 44px;
-      margin-bottom: 20px;
-      color: var(--mid-brown);
-    }
-    .step-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      color: var(--dark-brown);
-      margin-bottom: 10px;
-    }
-    .step-card p {
-      font-size: .82rem;
-      line-height: 1.65;
-      color: var(--text-body);
-    }
-
-    /* ─── CTA ─── */
-    .cta-section {
-      padding: 100px 48px;
-      text-align: center;
-      background: var(--warm-white);
-      position: relative;
-    }
-    .sparkle-group {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .sparkle { color: var(--gold); font-size: 1.1rem; }
-    .cta-eyebrow {
-      font-size: .75rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--mid-brown);
-      margin-bottom: 20px;
-    }
-    .cta-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 3.5vw, 2.8rem);
-      color: var(--dark-brown);
-      margin-bottom: 14px;
-    }
-    .cta-section h2 em { font-style: italic; color: var(--mid-brown); }
-    .cta-section p {
-      font-size: .92rem;
-      color: var(--text-body);
-      margin-bottom: 40px;
-      max-width: 420px;
-      margin-left: auto; margin-right: auto;
-      line-height: 1.6;
-    }
-    .cta-buttons { display: flex; justify-content: center; gap: 16px; }
-    .btn-outline {
-      border: 1.5px solid var(--dark-brown);
-      color: var(--dark-brown);
-      background: transparent;
-      padding: 12px 24px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .88rem;
-      cursor: pointer;
-      transition: background .2s, color .2s;
-    }
-    .btn-outline:hover { background: var(--dark-brown); color: #fff; }
-
-    /* ─── FOOTER ─── */
-    footer {
-      background: var(--cream);
-      border-top: 1px solid rgba(61,46,34,.1);
-      padding: 20px 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: .75rem;
-      color: var(--mid-brown);
-    }
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      color: var(--dark-brown);
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giver – Gift Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+         :root {
+            --cream: #F5F0E8;
+            --warm-white: #FDFAF4;
+            --dark-brown: #3D2E22;
+            --mid-brown: #6B4F3A;
+            --accent-red: #C0392B;
+            --gold: #C9A84C;
+            --text-body: #5A4A3A;
+            --step-bg: #EDE5D8;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--warm-white);
+            color: var(--text-body);
+            overflow-x: hidden;
+        }
+        /* ─── NAVBAR ─── */
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 48px;
+            background: var(--warm-white);
+            border-bottom: 1px solid rgba(61, 46, 34, .08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--dark-brown);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-logo svg {
+            width: 22px;
+            height: 22px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-body);
+            font-size: .88rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color .2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--dark-brown);
+        }
+        
+        .btn-register {
+            background: var(--dark-brown);
+            color: #fff !important;
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: .85rem !important;
+        }
+        /* ─── HERO ─── */
+        
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 560px;
+            background: var(--cream);
+            overflow: hidden;
+        }
+        
+        .hero-left {
+            padding: 72px 56px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeUp .9s ease both;
+        }
+        
+        .hero-badge {
+            font-size: .72rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--mid-brown);
+            border-bottom: 1.5px solid var(--mid-brown);
+            display: inline-block;
+            padding-bottom: 2px;
+            margin-bottom: 28px;
+        }
+        
+        .hero-left h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            line-height: 1.2;
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+        }
+        
+        .hero-left h1 em {
+            font-style: italic;
+            color: var(--mid-brown);
+        }
+        
+        .hero-left p {
+            font-size: .92rem;
+            line-height: 1.7;
+            color: var(--text-body);
+            max-width: 380px;
+            margin-bottom: 36px;
+        }
+        
+        .hero-ctas {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+        
+        .btn-primary {
+            background: var(--dark-brown);
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .88rem;
+            letter-spacing: .04em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background .2s, transform .15s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--mid-brown);
+            transform: translateY(-1px);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-body);
+            border: none;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .88rem;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 36px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--dark-brown);
+            font-weight: 600;
+        }
+        
+        .stat-label {
+            font-size: .72rem;
+            color: var(--mid-brown);
+            margin-top: 2px;
+        }
+        /* hero right – photo collage */
+        
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .collage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            height: 100%;
+            gap: 3px;
+        }
+        
+        .collage-cell {
+            overflow: hidden;
+            background: #D4C5B0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .collage-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .5s ease;
+        }
+        
+        .collage-cell:hover img {
+            transform: scale(1.05);
+        }
+        /* placeholder gift SVG shown if images don't load */
+        
+        .collage-cell svg {
+            width: 60px;
+            height: 60px;
+            opacity: .3;
+        }
+        /* ─── HOW IT WORKS ─── */
+        
+        .how-section {
+            background: var(--dark-brown);
+            padding: 80px 48px;
+            animation: fadeUp .9s ease both;
+        }
+        
+        .section-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .section-eyebrow span {
+            font-size: .75rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .5);
+        }
+        
+        .eyebrow-line {
+            width: 48px;
+            height: 1px;
+            background: rgba(255, 255, 255, .3);
+        }
+        
+        .how-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            color: var(--cream);
+            margin-bottom: 56px;
+        }
+        
+        .how-section h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .step-card {
+            background: var(--step-bg);
+            border-radius: 4px;
+            padding: 32px 24px;
+            position: relative;
+            transition: transform .25s, box-shadow .25s;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .2);
+        }
+        
+        .step-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: rgba(61, 46, 34, .15);
+            font-weight: 600;
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            line-height: 1;
+        }
+        
+        .step-icon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 20px;
+            color: var(--mid-brown);
+        }
+        
+        .step-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+        }
+        
+        .step-card p {
+            font-size: .82rem;
+            line-height: 1.65;
+            color: var(--text-body);
+        }
+        /* ─── CTA ─── */
+        
+        .cta-section {
+            padding: 100px 48px;
+            text-align: center;
+            background: var(--warm-white);
+            position: relative;
+        }
+        
+        .sparkle-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .sparkle {
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+        
+        .cta-eyebrow {
+            font-size: .75rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--mid-brown);
+            margin-bottom: 20px;
+        }
+        
+        .cta-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            color: var(--dark-brown);
+            margin-bottom: 14px;
+        }
+        
+        .cta-section h2 em {
+            font-style: italic;
+            color: var(--mid-brown);
+        }
+        
+        .cta-section p {
+            font-size: .92rem;
+            color: var(--text-body);
+            margin-bottom: 40px;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+        
+        .btn-outline {
+            border: 1.5px solid var(--dark-brown);
+            color: var(--dark-brown);
+            background: transparent;
+            padding: 12px 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .88rem;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        
+        .btn-outline:hover {
+            background: var(--dark-brown);
+            color: #fff;
+        }
+        /* ─── FOOTER ─── */
+        
+        footer {
+            background: var(--cream);
+            border-top: 1px solid rgba(61, 46, 34, .1);
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .75rem;
+            color: var(--mid-brown);
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--dark-brown);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* ─── ANIMATIONS ─── */
+        
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav>
-  <div class="nav-logo">
-    <!-- Gift box icon -->
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-logo">
+            <!-- Gift box icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <rect x="3" y="8" width="18" height="13" rx="1"/>
       <path d="M12 8v13M3 12h18"/>
       <path d="M8 8C8 6 9.5 4 12 4s4 2 0 4"/>
       <path d="M16 8C16 6 14.5 4 12 4S8 6 12 8"/>
-    </svg>
-    Giver
-  </div>
-  <div class="nav-links">
-    <a href="#">
-      <!-- Login icon -->
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      Login
-    </a>
-    <a href="#" class="btn-register">
-      <!-- Register icon -->
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:inline;vertical-align:middle;margin-right:4px"><circle cx="10" cy="8" r="4"/><path d="M2 20c0-4 3.6-7 8-7"/><path d="M17 14v6M14 17h6"/></svg>
-      Register
-    </a>
-  </div>
-</nav>
+    </svg> Giver
+        </div>
+        <div class="nav-links">
+            <a href="#">
+                <!-- Login icon -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> Login
+            </a>
+            <a href="#" class="btn-register">
+                <!-- Register icon -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:inline;vertical-align:middle;margin-right:4px"><circle cx="10" cy="8" r="4"/><path d="M2 20c0-4 3.6-7 8-7"/><path d="M17 14v6M14 17h6"/></svg>                Register
+            </a>
+        </div>
+    </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <span class="hero-badge">Gift Recommendation System</span>
-    <h1>Discover the Gift<br>That Feels <em>Perfect</em><br>for Everyone</h1>
-    <p>An intelligent gift recommendation system that helps you find the most thoughtful gifts — tailored by interests, budget, and relationship.</p>
-    <div class="hero-ctas">
-      <button class="btn-primary">GET STARTED &rarr;</button>
-      <button class="btn-ghost">How It Works</button>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-number">100+</span>
-        <span class="stat-label">Why it Works</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">94%</span>
-        <span class="stat-label">Satisfaction Rate</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">50</span>
-        <span class="stat-label">Happy Users</span>
-      </div>
-    </div>
-  </div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-left">
+            <span class="hero-badge">Gift Recommendation System</span>
+            <h1>Discover the Gift<br>That Feels <em>Perfect</em><br>for Everyone</h1>
+            <p>An intelligent gift recommendation system that helps you find the most thoughtful gifts — tailored by interests, budget, and relationship.</p>
+            <div class="hero-ctas">
+                <button class="btn-primary">GET STARTED &rarr;</button>
+                <button class="btn-ghost">How It Works</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Why it Works</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">94%</span>
+                    <span class="stat-label">Satisfaction Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50</span>
+                    <span class="stat-label">Happy Users</span>
+                </div>
+            </div>
+        </div>
 
-  <div class="hero-right">
-    <div class="collage">
-      <!-- Cell 1 – top-left -->
-      <div class="collage-cell" style="background:#C9B49A;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#8B6E52" stroke-width="1.2"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M12 8v13M3 12h18"/><path d="M8 8C8 6 9.5 4 12 4s4 2 0 4"/></svg>
-      </div>
-      <!-- Cell 2 – top-right -->
-      <div class="collage-cell" style="background:#B8A090; grid-row: span 2;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#8B6E52" stroke-width="1.2" style="width:80px;height:80px"><circle cx="12" cy="8" r="4" fill="#D4C0A8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#D4C0A8"/></svg>
-      </div>
-      <!-- Cell 3 – bottom-left -->
-      <div class="collage-cell" style="background:#A8917D;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#6B4F3A" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#C9A88A"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="hero-right">
+            <div class="collage">
+                <!-- Cell 1 – top-left -->
+                <div class="collage-cell" style="background:#C9B49A;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#8B6E52" stroke-width="1.2"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M12 8v13M3 12h18"/><path d="M8 8C8 6 9.5 4 12 4s4 2 0 4"/></svg>
+                </div>
+                <!-- Cell 2 – top-right -->
+                <div class="collage-cell" style="background:#B8A090; grid-row: span 2;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#8B6E52" stroke-width="1.2" style="width:80px;height:80px"><circle cx="12" cy="8" r="4" fill="#D4C0A8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#D4C0A8"/></svg>
+                </div>
+                <!-- Cell 3 – bottom-left -->
+                <div class="collage-cell" style="background:#A8917D;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#6B4F3A" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#C9A88A"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- HOW IT WORKS -->
-<section class="how-section">
-  <div class="section-eyebrow">
-    <div class="eyebrow-line"></div>
-    <span>How It Works</span>
-    <div class="eyebrow-line"></div>
-  </div>
-  <h2>Just <em>4 Simple Steps</em></h2>
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+        <div class="section-eyebrow">
+            <div class="eyebrow-line"></div>
+            <span>How It Works</span>
+            <div class="eyebrow-line"></div>
+        </div>
+        <h2>Just <em>4 Simple Steps</em></h2>
 
-  <div class="steps-grid">
+        <div class="steps-grid">
 
-    <!-- Step 1 -->
-    <div class="step-card">
-      <span class="step-number">01</span>
-      <!-- Person / recipient icon -->
-      <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <span class="step-number">01</span>
+                <!-- Person / recipient icon -->
+                <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
         <circle cx="12" cy="7" r="4"/>
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
       </svg>
-      <h3>Add a Recipient</h3>
-      <p>Save recipient details such as their name, relationship, and interests so the system can make accurate matches.</p>
-    </div>
+                <h3>Add a Recipient</h3>
+                <p>Save recipient details such as their name, relationship, and interests so the system can make accurate matches.</p>
+            </div>
 
-    <!-- Step 2 -->
-    <div class="step-card">
-      <span class="step-number">02</span>
-      <!-- Gear / analysis icon -->
-      <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <!-- Step 2 -->
+            <div class="step-card">
+                <span class="step-number">02</span>
+                <!-- Gear / analysis icon -->
+                <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
         <circle cx="12" cy="12" r="7" stroke-dasharray="3 3"/>
       </svg>
-      <h3>Analysis</h3>
-      <p>Our engine processes the data and intelligently matches it against a catalog of 500+ curated gifts.</p>
-    </div>
+                <h3>Analysis</h3>
+                <p>Our engine processes the data and intelligently matches it against a catalog of 500+ curated gifts.</p>
+            </div>
 
-    <!-- Step 3 -->
-    <div class="step-card">
-      <span class="step-number">03</span>
-      <!-- Gift box icon -->
-      <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <!-- Step 3 -->
+            <div class="step-card">
+                <span class="step-number">03</span>
+                <!-- Gift box icon -->
+                <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
         <rect x="3" y="8" width="18" height="13" rx="1"/>
         <path d="M12 8v13M3 12h18"/>
         <path d="M9 8C9 6 10 4 12 4s3 2-3 4"/>
         <path d="M15 8C15 6 14 4 12 4S9 6 15 8"/>
       </svg>
-      <h3>Choose a Gift</h3>
-      <p>Compare and pick from the suggestions, complete with details, pricing, and reviews.</p>
-    </div>
+                <h3>Choose a Gift</h3>
+                <p>Compare and pick from the suggestions, complete with details, pricing, and reviews.</p>
+            </div>
 
-    <!-- Step 4 -->
-    <div class="step-card">
-      <span class="step-number">04</span>
-      <!-- Shopping bag icon -->
-      <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <!-- Step 4 -->
+            <div class="step-card">
+                <span class="step-number">04</span>
+                <!-- Shopping bag icon -->
+                <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
         <line x1="3" y1="6" x2="21" y2="6"/>
         <path d="M16 10a4 4 0 0 1-8 0"/>
       </svg>
-      <h3>Buy with One Click</h3>
-      <p>Jump directly to the online store. No middlemen — fast, seamless, and affiliate-free.</p>
-    </div>
+                <h3>Buy with One Click</h3>
+                <p>Jump directly to the online store. No middlemen — fast, seamless, and affiliate-free.</p>
+            </div>
 
-  </div>
-</section>
+        </div>
+    </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="sparkle-group">
-    <span class="sparkle">✦</span>
-    <span style="font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid-brown)">Free to Start</span>
-    <span class="sparkle">✦</span>
-  </div>
-  <h2>Ready to Give the <em>Perfect Gift?</em></h2>
-  <p>Sign up for free today and discover the ideal gift for everyone you care about.</p>
-  <div class="cta-buttons">
-    <button class="btn-primary">Create Free Account &rarr;</button>
-    <button class="btn-outline">Sign In</button>
-  </div>
-</section>
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="sparkle-group">
+            <span class="sparkle">✦</span>
+            <span style="font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--mid-brown)">Free to Start</span>
+            <span class="sparkle">✦</span>
+        </div>
+        <h2>Ready to Give the <em>Perfect Gift?</em></h2>
+        <p>Sign up for free today and discover the ideal gift for everyone you care about.</p>
+        <div class="cta-buttons">
+            <button class="btn-primary">Create Free Account &rarr;</button>
+            <button class="btn-outline">Sign In</button>
+        </div>
+    </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <rect x="3" y="8" width="18" height="13" rx="1"/>
       <path d="M12 8v13M3 12h18"/>
       <path d="M8 8C8 6 9.5 4 12 4s4 2 0 4"/>
-    </svg>
-    Giver
-  </div>
-  <span>© 2026 Giver — Gift Recommendation System</span>
-</footer>
+    </svg> Giver
+        </div>
+        <span>© 2025 Giver — Gift Recommendation System</span>
+    </footer>
 
 </body>
+
 </html>
