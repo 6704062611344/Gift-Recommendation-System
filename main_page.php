@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giver – Gift Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+         :root {
+            /* ── Colors from design system ── */
+            --col-salmon: #C65D51;
+            --col-rose: #D4867A;
+            --col-pink: #E09890;
+            --col-white: #FFFFFF;
+            --col-offwhite: #FAF8F5;
+            --col-cream: #FBF0F2;
+            --col-beige1: #C9A96E;
+            --col-beige2: #EFEOC4;
+            --col-beige3: #F3EFEB;
+            --col-tan1: #A8BA5E;
+            /* #A8BA5E ≈ tan from palette */
+            --col-tan2: #B89968;
+            --col-tan3: #D4C4A0;
+            --col-brown1: #453631;
+            --col-brown2: #6B5D52;
+            --col-brown3: #8BA890;
+            /* muted green-brown */
+            --col-dark1: #3D322A;
+            --col-dark2: #352B23;
+            --col-darkest: #2A1F1A;
+            /* semantic */
+            --bg: var(--col-offwhite);
+            --bg-hero: var(--col-cream);
+            --bg-section: var(--col-brown1);
+            --text: var(--col-brown2);
+            --text-dark: var(--col-dark1);
+            --accent: var(--col-salmon);
+            --accent-light: var(--col-rose);
+            --gold: var(--col-beige1);
+            --step-bg: var(--col-beige3);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        /* ─── NAVBAR ─── */
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 52px;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(69, 54, 49, .09);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: .85rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color .2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .btn-register {
+            background: var(--text-dark) !important;
+            color: #fff !important;
+            padding: 8px 20px;
+            border-radius: 3px;
+            font-weight: 500 !important;
+        }
+        /* ─── HERO ─── */
+        
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 580px;
+            background: var(--bg-hero);
+            overflow: hidden;
+        }
+        
+        .hero-left {
+            padding: 72px 56px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeUp .85s ease both;
+        }
+        
+        .hero-badge {
+            font-family: 'Inter', sans-serif;
+            font-size: .7rem;
+            font-weight: 500;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border-bottom: 1.5px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 3px;
+            margin-bottom: 28px;
+        }
+        
+        .hero-left h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 3.6vw, 3.1rem);
+            font-weight: 600;
+            line-height: 1.18;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+        
+        .hero-left h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        
+        .hero-left p {
+            font-size: .9rem;
+            line-height: 1.75;
+            color: var(--text);
+            max-width: 380px;
+            margin-bottom: 36px;
+            font-weight: 300;
+        }
+        
+        .hero-ctas {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 52px;
+        }
+        
+        .btn-primary {
+            background: var(--text-dark);
+            color: #fff;
+            padding: 12px 26px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: .84rem;
+            font-weight: 500;
+            letter-spacing: .05em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background .2s, transform .15s;
+            border-radius: 2px;
+        }
+        
+        .btn-primary:hover {
+            background: var(--col-brown2);
+            transform: translateY(-1px);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: .84rem;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 400;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .stat-label {
+            font-size: .68rem;
+            color: var(--col-brown2);
+            margin-top: 2px;
+            letter-spacing: .04em;
+        }
+        /* hero right – collage */
+        
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .collage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            height: 100%;
+            gap: 3px;
+        }
+        
+        .collage-cell {
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .collage-cell svg {
+            width: 64px;
+            height: 64px;
+            opacity: .25;
+        }
+        /* ─── HOW IT WORKS ─── */
+        
+        .how-section {
+            background: var(--bg-section);
+            padding: 84px 52px;
+        }
+        
+        .section-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        
+        .section-eyebrow span {
+            font-size: .7rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .45);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .eyebrow-line {
+            width: 44px;
+            height: 1px;
+            background: rgba(255, 255, 255, .25);
+        }
+        
+        .how-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.9rem, 3vw, 2.7rem);
+            font-weight: 600;
+            color: #FAF8F5;
+            margin-bottom: 52px;
+        }
+        
+        .how-section h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+        
+        .step-card {
+            background: var(--step-bg);
+            border-radius: 3px;
+            padding: 32px 22px;
+            position: relative;
+            transition: transform .25s, box-shadow .25s;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, .22);
+        }
+        
+        .step-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            color: rgba(69, 54, 49, .12);
+            font-weight: 600;
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            line-height: 1;
+        }
+        
+        .step-icon {
+            width: 42px;
+            height: 42px;
+            margin-bottom: 18px;
+            color: var(--accent);
+        }
+        
+        .step-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        
+        .step-card p {
+            font-size: .8rem;
+            line-height: 1.65;
+            color: var(--col-brown2);
+            font-weight: 300;
+        }
+        /* ─── CTA ─── */
+        
+        .cta-section {
+            padding: 104px 52px;
+            text-align: center;
+            background: var(--bg);
+        }
+        
+        .sparkle-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        
+        .sparkle {
+            color: var(--gold);
+            font-size: 1rem;
+        }
+        
+        .cta-label {
+            font-size: .7rem;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--col-brown2);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 3.6vw, 2.9rem);
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+        }
+        
+        .cta-section h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        
+        .cta-section p {
+            font-size: .9rem;
+            color: var(--text);
+            margin-bottom: 40px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.65;
+            font-weight: 300;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+        }
+        
+        .btn-outline {
+            border: 1.5px solid var(--text-dark);
+            color: var(--text-dark);
+            background: transparent;
+            padding: 12px 26px;
+            font-family: 'Inter', sans-serif;
+            font-size: .84rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background .2s, color .2s;
+        }
+        
+        .btn-outline:hover {
+            background: var(--text-dark);
+            color: #fff;
+        }
+        /* ─── FOOTER ─── */
+        
+        footer {
+            background: var(--col-cream);
+            border-top: 1px solid rgba(69, 54, 49, .1);
+            padding: 20px 52px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .73rem;
+            color: var(--col-brown2);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* ─── ANIMATIONS ─── */
+        
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(26px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-logo">
+            <img src="surprise(1).png" style="width:22px;height:22px;object-fit:contain;"> Giver
+        </div>
+        <div class="nav-links">
+            <a href="login_register_page.php">
+                <img src="surprise(1).png" style="width:13px;height:13px;object-fit:contain;"> Login
+            </a>
+            <a href="login_register_page.php#register" class="btn-register">
+                <img src="surprise(1).png" style="width:13px;height:13px;object-fit:contain;display:inline;vertical-align:middle;margin-right:4px;"> Register
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-left">
+            <span class="hero-badge">Gift Recommendation System</span>
+            <h1>Discover the Gift<br>That Feels <em>Perfect</em><br>for Everyone</h1>
+            <p>An intelligent gift recommendation system that helps you find the most thoughtful gifts — tailored by interests, budget, and relationship.</p>
+            <div class="hero-ctas">
+                <button class="btn-primary" onclick="location.href='login_register_page.php#register'">GET STARTED &rarr;</button>
+                <button class="btn-ghost">How It Works</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Why it Works</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">94%</span>
+                    <span class="stat-label">Satisfaction Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50</span>
+                    <span class="stat-label">Happy Users</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="collage">
+                <div class="collage-cell" style="background:#D4B8A8;">
+                    <!-- gift box -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#8B5E52" stroke-width="1.2">
+          <rect x="3" y="8" width="18" height="13" rx="1"/>
+          <path d="M12 8v13M3 12h18"/>
+          <path d="M8 8C8 6 10 4 12 4s4 2 0 4"/>
+        </svg>
+                </div>
+                <div class="collage-cell" style="background:#C2A090; grid-row: span 2;">
+                    <!-- heart -->
+                    <svg viewBox="0 0 24 24" fill="#C65D51" stroke="#C65D51" stroke-width="1" style="width:72px;height:72px;opacity:.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+                </div>
+                <div class="collage-cell" style="background:#B89880;">
+                    <!-- star -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#8B5E52" stroke-width="1.4" style="width:52px;height:52px;opacity:.5">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+        <div class="section-eyebrow">
+            <div class="eyebrow-line"></div>
+            <span>How It Works</span>
+            <div class="eyebrow-line"></div>
+        </div>
+        <h2>Just <em>4 Simple Steps</em></h2>
+
+        <div class="steps-grid">
+
+            <!-- Step 1: Add Recipient — person icon -->
+            <div class="step-card">
+                <span class="step-number">01</span>
+                <img src="surprise(1).png" class="step-icon" style="object-fit:contain;">
+                <h3>Add a Recipient</h3>
+                <p>Save recipient details such as their name, relationship, and interests so the system can make accurate matches.</p>
+            </div>
+
+            <!-- Step 2: Analysis — settings/gear icon -->
+            <div class="step-card">
+                <span class="step-number">02</span>
+                <img src="surprise(1).png" class="step-icon" style="object-fit:contain;">
+                <h3>Analysis</h3>
+                <p>Our engine processes the data and intelligently matches it against a catalog of 500+ curated gifts.</p>
+            </div>
+
+            <!-- Step 3: Choose Gift — gift box icon -->
+            <div class="step-card">
+                <span class="step-number">03</span>
+                <img src="surprise(1).png" class="step-icon" style="object-fit:contain;">
+                <h3>Choose a Gift</h3>
+                <p>Compare and pick from the suggestions, complete with details, pricing, and reviews.</p>
+            </div>
+
+            <!-- Step 4: Buy — shopping bag icon -->
+            <div class="step-card">
+                <span class="step-number">04</span>
+                <img src="surprise(1).png" class="step-icon" style="object-fit:contain;">
+                <h3>Buy with One Click</h3>
+                <p>Jump directly to the online store. No middlemen — fast, seamless, and affiliate-free.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="sparkle-group">
+            <span class="sparkle">✦</span>
+            <span class="cta-label">Free to Start</span>
+            <span class="sparkle">✦</span>
+        </div>
+        <h2>Ready to Give the <em>Perfect Gift?</em></h2>
+        <p>Sign up for free today and discover the ideal gift for everyone you care about.</p>
+        <div class="cta-buttons">
+            <button class="btn-primary" onclick="location.href='login_register_page.php#register'">Create Free Account &rarr;</button>
+            <button class="btn-outline" onclick="location.href='login_register_page.php'">Sign In</button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">
+            <img src="icon\surprise (1).png" style="width:18px;height:18px;object-fit:contain;"> Giver
+        </div>
+        <span>© 2026 Giver — Gift Recommendation System</span>
+    </footer>
+
+</body>
+
+</html>

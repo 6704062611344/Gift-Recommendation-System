@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giver – Login & Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+         :root {
+            --col-salmon: #C65D51;
+            --col-rose: #D4867A;
+            --col-white: #FFFFFF;
+            --col-offwhite: #FAF8F5;
+            --col-cream: #FBF0F2;
+            --col-beige1: #C9A96E;
+            --col-beige3: #F3EFEB;
+            --col-tan2: #B89968;
+            --col-brown1: #453631;
+            --col-brown2: #6B5D52;
+            --col-dark1: #3D322A;
+            --col-dark2: #352B23;
+            --bg: var(--col-offwhite);
+            --text: var(--col-brown2);
+            --text-dark: var(--col-dark1);
+            --accent: var(--col-salmon);
+            --gold: var(--col-beige1);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* ─── NAVBAR ─── */
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 52px;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(69, 54, 49, .09);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .nav-logo-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .85rem;
+        }
+        /* ─── MAIN CONTAINER ─── */
+        
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background: var(--bg);
+        }
+        
+        .auth-card {
+            background: var(--col-white);
+            border: 1px solid rgba(69, 54, 49, .1);
+            border-radius: 4px;
+            width: 100%;
+            max-width: 420px;
+            padding: 48px 44px 44px;
+            box-shadow: 0 4px 32px rgba(69, 54, 49, .07);
+            animation: fadeUp .6s ease both;
+        }
+        /* ─── CARD HEADER ─── */
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        
+        .brand-icon {
+            width: 52px;
+            height: 52px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 1.4rem;
+        }
+        
+        .card-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        
+        .card-header .subtitle {
+            font-size: .72rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        
+        .card-header .tagline {
+            font-size: .8rem;
+            color: var(--text);
+            margin-top: 6px;
+            font-weight: 300;
+        }
+        /* ─── TABS ─── */
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1.5px solid rgba(69, 54, 49, .12);
+            margin-bottom: 32px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: .82rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            position: relative;
+            letter-spacing: .04em;
+            transition: color .2s;
+        }
+        
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -1.5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--text-dark);
+            transform: scaleX(0);
+            transition: transform .25s ease;
+        }
+        
+        .tab-btn.active {
+            color: var(--text-dark);
+        }
+        
+        .tab-btn.active::after {
+            transform: scaleX(1);
+        }
+        /* ─── FORM PANELS ─── */
+        
+        .panel {
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+            animation: fadeUp .35s ease both;
+        }
+        /* ─── FORM ELEMENTS ─── */
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: .74rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 7px;
+            letter-spacing: .03em;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid rgba(69, 54, 49, .18);
+            border-radius: 2px;
+            font-family: 'Inter', sans-serif;
+            font-size: .84rem;
+            color: var(--text-dark);
+            background: var(--col-offwhite);
+            transition: border-color .2s, box-shadow .2s;
+            outline: none;
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(107, 93, 82, .38);
+            font-weight: 300;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--col-brown2);
+            box-shadow: 0 0 0 3px rgba(107, 93, 82, .08);
+            background: #fff;
+        }
+        /* ─── HELPER ROW ─── */
+        
+        .form-helper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -8px;
+            margin-bottom: 18px;
+        }
+        
+        .form-helper label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .75rem;
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 300;
+        }
+        
+        .form-helper label input[type="checkbox"] {
+            width: 13px;
+            height: 13px;
+            accent-color: var(--text-dark);
+            cursor: pointer;
+        }
+        
+        .forgot-link {
+            font-size: .75rem;
+            color: var(--col-brown2);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+            font-weight: 300;
+            background: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .forgot-link:hover {
+            color: var(--accent);
+        }
+        /* ─── SUBMIT BUTTON ─── */
+        
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--text-dark);
+            color: #fff;
+            border: none;
+            border-radius: 2px;
+            font-family: 'Inter', sans-serif;
+            font-size: .84rem;
+            font-weight: 500;
+            letter-spacing: .06em;
+            cursor: pointer;
+            transition: background .2s, transform .15s;
+            margin-top: 8px;
+        }
+        
+        .btn-submit:hover {
+            background: var(--col-brown2);
+            transform: translateY(-1px);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        /* ─── DIVIDER ─── */
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: rgba(107, 93, 82, .35);
+            font-size: .7rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(69, 54, 49, .1);
+        }
+        /* ─── SWITCH LINK ─── */
+        
+        .switch-hint {
+            text-align: center;
+            margin-top: 22px;
+            font-size: .78rem;
+            color: var(--text);
+            font-weight: 300;
+        }
+        
+        .switch-hint button {
+            background: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: .78rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        
+        .switch-hint button:hover {
+            color: var(--accent);
+        }
+        /* ─── FOOTER ─── */
+        
+        footer {
+            background: var(--col-cream);
+            border-top: 1px solid rgba(69, 54, 49, .1);
+            padding: 20px 52px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .73rem;
+            color: var(--col-brown2);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .footer-logo-icon {
+            width: 18px;
+            height: 18px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .6rem;
+        }
+        /* ─── ANIMATION ─── */
+        
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* ─── RESPONSIVE ─── */
+        
+        @media (max-width: 520px) {
+            nav {
+                padding: 16px 20px;
+            }
+            .auth-card {
+                padding: 36px 28px 32px;
+            }
+            footer {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a href="main_page.php" class="nav-logo">
+            <img src="surprise(1).png" style="width:22px;height:22px;object-fit:contain;"> Giver
+        </a>
+        <div style="font-size:.72rem;color:var(--col-brown2);letter-spacing:.06em;text-transform:uppercase;">
+            Gift Recommendation System
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main>
+        <div class="auth-card">
+
+            <!-- Card Header -->
+            <div class="card-header">
+                <div class="brand-icon">🎁</div>
+                <h1>Giver</h1>
+                <div class="subtitle">Gift Recommendation System</div>
+                <div class="tagline">Find the perfect gift for everyone you care about.</div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <!-- LOGIN PANEL -->
+            <form action="process_login.php" method="POST">
+                <div class="panel active" id="panel-login">
+                    <p style="font-size:.8rem;color:var(--text);margin-bottom:20px;font-weight:300;line-height:1.6;">
+                        Welcome back! Enter your credentials to access your account.
+                    </p>
+
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input name = "email_account" type="email" id="login-email" placeholder="student@email.com" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input name = "password_account" type="password" id="login-password" placeholder="••••••••" required/>
+                        <?php 
+                            if (isset($_GET['error']) && $_GET['error'] == 'wrong_password') {
+                                echo '<span style="color: red; font-size: 12px;">Password is incorrect.</span>';
+                            }
+                        ?>
+                    </div>
+
+                    <div class="form-helper">
+                        <label>
+                <input type="checkbox" /> Remember me
+            </label>
+                        <button type = "submit" class="forgot-link">Forgot password?</button>
+                    </div>
+
+                    <button type = "submit" class="btn-submit" onclick="handleLogin()">Login</button>
+
+                    <div class="switch-hint">
+                        Don't have an account? <button onclick="switchTab('register')">Register here</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- REGISTER PANEL -->
+             <form action="process_register.php" method="POST">
+                <div class="panel" id="panel-register">
+                    <p style="font-size:.8rem;color:var(--text);margin-bottom:20px;font-weight:300;line-height:1.6;">
+                        Create a free account to start discovering thoughtful gifts.
+                    </p>
+
+                    <div class="form-group">
+                        <label for="reg-name">Name</label>
+                        <input name = "name_account" type="text" id="reg-name" placeholder="Enter your full name" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input name = "username_account" type="text" id="reg-username" placeholder="Choose a username" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input name = "email_account" type="email" id="reg-email" placeholder="your@email.com" required/>
+                        <?php 
+                            if (isset($_GET['error']) && $_GET['error'] == 'already_exists') {
+                                echo '<span style="color: red; font-size: 12px;">This email address is already registered.</span>';
+                            }
+                        ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input name = "password_account1" type="password" id="reg-password" placeholder="Create a password" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-confirm">Confirm Password</label>
+                        <input name = "password_account2" type="password" id="reg-confirm" placeholder="Repeat your password" required/>
+                    </div>
+
+                    <button type ="submit" class="btn-submit" onclick="handleRegister()">Register</button>
+
+                    <div class="switch-hint">
+                        Already have an account? <button onclick="switchTab('login')">Login here</button>
+                    </div>
+                </div>
+             </form>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">
+            <div class="footer-logo-icon">🎁</div>
+            Giver
+        </div>
+        <span>© 2026 Giver — Gift Recommendation System</span>
+    </footer>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('panel-' + tab).classList.add('active');
+        }
+
+        // Auto-switch tab based on URL hash (#register opens register tab)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#register') {
+                switchTab('register');
+            }
+        });
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value;
+            if (!email || !pass) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            // TODO: connect to backend
+            alert('Login successful! (demo)');
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('reg-name').value.trim();
+            const user = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+            if (!name || !user || !email || !pass || !confirm) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            if (pass !== confirm) {
+                alert('Passwords do not match.');
+                return;
+            }
+            // TODO: connect to backend
+            alert('Account created! (demo)');
+        }
+    </script>
+</body>
+
+</html>
