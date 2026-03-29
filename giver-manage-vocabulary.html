@@ -744,14 +744,29 @@
 
 <script>
   /* ─── DATA ─── */
-  let vocab = [
+  const VOCAB_KEY = 'giver_vocabulary';
+  const DEFAULT_VOCAB = [
     { id: 1, term: 'tech',    synonyms: ['technology', 'gadget', 'device'], category: 'electronics' },
     { id: 2, term: 'fitness', synonyms: ['workout', 'exercise', 'gym'],     category: 'fitness'     }
   ];
 
+  function loadVocab() {
+    try {
+      const raw = localStorage.getItem(VOCAB_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    localStorage.setItem(VOCAB_KEY, JSON.stringify(DEFAULT_VOCAB));
+    return [...DEFAULT_VOCAB];
+  }
+
+  function saveVocab() {
+    localStorage.setItem(VOCAB_KEY, JSON.stringify(vocab));
+  }
+
+  let vocab = loadVocab();
   let editingId  = null;
   let deletingId = null;
-  let nextId     = 3;
+  let nextId     = vocab.length ? Math.max(...vocab.map(v => v.id)) + 1 : 1;
   let currentSynonyms = [];
 
   /* ─── RENDER ─── */
@@ -849,6 +864,7 @@
       vocab.push({ id: nextId++, term, synonyms: [...currentSynonyms], category });
       showToast('Term added.');
     }
+    saveVocab();
     closeModal('termModal');
     filterVocab();
   }
@@ -862,6 +878,7 @@
 
   function confirmDelete() {
     vocab = vocab.filter(x => x.id !== deletingId);
+    saveVocab();
     closeModal('deleteModal');
     filterVocab();
     showToast('Term deleted.');

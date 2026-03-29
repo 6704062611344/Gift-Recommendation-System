@@ -739,26 +739,29 @@
 
 <script>
   /* ─── DATA ─── */
-  let rules = [
-    {
-      id: 1,
-      priority: 1,
-      name: 'Tech Enthusiast',
-      condition: 'interests includes tech OR gadgets',
-      categories: ['electronics']
-    },
-    {
-      id: 2,
-      priority: 2,
-      name: 'Home Lover',
-      condition: 'interests includes home OR decoration',
-      categories: ['home-decor', 'kitchen']
-    }
+  const RULES_KEY = 'giver_rules';
+  const DEFAULT_RULES = [
+    { id: 1, priority: 1, name: 'Tech Enthusiast', condition: 'interests includes tech OR gadgets', categories: ['electronics'] },
+    { id: 2, priority: 2, name: 'Home Lover',      condition: 'interests includes home OR decoration', categories: ['home-decor', 'kitchen'] }
   ];
 
+  function loadRules() {
+    try {
+      const raw = localStorage.getItem(RULES_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    localStorage.setItem(RULES_KEY, JSON.stringify(DEFAULT_RULES));
+    return [...DEFAULT_RULES];
+  }
+
+  function saveRules() {
+    localStorage.setItem(RULES_KEY, JSON.stringify(rules));
+  }
+
+  let rules = loadRules();
   let editingId = null;
   let deletingId = null;
-  let nextId = 3;
+  let nextId = rules.length ? Math.max(...rules.map(r => r.id)) + 1 : 1;
   let currentTags = [];
 
   /* ─── RENDER ─── */
@@ -860,6 +863,7 @@
     }
 
     rules.sort((a, b) => a.priority - b.priority);
+    saveRules();
     closeModal('ruleModal');
     filterRules();
   }
@@ -873,6 +877,7 @@
 
   function confirmDelete() {
     rules = rules.filter(x => x.id !== deletingId);
+    saveRules();
     closeModal('deleteModal');
     filterRules();
     showToast('Rule deleted.');

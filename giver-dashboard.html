@@ -380,7 +380,7 @@
                         <img src="icon-gifts.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
-                <div class="card-number">6</div>
+                <div class="card-number" id="countGifts">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-gifts.html" class="manage-btn">
         Manage
@@ -401,7 +401,7 @@
                         <img src="icon-categories.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
-                <div class="card-number">5</div>
+                <div class="card-number" id="countCategories">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-categories.html" class="manage-btn">
         Manage
@@ -422,7 +422,7 @@
                         <img src="icon-rules.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
-                <div class="card-number">2</div>
+                <div class="card-number" id="countRules">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-rules.html" class="manage-btn">
         Manage
@@ -443,7 +443,7 @@
                         <img src="icon-vocabulary.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
-                <div class="card-number">2</div>
+                <div class="card-number" id="countVocab">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-vocabulary.html" class="manage-btn">
         Manage
@@ -464,7 +464,7 @@
                         <img src="icon-admin.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
-                <div class="card-number">1</div>
+                <div class="card-number" id="countAdmin">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-admin.html" class="manage-btn">
         Manage
@@ -478,6 +478,57 @@
     </main>
 
     <script>
+        /* ─── AUTH CHECK ─── */
+        const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
+        if (!user || !user.role) window.location.href = 'login_register_page.html';
+        if (user.role !== 'admin') window.location.href = 'user-home.html';
+
+        /* ─── LOAD COUNTS FROM localStorage ─── */
+        function getCount(key, defaultData) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (raw) return JSON.parse(raw).length;
+            } catch(e) {}
+            // Seed defaults and return default count
+            localStorage.setItem(key, JSON.stringify(defaultData));
+            return defaultData.length;
+        }
+
+        const DEFAULT_GIFTS = [
+            { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }
+        ];
+        const DEFAULT_CATS  = [{ id:1 },{ id:2 },{ id:3 },{ id:4 },{ id:5 }];
+        const DEFAULT_RULES = [{ id:1 },{ id:2 }];
+        const DEFAULT_VOCAB = [{ id:1 },{ id:2 }];
+        const DEFAULT_ADMINS = [{ id:1, email:'admin@giver.com' }, { id:2, email:'admin2@giver.com' }];
+
+        function countUp(el, target, duration) {
+            let start = 0;
+            const step = target / (duration / 16);
+            const tick = () => {
+                start = Math.min(start + step, target);
+                el.textContent = Math.round(start);
+                if (start < target) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const giftsCount      = getCount('giver_gifts',      DEFAULT_GIFTS);
+            const categoriesCount = getCount('giver_categories', DEFAULT_CATS);
+            const rulesCount      = getCount('giver_rules',      DEFAULT_RULES);
+            const vocabCount      = getCount('giver_vocabulary', DEFAULT_VOCAB);
+            // Admin count: demo admins + registered admins
+            const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
+            const adminCount = 2 + registeredUsers.filter(u => u.role === 'admin').length;
+
+            countUp(document.getElementById('countGifts'),      giftsCount,      600);
+            countUp(document.getElementById('countCategories'), categoriesCount, 600);
+            countUp(document.getElementById('countRules'),      rulesCount,      600);
+            countUp(document.getElementById('countVocab'),      vocabCount,      600);
+            countUp(document.getElementById('countAdmin'),      adminCount,      600);
+        });
+
         function logout() {
             sessionStorage.removeItem('giver_user');
             window.location.href = 'login_register_page.html';

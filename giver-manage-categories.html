@@ -551,7 +551,8 @@
 </div>
 
 <script>
-  let categories = [
+  const CAT_KEY = 'giver_categories';
+  const DEFAULT_CATS = [
     { id: 1, name: 'Electronics', desc: 'Gadgets and electronic devices' },
     { id: 2, name: 'Home Decor', desc: 'Items for home decoration' },
     { id: 3, name: 'Kitchen', desc: 'Kitchen appliances and tools' },
@@ -559,9 +560,23 @@
     { id: 5, name: 'Books', desc: 'Books and literature' },
   ];
 
+  function loadCategories() {
+    try {
+      const raw = localStorage.getItem(CAT_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    localStorage.setItem(CAT_KEY, JSON.stringify(DEFAULT_CATS));
+    return [...DEFAULT_CATS];
+  }
+
+  function saveCategories() {
+    localStorage.setItem(CAT_KEY, JSON.stringify(categories));
+  }
+
+  let categories = loadCategories();
   let editingId = null;
   let deletingId = null;
-  let nextId = 6;
+  let nextId = categories.length ? Math.max(...categories.map(c => c.id)) + 1 : 1;
 
   function renderGrid(data) {
     const grid = document.getElementById('categoriesGrid');
@@ -625,6 +640,7 @@
       categories.push({ id: nextId++, name, desc });
       showToast('Category added.', 'success');
     }
+    saveCategories();
     closeModal('catModal');
     filterCategories();
   }
@@ -638,6 +654,7 @@
 
   function confirmDelete() {
     categories = categories.filter(x => x.id !== deletingId);
+    saveCategories();
     closeModal('deleteModal');
     filterCategories();
     showToast('Category deleted.', 'success');
