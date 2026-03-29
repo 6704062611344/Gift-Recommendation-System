@@ -459,7 +459,9 @@
   if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
 
   /* ─── DYNAMIC COUNTS ─── */
-  const GIFT_TOTAL = 12; // total gifts in database
+  // Read actual gift count from same localStorage key as admin
+  const giftRaw = localStorage.getItem('giver_gifts');
+  const GIFT_TOTAL = giftRaw ? JSON.parse(giftRaw).length : 0;
 
   const recKey  = 'giver_recipients_' + user.username;
   const favKey  = 'giver_favorites_'  + user.username;

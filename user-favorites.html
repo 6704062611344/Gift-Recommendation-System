@@ -90,20 +90,16 @@
   const FAV_KEY = 'giver_favorites_' + (user.username || 'guest');
   let favorites = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
 
-  const ALL_GIFTS = [
-    { id: 1,  name: 'Lenovo ERAZER XF36 Wireless Earbuds',        price: 259,  rating: 4.9, category: 'electronics', img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lp8lsxyghpn7bf' },
-    { id: 2,  name: 'Congrats Gift Box Set with Candle',           price: 35,   rating: 4.8, category: 'home-decor',  img: 'https://down-th.img.susercontent.com/file/th-11134207-7r991-lrwkr4vqq08mb3' },
-    { id: 3,  name: 'Glad2Glow Lip Serum 3-in-1',                 price: 125,  rating: 4.9, category: 'beauty',       img: 'https://down-th.img.susercontent.com/file/th-11134207-7r991-ls2lmq7l23h96e' },
-    { id: 4,  name: 'Yoga Mat Non-Slip with Carry Strap',         price: 349,  rating: 4.7, category: 'fitness',      img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lx6r2s5m6nl040' },
-    { id: 5,  name: 'Aromatherapy Diffuser & Essential Oil Set',   price: 490,  rating: 4.8, category: 'home-decor',  img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lzge93xvzl9k1d' },
-    { id: 6,  name: 'Mechanical Keyboard RGB Gaming',              price: 899,  rating: 4.6, category: 'electronics', img: 'https://down-th.img.susercontent.com/file/th-11134207-7qukw-lhivt3rrfpxkbb' },
-    { id: 7,  name: 'Plant Pot Set Minimalist Ceramic',            price: 199,  rating: 4.7, category: 'home-decor',  img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lylxol4efpvo75' },
-    { id: 8,  name: 'Resistance Bands Set (5 levels)',             price: 149,  rating: 4.8, category: 'fitness',     img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98w-lqwobzjv5d5cdd' },
-    { id: 9,  name: 'Smart Watch Fitness Tracker',                 price: 799,  rating: 4.5, category: 'electronics', img: 'https://down-th.img.susercontent.com/file/th-11134207-7r990-lxq0n1kqz2je5e' },
-    { id: 10, name: 'Scented Soy Wax Candle Gift Set',             price: 280,  rating: 4.9, category: 'home-decor',  img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lwas0aevmq3j8e' },
-    { id: 11, name: 'Protein Shaker Bottle 700ml',                 price: 89,   rating: 4.6, category: 'fitness',     img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98y-lzf4fxo6l2np70' },
-    { id: 12, name: 'Korean Skincare Set (Toner + Moisturizer)',   price: 320,  rating: 4.8, category: 'beauty',      img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lz4nfx6hkc9j31' },
-  ];
+  /* ─── LOAD GIFTS FROM ADMIN DATA ─── */
+  const GIFTS_KEY = 'giver_gifts';
+  function loadAllGifts() {
+    try {
+      const raw = localStorage.getItem(GIFTS_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return [];
+  }
+  let ALL_GIFTS = loadAllGifts();
 
   function isFav(id) { return favorites.includes(id); }
 
@@ -131,10 +127,13 @@
       return;
     }
 
-    grid.innerHTML = favGifts.map(g => `
+    grid.innerHTML = favGifts.map(g => {
+      const imgSrc = g.image || g.img || 'surprise(1).png';
+      const rating = g.rating || 4.5;
+      return `
       <div class="gift-card">
         <div class="gift-img-wrap">
-          <img src="${g.img}" alt="${escHtml(g.name)}"
+          <img src="${imgSrc}" alt="${escHtml(g.name)}"
                onerror="this.src='surprise(1).png';this.style.objectFit='contain';this.style.padding='24px';">
           <span class="gift-category-badge">${escHtml(g.category)}</span>
           <button class="fav-btn" onclick="removeFav(${g.id})" title="Remove from favorites">
@@ -146,18 +145,18 @@
         <div class="gift-info">
           <div class="gift-name">${escHtml(g.name)}</div>
           <div class="gift-bottom">
-            <span class="gift-price">฿${g.price.toLocaleString()}</span>
+            <span class="gift-price">฿${Number(g.price).toLocaleString()}</span>
             <span class="gift-rating">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="1">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
               </svg>
-              ${g.rating}
+              ${rating}
             </span>
             <a href="user-gifts.html?id=${g.id}" class="view-btn">View details</a>
           </div>
         </div>
       </div>
-    `).join('');
+    `}).join('');
   }
 
   let toastTimer;
