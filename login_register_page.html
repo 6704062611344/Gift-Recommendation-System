@@ -539,17 +539,38 @@
         });
 
         // Demo accounts — replace with real backend call
-        const USERS = [{
-            email: 'admin@giver.com',
-            password: 'admin1234',
-            role: 'admin',
-            name: 'Admin'
-        }, {
-            email: 'admin2@giver.com',
-            password: 'admin5678',
-            role: 'admin',
-            name: 'Admin 2'
-        }, ];
+        const USERS = [
+            // ── Admin accounts ──
+            {
+                email: 'admin@giver.com',
+                password: 'admin1234',
+                role: 'admin',
+                name: 'Admin',
+                username: 'admin'
+            },
+            {
+                email: 'admin2@giver.com',
+                password: 'admin5678',
+                role: 'admin',
+                name: 'Admin 2',
+                username: 'admin2'
+            },
+            // ── Test user accounts ──
+            {
+                email: 'user@giver.com',
+                password: 'user1234',
+                role: 'user',
+                name: 'Test User',
+                username: 'testuser'
+            },
+            {
+                email: 'user2@giver.com',
+                password: 'user5678',
+                role: 'user',
+                name: 'Test User 2',
+                username: 'testuser2'
+            },
+        ];
 
         function showError(msg) {
             let el = document.getElementById('login-error');
@@ -590,13 +611,14 @@
             sessionStorage.setItem('giver_user', JSON.stringify({
                 name: matched.name,
                 email: matched.email,
-                role: matched.role
+                role: matched.role,
+                username: matched.username
             }));
 
             if (matched.role === 'admin') {
                 window.location.href = 'giver-dashboard.html';
             } else {
-                window.location.href = 'main_page.html';
+                window.location.href = 'user-home.html';
             }
         }
 
