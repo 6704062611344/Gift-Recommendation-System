@@ -618,7 +618,7 @@
             if (el) el.style.display = 'none';
         }
 
-        function handleLogin() {
+        async function handleLogin() {
             clearError();
             const email = document.getElementById('login-email').value.trim().toLowerCase();
             const pass = document.getElementById('login-password').value;
@@ -628,44 +628,77 @@
                 return;
             }
 
-            const matched = USERS.find(u => u.email === email && u.password === pass);
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password: pass })
+                });
 
-            if (!matched) {
-                showError('Invalid email or password.');
-                return;
-            }
+                const data = await response.json();
 
-            // Store session (demo — use proper auth in production)
-            sessionStorage.setItem('giver_user', JSON.stringify({
-                name: matched.name,
-                email: matched.email,
-                role: matched.role,
-                username: matched.username
-            }));
+                if (!response.ok) {
+                    showError(data.message || 'รหัสผ่านหรืออีเมลไม่ถูกต้อง');
+                    return;
+                }
 
-            if (matched.role === 'admin') {
-                window.location.href = 'giver-dashboard.html';
-            } else {
-                window.location.href = 'user-home.html';
+                // Store session
+                sessionStorage.setItem('giver_user', JSON.stringify({
+                    id: data.user.id,
+                    name: data.user.name,
+                    email: data.user.email,
+                    role: data.user.role,
+                    username: data.user.username
+                }));
+
+                alert(data.message); // แจ้งเตือนเข้าสู่ระบบสำเร็จ
+                if (data.user.role === 'admin') {
+                    window.location.href = 'giver-dashboard.html';
+                } else {
+                    window.location.href = 'user-home.html';
+                }
+            } catch (err) {
+                console.error(err);
+                showError('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
             }
         }
 
-        function handleRegister() {
+        async function handleRegister() {
             const name = document.getElementById('reg-name').value.trim();
-            const user = document.getElementById('reg-username').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
             const email = document.getElementById('reg-email').value.trim();
-            const pass = document.getElementById('reg-password').value;
+            const password = document.getElementById('reg-password').value;
             const confirm = document.getElementById('reg-confirm').value;
-            if (!name || !user || !email || !pass || !confirm) {
+            
+            if (!name || !username || !email || !password || !confirm) {
                 alert('Please fill in all fields.');
                 return;
             }
-            if (pass !== confirm) {
+            if (password !== confirm) {
                 alert('Passwords do not match.');
                 return;
             }
-            // TODO: connect to backend
-            alert('Account created! (demo)');
+
+            try {
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert('ไม่สำเร็จ: ' + data.message);
+                    return;
+                }
+
+                alert('Account created successfully! โปรดเข้าสู่ระบบ');
+                switchTab('login'); // สลับกลับไปหน้าล็อกอิน
+            } catch (err) {
+                console.error(err);
+                alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+            }
         }
     </script>
 </body>
