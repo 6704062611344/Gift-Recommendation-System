@@ -650,8 +650,10 @@
 
   function viewGift(id) {
     const g = ALL_GIFTS.find(x => x.id === id);
+    if (!g) return;
     sessionStorage.setItem('giver_selected_gift', JSON.stringify(g));
-    window.location.href = 'user-gift-detail.html?id=' + id;
+    // Navigate to browse page with highlighted gift
+    window.location.href = 'user-gifts.html';
   }
 
   /* ─── TOAST ─── */
