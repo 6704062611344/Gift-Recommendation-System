@@ -486,8 +486,17 @@
   const recKey  = 'giver_recipients_' + user.username;
   const favKey  = 'giver_favorites_'  + user.username;
 
+  const allGiftsList = loadAllGifts();
+  const allGiftIds   = new Set(allGiftsList.map(g => g.id));
+
   const recipients = JSON.parse(localStorage.getItem(recKey) || '[]');
-  const favs       = JSON.parse(localStorage.getItem(favKey) || '[]');
+  const rawFavs    = JSON.parse(localStorage.getItem(favKey) || '[]');
+  // Only count favorites that still exist in the gift catalogue
+  const favs       = rawFavs.filter(id => allGiftIds.has(id));
+  // Auto-cleanup: remove stale IDs from localStorage
+  if (favs.length !== rawFavs.length) {
+    localStorage.setItem(favKey, JSON.stringify(favs));
+  }
 
   // Animate count up
   function countUp(el, target, duration) {
