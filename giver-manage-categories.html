@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giver — Manage Categories</title>
+<link rel="icon" href="surprise(1).png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ece4;
+    --card-bg: #faf8f4;
+    --border: #e2ddd5;
+    --text-primary: #1c1a17;
+    --text-secondary: #7a7268;
+    --accent: #b8965a;
+    --accent-light: #e8dcc8;
+    --accent-hover: #9a7a44;
+    --btn-bg: #ede8df;
+    --btn-hover: #e0d9cd;
+    --shadow: 0 1px 3px rgba(28,26,23,0.06), 0 4px 16px rgba(28,26,23,0.04);
+    --shadow-hover: 0 4px 12px rgba(28,26,23,0.1), 0 16px 40px rgba(28,26,23,0.08);
+    --danger: #c0392b;
+    --danger-bg: #fdf0ee;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.18s ease;
+  }
+
+  .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
+  .nav-links a.active { color: var(--accent); font-weight: 500; }
+  .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+
+  /* MAIN */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 48px 80px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .page-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .page-header p {
+    color: var(--text-secondary);
+    margin-top: 6px;
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 22px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .add-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,150,90,0.3); }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 32px;
+    animation: fadeUp 0.4s ease 0.05s both;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 13px 16px 13px 44px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .search-input::placeholder { color: var(--text-secondary); }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,150,90,0.12); }
+
+  /* GRID */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    animation: fadeUp 0.4s ease 0.1s both;
+  }
+
+  /* CATEGORY CARD */
+  .cat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 24px 22px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .cat-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+    border-color: var(--accent-light);
+  }
+
+  .cat-info { flex: 1; min-width: 0; }
+
+  .cat-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .cat-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  .cat-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .action-btn.edit:hover { background: var(--accent-light); border-color: var(--accent); }
+  .action-btn.del:hover { background: var(--danger-bg); border-color: #f0c4be; }
+
+  /* EMPTY */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 64px 32px;
+    color: var(--text-secondary);
+  }
+  .empty-state p { font-size: 14px; font-weight: 300; margin-top: 12px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(28,26,23,0.45);
+    backdrop-filter: blur(4px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 20px 60px rgba(28,26,23,0.18);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.22s ease;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .modal-close {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border: none; background: var(--btn-bg);
+    border-radius: 8px; cursor: pointer; color: var(--text-secondary);
+    transition: all 0.15s ease;
+  }
+  .modal-close:hover { background: var(--btn-hover); color: var(--text-primary); }
+
+  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-secondary);
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+  }
+
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(184,150,90,0.12);
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 28px 24px;
+  }
+
+  .btn-cancel {
+    padding: 10px 20px;
+    background: var(--btn-bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all 0.15s ease;
+  }
+  .btn-cancel:hover { background: var(--btn-hover); }
+
+  .btn-save {
+    padding: 10px 22px;
+    background: var(--accent);
+    border: none;
+    border-radius: 9px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-save:hover { background: var(--accent-hover); }
+
+  /* DELETE MODAL */
+  .modal-del-body {
+    padding: 28px 28px 8px;
+    text-align: center;
+  }
+
+  .del-icon-wrap {
+    width: 56px; height: 56px;
+    background: var(--danger-bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    color: var(--danger);
+  }
+
+  .modal-del-body h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .modal-del-body p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .modal-del-footer {
+    display: flex;
+    gap: 10px;
+    padding: 20px 28px 28px;
+    justify-content: center;
+  }
+
+  .btn-delete {
+    padding: 10px 22px;
+    background: var(--danger);
+    border: none;
+    border-radius: 9px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-delete:hover { background: #a93226; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 400;
+    background: var(--text-primary);
+    color: #fff;
+    padding: 13px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    box-shadow: 0 8px 24px rgba(28,26,23,0.2);
+    transform: translateY(16px);
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .categories-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 24px; }
+    main { padding: 40px 24px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="giver-dashboard.html">
+    <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;">
+    Giver
+  </a>
+  <ul class="nav-links">
+    <li><a href="giver-dashboard.html">
+      <img src="icon-dashboard.png" style="width:15px;height:15px;object-fit:contain;">
+      Dashboard
+    </a></li>
+    <li><a href="giver-manage-gifts.html">
+      <img src="icon-gifts.png" style="width:15px;height:15px;object-fit:contain;">
+      Gifts
+    </a></li>
+    <li><a href="#" class="active">
+      <img src="icon-categories.png" style="width:15px;height:15px;object-fit:contain;">
+      Categories
+    </a></li>
+    <li><a href="giver-manage-rules.html">
+      <img src="icon-rules.png" style="width:15px;height:15px;object-fit:contain;">
+      Rules
+    </a></li>
+    <li><a href="giver-manage-vocabulary.html">
+      <img src="icon-vocabulary.png" style="width:15px;height:15px;object-fit:contain;">
+      Vocabulary
+    </a></li>
+    <li><a href="#" onclick="logout()">
+      <img src="icon-logout.png" style="width:15px;height:15px;object-fit:contain;">
+      Logout
+    </a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div>
+      <h1>Manage Categories</h1>
+      <p>Organize gifts into categories</p>
+    </div>
+    <button class="add-btn" onclick="openAddModal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Categories
+    </button>
+  </div>
+
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="filterCategories()">
+  </div>
+
+  <div class="categories-grid" id="categoriesGrid"></div>
+</main>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="catModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Category</h3>
+      <button class="modal-close" onclick="closeModal('catModal')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Category Name</label>
+        <input type="text" class="form-input" id="catName" placeholder="e.g. Electronics">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="catDesc" placeholder="Describe this category..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('catModal')">Cancel</button>
+      <button class="btn-save" onclick="saveCategory()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <div class="modal-del-body">
+      <div class="del-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </div>
+      <h3>Delete Category</h3>
+      <p>Are you sure you want to delete <strong id="deleteCatName"></strong>?<br>This action cannot be undone.</p>
+    </div>
+    <div class="modal-del-footer">
+      <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+      <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+  let categories = [
+    { id: 1, name: 'Electronics', desc: 'Gadgets and electronic devices' },
+    { id: 2, name: 'Home Decor', desc: 'Items for home decoration' },
+    { id: 3, name: 'Kitchen', desc: 'Kitchen appliances and tools' },
+    { id: 4, name: 'Fitness', desc: 'Fitness and wellness products' },
+    { id: 5, name: 'Books', desc: 'Books and literature' },
+  ];
+
+  let editingId = null;
+  let deletingId = null;
+  let nextId = 6;
+
+  function renderGrid(data) {
+    const grid = document.getElementById('categoriesGrid');
+    if (data.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg><p>No categories found.</p></div>`;
+      return;
+    }
+    grid.innerHTML = data.map(c => `
+      <div class="cat-card">
+        <div class="cat-info">
+          <div class="cat-name">${c.name}</div>
+          <div class="cat-desc">${c.desc}</div>
+        </div>
+        <div class="cat-actions">
+          <button class="action-btn edit" title="Edit" onclick="openEditModal(${c.id})">
+            <img src="icon-edit.png" style="width:15px;height:15px;object-fit:contain;">
+          </button>
+          <button class="action-btn del" title="Delete" onclick="openDeleteModal(${c.id})">
+            <img src="icon-delete.png" style="width:15px;height:15px;object-fit:contain;">
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterCategories() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = categories.filter(c =>
+      c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)
+    );
+    renderGrid(filtered);
+  }
+
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('modalTitle').textContent = 'Add Category';
+    document.getElementById('catName').value = '';
+    document.getElementById('catDesc').value = '';
+    openModal('catModal');
+  }
+
+  function openEditModal(id) {
+    editingId = id;
+    const c = categories.find(x => x.id === id);
+    document.getElementById('modalTitle').textContent = 'Edit Category';
+    document.getElementById('catName').value = c.name;
+    document.getElementById('catDesc').value = c.desc;
+    openModal('catModal');
+  }
+
+  function saveCategory() {
+    const name = document.getElementById('catName').value.trim();
+    const desc = document.getElementById('catDesc').value.trim();
+    if (!name) { showToast('Please enter a category name.', 'error'); return; }
+
+    if (editingId) {
+      const idx = categories.findIndex(x => x.id === editingId);
+      categories[idx] = { id: editingId, name, desc };
+      showToast('Category updated.', 'success');
+    } else {
+      categories.push({ id: nextId++, name, desc });
+      showToast('Category added.', 'success');
+    }
+    closeModal('catModal');
+    filterCategories();
+  }
+
+  function openDeleteModal(id) {
+    deletingId = id;
+    const c = categories.find(x => x.id === id);
+    document.getElementById('deleteCatName').textContent = '"' + c.name + '"';
+    openModal('deleteModal');
+  }
+
+  function confirmDelete() {
+    categories = categories.filter(x => x.id !== deletingId);
+    closeModal('deleteModal');
+    filterCategories();
+    showToast('Category deleted.', 'success');
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
+  });
+
+  let toastTimer;
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.className = 'toast show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function logout() {
+    sessionStorage.removeItem('giver_user');
+    window.location.href = 'login_register_page.html';
+  }
+
+  renderGrid(categories);
+</script>
+</body>
+</html>

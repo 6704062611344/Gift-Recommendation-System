@@ -539,11 +539,17 @@
         });
 
         // Demo accounts — replace with real backend call
-        const USERS = [
-            { email: 'admin@giver.com',   password: 'admin1234',  role: 'admin',  name: 'Admin' },
-            { email: 'admin2@giver.com',  password: 'admin5678',  role: 'admin',  name: 'Admin 2' },
-            { email: 'user@giver.com',    password: 'user1234',   role: 'user',   name: 'User' },
-        ];
+        const USERS = [{
+            email: 'admin@giver.com',
+            password: 'admin1234',
+            role: 'admin',
+            name: 'Admin'
+        }, {
+            email: 'admin2@giver.com',
+            password: 'admin5678',
+            role: 'admin',
+            name: 'Admin 2'
+        }, ];
 
         function showError(msg) {
             let el = document.getElementById('login-error');
@@ -566,7 +572,7 @@
         function handleLogin() {
             clearError();
             const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const pass  = document.getElementById('login-password').value;
+            const pass = document.getElementById('login-password').value;
 
             if (!email || !pass) {
                 showError('Please fill in all fields.');
@@ -581,7 +587,11 @@
             }
 
             // Store session (demo — use proper auth in production)
-            sessionStorage.setItem('giver_user', JSON.stringify({ name: matched.name, email: matched.email, role: matched.role }));
+            sessionStorage.setItem('giver_user', JSON.stringify({
+                name: matched.name,
+                email: matched.email,
+                role: matched.role
+            }));
 
             if (matched.role === 'admin') {
                 window.location.href = 'giver-dashboard.html';
