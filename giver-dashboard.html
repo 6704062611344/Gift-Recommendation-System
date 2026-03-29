@@ -484,25 +484,20 @@
         if (user.role !== 'admin') window.location.href = 'user-home.html';
 
         /* ─── LOAD COUNTS FROM localStorage ─── */
-        function getCount(key, defaultData) {
+        function getCount(key, fallback) {
             try {
                 const raw = localStorage.getItem(key);
-                if (raw) return JSON.parse(raw).length;
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) return parsed.length;
+                }
             } catch(e) {}
-            // Seed defaults and return default count
-            localStorage.setItem(key, JSON.stringify(defaultData));
-            return defaultData.length;
+            // Don't seed — just return fallback count, let manage pages handle seeding
+            return fallback;
         }
 
-        const DEFAULT_GIFTS = [
-            { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }
-        ];
-        const DEFAULT_CATS  = [{ id:1 },{ id:2 },{ id:3 },{ id:4 },{ id:5 }];
-        const DEFAULT_RULES = [{ id:1 },{ id:2 }];
-        const DEFAULT_VOCAB = [{ id:1 },{ id:2 }];
-        const DEFAULT_ADMINS = [{ id:1, email:'admin@giver.com' }, { id:2, email:'admin2@giver.com' }];
-
         function countUp(el, target, duration) {
+            if (!el) return;
             let start = 0;
             const step = target / (duration / 16);
             const tick = () => {
@@ -514,11 +509,11 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const giftsCount      = getCount('giver_gifts',      DEFAULT_GIFTS);
-            const categoriesCount = getCount('giver_categories', DEFAULT_CATS);
-            const rulesCount      = getCount('giver_rules',      DEFAULT_RULES);
-            const vocabCount      = getCount('giver_vocabulary', DEFAULT_VOCAB);
-            // Admin count: demo admins + registered admins
+            const giftsCount      = getCount('giver_gifts',      6);
+            const categoriesCount = getCount('giver_categories', 5);
+            const rulesCount      = getCount('giver_rules',      2);
+            const vocabCount      = getCount('giver_vocabulary', 2);
+            // Admin count: 2 demo admins + any registered admins
             const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
             const adminCount = 2 + registeredUsers.filter(u => u.role === 'admin').length;
 
