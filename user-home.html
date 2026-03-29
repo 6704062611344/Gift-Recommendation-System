@@ -453,18 +453,49 @@
 </main>
 
 <script>
-  /* Read username from session */
+  /* ─── AUTH CHECK ─── */
   const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
+  if (!user || !user.username) window.location.href = 'login_register_page.html';
+  if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
 
-  /* If not logged in, redirect */
-  if (!user || !user.username) {
-    window.location.href = 'login_register_page.html';
+  /* ─── DYNAMIC COUNTS ─── */
+  const GIFT_TOTAL = 12; // total gifts in database
+
+  const recKey  = 'giver_recipients_' + user.username;
+  const favKey  = 'giver_favorites_'  + user.username;
+
+  const recipients = JSON.parse(localStorage.getItem(recKey) || '[]');
+  const favs       = JSON.parse(localStorage.getItem(favKey) || '[]');
+
+  // Animate count up
+  function countUp(el, target, duration) {
+    let start = 0;
+    const step = target / (duration / 16);
+    const tick = () => {
+      start = Math.min(start + step, target);
+      el.textContent = Math.round(start);
+      if (start < target) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 
-  /* Redirect admin to admin dashboard */
-  if (user.role === 'admin') {
-    window.location.href = 'giver-dashboard.html';
-  }
+  window.addEventListener('DOMContentLoaded', () => {
+    countUp(document.getElementById('recipientCount'), recipients.length, 600);
+    countUp(document.getElementById('giftCount'),      GIFT_TOTAL,        600);
+    countUp(document.getElementById('favCount'),       favs.length,       600);
+
+    // Update hero button text
+    const heroBtn = document.getElementById('addRecipientBtn');
+    if (recipients.length > 0) {
+      heroBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        View Recipients`;
+    }
+  });
 
   function logout() {
     sessionStorage.removeItem('giver_user');
@@ -473,3 +504,4 @@
 </script>
 </body>
 </html>
+
