@@ -559,6 +559,13 @@
             }
         });
 
+        // Quick-fill demo credentials into login form
+        function quickFill(email, password) {
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = password;
+            document.getElementById('login-email').focus();
+        }
+
         // Demo accounts — replace with real backend call
         const USERS = [
             // ── Admin accounts ──
