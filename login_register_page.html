@@ -627,7 +627,7 @@
                 showError('Please fill in all fields.');
                 return;
             }
-
+            
             // ตรวจสอบจาก registered users ใน localStorage ก่อน
             const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
             let found = registeredUsers.find(u => u.email.toLowerCase() === email && u.password === pass);
@@ -709,6 +709,7 @@
             switchTab('login');
         }
     </script>
+    <script src="auth-handler.js"></script>
 </body>
 
 </html>
