@@ -618,96 +618,74 @@
             if (el) el.style.display = 'none';
         }
 
-        function handleLogin() {
-            clearError();
-            const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const pass = document.getElementById('login-password').value;
+    // ... โค้ดส่วน switchTab หรือส่วนอื่นๆ ของเดิม (เก็บไว้) ...
 
-            if (!email || !pass) {
-                showError('Please fill in all fields.');
-                return;
-            }
-            
-            // ตรวจสอบจาก registered users ใน localStorage ก่อน
-            const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
-            let found = registeredUsers.find(u => u.email.toLowerCase() === email && u.password === pass);
+    // --- วางโค้ดใหม่ตรงนี้ ---
+    async function handleLogin() {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
 
-            // ถ้าไม่พบใน registered users ให้ตรวจจาก demo accounts
-            if (!found) {
-                found = USERS.find(u => u.email.toLowerCase() === email && u.password === pass);
-            }
+        if (!email || !password) {
+            showError('Please fill in all fields.');
+            return;
+        }
 
-            if (!found) {
-                showError('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-                return;
-            }
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-            // Store session
-            sessionStorage.setItem('giver_user', JSON.stringify({
-                id: found.id || found.email,
-                name: found.name,
-                email: found.email,
-                role: found.role,
-                username: found.username
-            }));
+            const data = await response.json();
 
-            if (found.role === 'admin') {
-                window.location.href = 'giver-dashboard.html';
+            if (response.ok) {
+                sessionStorage.setItem('giver_user', JSON.stringify(data.user));
+                if (data.user.role === 'admin') {
+                    window.location.href = 'giver-dashboard.html';
+                } else {
+                    window.location.href = 'user-home.html';
+                }
             } else {
-                window.location.href = 'user-home.html';
+                showError(data.message || 'Login failed');
             }
+        } catch (err) {
+            showError('Server connection error. Please try again.');
+        }
+    }
+
+    async function handleRegister() {
+        const name = document.getElementById('reg-name').value.trim();
+        const username = document.getElementById('reg-username').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+
+        if (password !== confirm) {
+            alert('Passwords do not match.');
+            return;
         }
 
-        function handleRegister() {
-            const name = document.getElementById('reg-name').value.trim();
-            const username = document.getElementById('reg-username').value.trim();
-            const email = document.getElementById('reg-email').value.trim().toLowerCase();
-            const password = document.getElementById('reg-password').value;
-            const confirm = document.getElementById('reg-confirm').value;
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, username, email, password })
+            });
 
-            if (!name || !username || !email || !password || !confirm) {
-                alert('Please fill in all fields.');
-                return;
-            }
-            if (password !== confirm) {
-                alert('Passwords do not match.');
-                return;
-            }
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters.');
-                return;
-            }
+            const data = await response.json();
 
-            // ตรวจสอบอีเมลซ้ำใน demo accounts
-            const existsInDemo = USERS.some(u => u.email.toLowerCase() === email);
-            if (existsInDemo) {
-                alert('อีเมลนี้ถูกใช้งานแล้ว');
-                return;
+            if (response.ok) {
+                alert('Registration successful! Please login.');
+                switchTab('login'); 
+            } else {
+                alert(data.message || 'Registration failed');
             }
-
-            // ตรวจสอบอีเมลซ้ำใน registered users
-            const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
-            const existsInRegistered = registeredUsers.some(u => u.email.toLowerCase() === email);
-            if (existsInRegistered) {
-                alert('อีเมลนี้ถูกใช้งานแล้ว');
-                return;
-            }
-
-            // บันทึก user ใหม่
-            const newUser = {
-                id: 'user_' + Date.now(),
-                name,
-                username,
-                email,
-                password,
-                role: 'user'
-            };
-            registeredUsers.push(newUser);
-            localStorage.setItem('giver_registered_users', JSON.stringify(registeredUsers));
-
-            alert('สมัครสมาชิกสำเร็จ! โปรดเข้าสู่ระบบ');
-            switchTab('login');
+        } catch (err) {
+            alert('Error connecting to server.');
         }
+    }
+    // ----------------------
     </script>
 </body>
 
