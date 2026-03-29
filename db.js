@@ -3,16 +3,15 @@ require('dotenv').config();
 
 const connectDB = async () => {
     try {
-        console.log("MONGO_URI =", process.env.MONGO_URI);
-        // รวม Option ไว้ในที่เดียว เพื่อให้รันได้ทุกที่
-        await mongoose.connect(process.env.MONGO_URI, {
-            // directConnection: true, // ลองคอมเมนต์บรรทัดนี้ไว้ก่อน ถ้ายังไม่ได้ค่อยเปิดใช้
-            serverSelectionTimeoutMS: 5000 
-        });
+        console.log('⏳ Attempting to connect to MongoDB Atlas...');
+        
+        // ใช้แค่ URI ตรงๆ ไม่ต้องใส่ Options อื่นเพื่อให้ Library จัดการเองตามความเหมาะสมของ Network
+        await mongoose.connect(process.env.MONGO_URI);
+        
         console.log('✅ MongoDB Connected Successfully!');
     } catch (err) {
         console.error('❌ Connection Error:', err.message);
-        process.exit(1); 
+        // ไม่ต้อง process.exit(1) เพื่อให้เราเห็น Log ค้างไว้ได้
     }
 };
 
