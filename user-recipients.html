@@ -818,7 +818,14 @@
     if (!gender)   { showToast('Please select a gender.'); return; }
     if (!relation) { showToast('Please enter a relationship.'); return; }
 
-    const interests = interestRaw ? interestRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const interests = interestRaw ? interestRaw.split(',').map(s => correctInterest(s.trim())).filter(Boolean) : [];
+
+    // Show toast if any interest was auto-corrected
+    const rawList = interestRaw ? interestRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const corrected = interests.filter((v, i) => rawList[i] && v !== rawList[i]);
+    if (corrected.length > 0) {
+      showToast('✏️ Auto-corrected: ' + corrected.join(', '));
+    }
 
     if (editingId) {
       const idx = recipients.findIndex(x => x.id === editingId);
@@ -856,6 +863,58 @@
     // Store selected recipient and navigate to recommendation page
     sessionStorage.setItem('giver_selected_recipient', JSON.stringify(r));
     window.location.href = 'user-recommendation.html?id=' + id;
+  }
+
+  /* ─── AUTO-CORRECT INTERESTS ─── */
+  function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    const dp = Array.from({length: m+1}, (_, i) => Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0));
+    for (let i = 1; i <= m; i++)
+      for (let j = 1; j <= n; j++)
+        dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+    return dp[m][n];
+  }
+
+  function getKnownInterests() {
+    const known = new Set([
+      'tech','technology','electronics','gadget','device',
+      'fitness','workout','exercise','gym','yoga','sport','health',
+      'home','decor','decoration','interior','homedecor',
+      'beauty','skincare','makeup','cosmetic','fashion',
+      'books','book','reading','literature',
+      'music','travel','cooking','kitchen','coffee','garden','nature',
+      'gaming','art','photography','outdoor','pets'
+    ]);
+    // Add terms from admin vocabulary
+    try {
+      const vocab = JSON.parse(localStorage.getItem('giver_vocabulary') || '[]');
+      vocab.forEach(v => {
+        if (v.term) known.add(v.term.toLowerCase());
+        if (v.synonyms) v.synonyms.forEach(s => known.add(s.toLowerCase()));
+      });
+    } catch(e) {}
+    // Add tags from gifts
+    try {
+      const gifts = JSON.parse(localStorage.getItem('giver_gifts') || '[]');
+      gifts.forEach(g => (g.tags || []).forEach(t => known.add(t.toLowerCase())));
+    } catch(e) {}
+    return [...known];
+  }
+
+  function correctInterest(word) {
+    if (!word) return word;
+    const lower = word.toLowerCase();
+    const known = getKnownInterests();
+    // Exact match — no correction needed
+    if (known.includes(lower)) return lower;
+    // Find closest match within edit distance 2
+    let best = null, bestDist = Infinity;
+    for (const term of known) {
+      const dist = levenshtein(lower, term);
+      if (dist < bestDist) { bestDist = dist; best = term; }
+    }
+    // Only auto-correct if distance ≤ 2 (small typo)
+    return (bestDist <= 2 && best) ? best : lower;
   }
 
   /* ─── HELPERS ─── */
