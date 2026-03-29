@@ -537,15 +537,71 @@
             }
         });
 
+        // Demo accounts — replace with real backend call
+        const USERS = [{
+            email: 'admin@giver.com',
+            password: 'admin1234',
+            role: 'admin',
+            name: 'Admin'
+        }, {
+            email: 'admin2@giver.com',
+            password: 'admin5678',
+            role: 'admin',
+            name: 'Admin 2'
+        }, {
+            email: 'user@giver.com',
+            password: 'user1234',
+            role: 'user',
+            name: 'User'
+        }, ];
+
+        function showError(msg) {
+            let el = document.getElementById('login-error');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'login-error';
+                el.style.cssText = 'background:#fdf0ee;border:1px solid #f0c4be;color:#c0392b;font-size:.78rem;padding:10px 14px;border-radius:4px;margin-bottom:16px;text-align:center;';
+                const btn = document.querySelector('#panel-login .btn-submit');
+                btn.parentNode.insertBefore(el, btn);
+            }
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function clearError() {
+            const el = document.getElementById('login-error');
+            if (el) el.style.display = 'none';
+        }
+
         function handleLogin() {
-            const email = document.getElementById('login-email').value.trim();
+            clearError();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
             const pass = document.getElementById('login-password').value;
+
             if (!email || !pass) {
-                alert('Please fill in all fields.');
+                showError('Please fill in all fields.');
                 return;
             }
-            // TODO: connect to backend
-            alert('Login successful! (demo)');
+
+            const matched = USERS.find(u => u.email === email && u.password === pass);
+
+            if (!matched) {
+                showError('Invalid email or password.');
+                return;
+            }
+
+            // Store session (demo — use proper auth in production)
+            sessionStorage.setItem('giver_user', JSON.stringify({
+                name: matched.name,
+                email: matched.email,
+                role: matched.role
+            }));
+
+            if (matched.role === 'admin') {
+                window.location.href = 'giver-dashboard.html';
+            } else {
+                window.location.href = 'main_page.html';
+            }
         }
 
         function handleRegister() {
