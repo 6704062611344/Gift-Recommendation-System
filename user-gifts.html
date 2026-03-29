@@ -469,16 +469,30 @@
     const FAV_KEY = 'giver_favorites_' + (user.username || 'guest');
     let favorites = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
 
-    /* ─── LOAD GIFTS FROM ADMIN DATA ─── */
+    /* ─── LOAD GIFTS FROM ADMIN DATA (with fallback) ─── */
     const GIFTS_KEY = 'giver_gifts';
+    const DEFAULT_GIFTS = [
+      { id: 1, name: 'Wireless Headphones',  desc: 'Premium noise-cancelling wireless headphones', price: 2990, category: 'electronics', tags: ['music', 'tech', 'lifestyle'],       rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lp8lsxyghpn7bf', gender: 'unisex', age: '18-40', store: '' },
+      { id: 2, name: 'Handmade Candle Set',   desc: 'Artisan scented candles in elegant packaging',  price: 890,  category: 'home-decor',   tags: ['home', 'relaxation', 'gift'],      rating: 4.9, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r991-lrwkr4vqq08mb3', gender: 'unisex', age: '18-60', store: '' },
+      { id: 3, name: 'Coffee Maker',          desc: 'Automatic coffee maker with grinder',           price: 4500, category: 'kitchen',       tags: ['coffee', 'kitchen', 'morning'],    rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lzge93xvzl9k1d', gender: 'unisex', age: '20-50', store: '' },
+      { id: 4, name: 'Yoga Mat Set',          desc: 'Premium yoga mat with carrying strap',          price: 1290, category: 'fitness',       tags: ['fitness', 'yoga', 'wellness'],     rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lx6r2s5m6nl040', gender: 'female', age: '18-45', store: '' },
+      { id: 5, name: 'Leather Wallet',        desc: 'Slim genuine leather bifold wallet',            price: 1590, category: 'fashion',       tags: ['leather', 'fashion', 'accessories'],rating: 4.6, image: 'https://down-th.img.susercontent.com/file/th-11134207-7qukw-lhivt3rrfpxkbb', gender: 'male',   age: '20-50', store: '' },
+      { id: 6, name: 'Herb Garden Kit',       desc: 'Indoor growing kit with seeds and pots',        price: 750,  category: 'home-decor',   tags: ['garden', 'home', 'nature'],        rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lylxol4efpvo75', gender: 'unisex', age: '18-60', store: '' },
+    ];
     function loadAllGifts() {
       try {
         const raw = localStorage.getItem(GIFTS_KEY);
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.length > 0) return parsed;
+        }
       } catch(e) {}
-      return [];
+      // Seed defaults so admin page & user pages stay in sync
+      localStorage.setItem(GIFTS_KEY, JSON.stringify(DEFAULT_GIFTS));
+      return [...DEFAULT_GIFTS];
     }
     const ALL_GIFTS = loadAllGifts();
+
 
     let activeFilter = 'all';
 
