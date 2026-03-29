@@ -748,8 +748,15 @@
   function loadRules() {
     try {
       const raw = localStorage.getItem(RULES_KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Validate: must have proper rule fields, not skeleton data
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].name && parsed[0].categories) {
+          return parsed;
+        }
+      }
     } catch(e) {}
+    // Seed with proper defaults
     localStorage.setItem(RULES_KEY, JSON.stringify(DEFAULT_RULES));
     return [...DEFAULT_RULES];
   }

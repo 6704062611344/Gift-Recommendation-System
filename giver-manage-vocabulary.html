@@ -753,8 +753,15 @@
   function loadVocab() {
     try {
       const raw = localStorage.getItem(VOCAB_KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Validate: must have proper vocab fields, not skeleton data
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].term && parsed[0].synonyms) {
+          return parsed;
+        }
+      }
     } catch(e) {}
+    // Seed with proper defaults
     localStorage.setItem(VOCAB_KEY, JSON.stringify(DEFAULT_VOCAB));
     return [...DEFAULT_VOCAB];
   }
