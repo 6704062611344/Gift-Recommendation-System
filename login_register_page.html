@@ -544,9 +544,133 @@
         <span>© 2026 Giver — Gift Recommendation System</span>
     </footer>
 
-    <script>
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import {
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+        import {
+            doc, setDoc, getDoc
+        } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+        /* ── Tab switching ── */
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('panel-' + tab).classList.add('active');
+        }
+        window.switchTab = switchTab;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#register') switchTab('register');
+        });
+
+        /* ── Quick-fill demo ── */
+        window.quickFill = function(email, password) {
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = password;
+        };
+
+        /* ── Error display ── */
+        function showError(msg) {
+            let el = document.getElementById('login-error');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'login-error';
+                el.style.cssText = 'background:#fdf0ee;border:1px solid #f0c4be;color:#c0392b;font-size:.78rem;padding:10px 14px;border-radius:4px;margin-bottom:16px;text-align:center;';
+                const btn = document.querySelector('#panel-login .btn-submit');
+                btn.parentNode.insertBefore(el, btn);
+            }
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function clearError() {
+            const el = document.getElementById('login-error');
+            if (el) el.style.display = 'none';
+        }
+
+        /* ── Check if already logged in ── */
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                if (snap.exists()) {
+                    const role = snap.data().role;
+                    window.location.href = role === 'admin' ? 'giver-dashboard.html' : 'user-home.html';
+                }
+            }
+        });
+
+        /* ── LOGIN ── */
+        window.handleLogin = async function() {
+            clearError();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const pass  = document.getElementById('login-password').value;
+
+            if (!email || !pass) { showError('Please fill in all fields.'); return; }
+
+            const btn = document.querySelector('#panel-login .btn-submit');
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                const snap = await getDoc(doc(db, 'users', cred.user.uid));
+                const role = snap.exists() ? snap.data().role : 'user';
+                window.location.href = role === 'admin' ? 'giver-dashboard.html' : 'user-home.html';
+            } catch(e) {
+                showError('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+                btn.disabled = false;
+                btn.textContent = 'Login';
+            }
+        };
+
+        /* ── REGISTER ── */
+        window.handleRegister = async function() {
+            const name     = document.getElementById('reg-name').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
+            const email    = document.getElementById('reg-email').value.trim().toLowerCase();
+            const password = document.getElementById('reg-password').value;
+            const confirm  = document.getElementById('reg-confirm').value;
+
+            if (!name || !username || !email || !password || !confirm) {
+                alert('Please fill in all fields.'); return;
+            }
+            if (password !== confirm) { alert('Passwords do not match.'); return; }
+            if (password.length < 6)  { alert('Password must be at least 6 characters.'); return; }
+
+            const btn = document.querySelector('#panel-register .btn-submit');
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                // บันทึก profile + role ใน Firestore
+                await setDoc(doc(db, 'users', cred.user.uid), {
+                    name, username, email,
+                    role: 'user',
+                    createdAt: new Date().toISOString()
+                });
+                alert('สมัครสมาชิกสำเร็จ! กำลังเข้าสู่ระบบ...');
+                window.location.href = 'user-home.html';
+            } catch(e) {
+                if (e.code === 'auth/email-already-in-use') {
+                    alert('อีเมลนี้ถูกใช้งานแล้ว');
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + e.message);
+                }
+                btn.disabled = false;
+                btn.textContent = 'Register';
+            }
+        };
+    </script>
+</body>
+
+</html>
+
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
             document.getElementById('panel-' + tab).classList.add('active');
