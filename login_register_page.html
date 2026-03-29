@@ -618,7 +618,7 @@
             if (el) el.style.display = 'none';
         }
 
-        async function handleLogin() {
+        function handleLogin() {
             clearError();
             const email = document.getElementById('login-email').value.trim().toLowerCase();
             const pass = document.getElementById('login-password').value;
@@ -628,48 +628,43 @@
                 return;
             }
 
-            try {
-                const response = await fetch('http://localhost:3000/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password: pass })
-                });
+            // ตรวจสอบจาก registered users ใน localStorage ก่อน
+            const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
+            let found = registeredUsers.find(u => u.email.toLowerCase() === email && u.password === pass);
 
-                const data = await response.json();
+            // ถ้าไม่พบใน registered users ให้ตรวจจาก demo accounts
+            if (!found) {
+                found = USERS.find(u => u.email.toLowerCase() === email && u.password === pass);
+            }
 
-                if (!response.ok) {
-                    showError(data.message || 'รหัสผ่านหรืออีเมลไม่ถูกต้อง');
-                    return;
-                }
+            if (!found) {
+                showError('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+                return;
+            }
 
-                // Store session
-                sessionStorage.setItem('giver_user', JSON.stringify({
-                    id: data.user.id,
-                    name: data.user.name,
-                    email: data.user.email,
-                    role: data.user.role,
-                    username: data.user.username
-                }));
+            // Store session
+            sessionStorage.setItem('giver_user', JSON.stringify({
+                id: found.id || found.email,
+                name: found.name,
+                email: found.email,
+                role: found.role,
+                username: found.username
+            }));
 
-                alert(data.message); // แจ้งเตือนเข้าสู่ระบบสำเร็จ
-                if (data.user.role === 'admin') {
-                    window.location.href = 'giver-dashboard.html';
-                } else {
-                    window.location.href = 'user-home.html';
-                }
-            } catch (err) {
-                console.error(err);
-                showError('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+            if (found.role === 'admin') {
+                window.location.href = 'giver-dashboard.html';
+            } else {
+                window.location.href = 'user-home.html';
             }
         }
 
-        async function handleRegister() {
+        function handleRegister() {
             const name = document.getElementById('reg-name').value.trim();
             const username = document.getElementById('reg-username').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
+            const email = document.getElementById('reg-email').value.trim().toLowerCase();
             const password = document.getElementById('reg-password').value;
             const confirm = document.getElementById('reg-confirm').value;
-            
+
             if (!name || !username || !email || !password || !confirm) {
                 alert('Please fill in all fields.');
                 return;
@@ -678,27 +673,40 @@
                 alert('Passwords do not match.');
                 return;
             }
-
-            try {
-                const response = await fetch('http://localhost:3000/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, username, email, password })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    alert('ไม่สำเร็จ: ' + data.message);
-                    return;
-                }
-
-                alert('Account created successfully! โปรดเข้าสู่ระบบ');
-                switchTab('login'); // สลับกลับไปหน้าล็อกอิน
-            } catch (err) {
-                console.error(err);
-                alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters.');
+                return;
             }
+
+            // ตรวจสอบอีเมลซ้ำใน demo accounts
+            const existsInDemo = USERS.some(u => u.email.toLowerCase() === email);
+            if (existsInDemo) {
+                alert('อีเมลนี้ถูกใช้งานแล้ว');
+                return;
+            }
+
+            // ตรวจสอบอีเมลซ้ำใน registered users
+            const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
+            const existsInRegistered = registeredUsers.some(u => u.email.toLowerCase() === email);
+            if (existsInRegistered) {
+                alert('อีเมลนี้ถูกใช้งานแล้ว');
+                return;
+            }
+
+            // บันทึก user ใหม่
+            const newUser = {
+                id: 'user_' + Date.now(),
+                name,
+                username,
+                email,
+                password,
+                role: 'user'
+            };
+            registeredUsers.push(newUser);
+            localStorage.setItem('giver_registered_users', JSON.stringify(registeredUsers));
+
+            alert('สมัครสมาชิกสำเร็จ! โปรดเข้าสู่ระบบ');
+            switchTab('login');
         }
     </script>
 </body>
