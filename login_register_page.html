@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Giver — Login & Register</title>
+    <title>Giver — Login &amp; Register</title>
     <link rel="icon" href="surprise(1).png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <style>
@@ -15,8 +15,8 @@
             margin: 0;
             padding: 0;
         }
-        
-         :root {
+
+        :root {
             --col-salmon: #C65D51;
             --col-rose: #D4867A;
             --col-white: #FFFFFF;
@@ -35,11 +35,11 @@
             --accent: var(--col-salmon);
             --gold: var(--col-beige1);
         }
-        
+
         html {
             scroll-behavior: smooth;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
@@ -48,8 +48,8 @@
             display: flex;
             flex-direction: column;
         }
+
         /* ─── NAVBAR ─── */
-        
         nav {
             display: flex;
             justify-content: space-between;
@@ -61,7 +61,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .nav-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.45rem;
@@ -72,7 +72,7 @@
             gap: 8px;
             text-decoration: none;
         }
-        
+
         .nav-logo-icon {
             width: 28px;
             height: 28px;
@@ -83,8 +83,8 @@
             justify-content: center;
             font-size: .85rem;
         }
+
         /* ─── MAIN CONTAINER ─── */
-        
         main {
             flex: 1;
             display: flex;
@@ -93,7 +93,7 @@
             padding: 60px 20px;
             background: var(--bg);
         }
-        
+
         .auth-card {
             background: var(--col-white);
             border: 1px solid rgba(69, 54, 49, .1);
@@ -104,13 +104,13 @@
             box-shadow: 0 4px 32px rgba(69, 54, 49, .07);
             animation: fadeUp .6s ease both;
         }
+
         /* ─── CARD HEADER ─── */
-        
         .card-header {
             text-align: center;
             margin-bottom: 36px;
         }
-        
+
         .brand-icon {
             width: 52px;
             height: 52px;
@@ -122,7 +122,7 @@
             margin: 0 auto 14px;
             font-size: 1.4rem;
         }
-        
+
         .card-header h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.6rem;
@@ -130,7 +130,7 @@
             color: var(--text-dark);
             margin-bottom: 4px;
         }
-        
+
         .card-header .subtitle {
             font-size: .72rem;
             letter-spacing: .1em;
@@ -138,21 +138,21 @@
             color: var(--accent);
             font-weight: 500;
         }
-        
+
         .card-header .tagline {
             font-size: .8rem;
             color: var(--text);
             margin-top: 6px;
             font-weight: 300;
         }
+
         /* ─── TABS ─── */
-        
         .tabs {
             display: flex;
             border-bottom: 1.5px solid rgba(69, 54, 49, .12);
             margin-bottom: 32px;
         }
-        
+
         .tab-btn {
             flex: 1;
             background: none;
@@ -167,7 +167,7 @@
             letter-spacing: .04em;
             transition: color .2s;
         }
-        
+
         .tab-btn::after {
             content: '';
             position: absolute;
@@ -179,30 +179,30 @@
             transform: scaleX(0);
             transition: transform .25s ease;
         }
-        
+
         .tab-btn.active {
             color: var(--text-dark);
         }
-        
+
         .tab-btn.active::after {
             transform: scaleX(1);
         }
+
         /* ─── FORM PANELS ─── */
-        
         .panel {
             display: none;
         }
-        
+
         .panel.active {
             display: block;
             animation: fadeUp .35s ease both;
         }
+
         /* ─── FORM ELEMENTS ─── */
-        
         .form-group {
             margin-bottom: 18px;
         }
-        
+
         .form-group label {
             display: block;
             font-size: .74rem;
@@ -211,7 +211,7 @@
             margin-bottom: 7px;
             letter-spacing: .03em;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 10px 14px;
@@ -224,19 +224,19 @@
             transition: border-color .2s, box-shadow .2s;
             outline: none;
         }
-        
+
         .form-group input::placeholder {
             color: rgba(107, 93, 82, .38);
             font-weight: 300;
         }
-        
+
         .form-group input:focus {
             border-color: var(--col-brown2);
             box-shadow: 0 0 0 3px rgba(107, 93, 82, .08);
             background: #fff;
         }
+
         /* ─── HELPER ROW ─── */
-        
         .form-helper {
             display: flex;
             justify-content: space-between;
@@ -244,7 +244,7 @@
             margin-top: -8px;
             margin-bottom: 18px;
         }
-        
+
         .form-helper label {
             display: flex;
             align-items: center;
@@ -254,14 +254,14 @@
             cursor: pointer;
             font-weight: 300;
         }
-        
+
         .form-helper label input[type="checkbox"] {
             width: 13px;
             height: 13px;
             accent-color: var(--text-dark);
             cursor: pointer;
         }
-        
+
         .forgot-link {
             font-size: .75rem;
             color: var(--col-brown2);
@@ -273,12 +273,12 @@
             border: none;
             font-family: 'Inter', sans-serif;
         }
-        
+
         .forgot-link:hover {
             color: var(--accent);
         }
+
         /* ─── SUBMIT BUTTON ─── */
-        
         .btn-submit {
             width: 100%;
             padding: 12px;
@@ -294,17 +294,17 @@
             transition: background .2s, transform .15s;
             margin-top: 8px;
         }
-        
+
         .btn-submit:hover {
             background: var(--col-brown2);
             transform: translateY(-1px);
         }
-        
+
         .btn-submit:active {
             transform: translateY(0);
         }
+
         /* ─── DIVIDER ─── */
-        
         .divider {
             display: flex;
             align-items: center;
@@ -315,7 +315,7 @@
             letter-spacing: .08em;
             text-transform: uppercase;
         }
-        
+
         .divider::before,
         .divider::after {
             content: '';
@@ -323,8 +323,8 @@
             height: 1px;
             background: rgba(69, 54, 49, .1);
         }
+
         /* ─── SWITCH LINK ─── */
-        
         .switch-hint {
             text-align: center;
             margin-top: 22px;
@@ -332,7 +332,7 @@
             color: var(--text);
             font-weight: 300;
         }
-        
+
         .switch-hint button {
             background: none;
             border: none;
@@ -344,12 +344,12 @@
             text-decoration: underline;
             text-underline-offset: 2px;
         }
-        
+
         .switch-hint button:hover {
             color: var(--accent);
         }
+
         /* ─── FOOTER ─── */
-        
         footer {
             background: var(--col-cream);
             border-top: 1px solid rgba(69, 54, 49, .1);
@@ -361,7 +361,7 @@
             color: var(--col-brown2);
             font-family: 'Inter', sans-serif;
         }
-        
+
         .footer-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.05rem;
@@ -371,7 +371,7 @@
             align-items: center;
             gap: 6px;
         }
-        
+
         .footer-logo-icon {
             width: 18px;
             height: 18px;
@@ -382,8 +382,8 @@
             justify-content: center;
             font-size: .6rem;
         }
+
         /* ─── ANIMATION ─── */
-        
         @keyframes fadeUp {
             from {
                 opacity: 0;
@@ -394,8 +394,8 @@
                 transform: translateY(0);
             }
         }
+
         /* ─── RESPONSIVE ─── */
-        
         @media (max-width: 520px) {
             nav {
                 padding: 16px 20px;
@@ -455,13 +455,17 @@
                         🔑 Demo Accounts
                     </div>
                     <div style="display:flex;flex-direction:column;gap:6px;">
-                        <button onclick="quickFill('user@giver.com','user1234')"
+                        <button
+                            id="demo-user-btn"
+                            onclick="quickFill('user@giver.com','user1234')"
                             style="display:flex;justify-content:space-between;align-items:center;width:100%;background:#fff;border:1px solid #e2ddd5;border-radius:4px;padding:7px 10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.75rem;color:#3D322A;transition:border-color .15s;"
                             onmouseover="this.style.borderColor='#b8965a'" onmouseout="this.style.borderColor='#e2ddd5'">
                             <span>👤 <strong>User</strong> — user@giver.com</span>
                             <span style="color:#7a7268;font-size:.7rem;">user1234</span>
                         </button>
-                        <button onclick="quickFill('admin@giver.com','admin1234')"
+                        <button
+                            id="demo-admin-btn"
+                            onclick="quickFill('admin@giver.com','admin1234')"
                             style="display:flex;justify-content:space-between;align-items:center;width:100%;background:#fff;border:1px solid #e2ddd5;border-radius:4px;padding:7px 10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.75rem;color:#3D322A;transition:border-color .15s;"
                             onmouseover="this.style.borderColor='#b8965a'" onmouseout="this.style.borderColor='#e2ddd5'">
                             <span>🛡️ <strong>Admin</strong> — admin@giver.com</span>
@@ -482,12 +486,12 @@
 
                 <div class="form-helper">
                     <label>
-            <input type="checkbox" /> Remember me
-          </label>
+                        <input type="checkbox" /> Remember me
+                    </label>
                     <button class="forgot-link">Forgot password?</button>
                 </div>
 
-                <button class="btn-submit" onclick="handleLogin()">Login</button>
+                <button class="btn-submit" id="login-submit-btn" onclick="handleLogin()">Login</button>
 
                 <div class="switch-hint">
                     Don't have an account? <button onclick="switchTab('register')">Register here</button>
@@ -525,7 +529,7 @@
                     <input type="password" id="reg-confirm" placeholder="Repeat your password" />
                 </div>
 
-                <button class="btn-submit" onclick="handleRegister()">Register</button>
+                <button class="btn-submit" id="register-submit-btn" onclick="handleRegister()">Register</button>
 
                 <div class="switch-hint">
                     Already have an account? <button onclick="switchTab('login')">Login here</button>
@@ -575,8 +579,7 @@
                 role: 'admin',
                 name: 'Admin',
                 username: 'admin'
-            },
-            {
+            }, {
                 email: 'admin2@giver.com',
                 password: 'admin5678',
                 role: 'admin',
@@ -590,8 +593,7 @@
                 role: 'user',
                 name: 'Test User',
                 username: 'testuser'
-            },
-            {
+            }, {
                 email: 'user2@giver.com',
                 password: 'user5678',
                 role: 'user',
@@ -606,7 +608,7 @@
                 el = document.createElement('div');
                 el.id = 'login-error';
                 el.style.cssText = 'background:#fdf0ee;border:1px solid #f0c4be;color:#c0392b;font-size:.78rem;padding:10px 14px;border-radius:4px;margin-bottom:16px;text-align:center;';
-                const btn = document.querySelector('#panel-login .btn-submit');
+                const btn = document.getElementById('login-submit-btn');
                 btn.parentNode.insertBefore(el, btn);
             }
             el.textContent = msg;
@@ -619,6 +621,7 @@
         }
 
     // ... โค้ดส่วน switchTab หรือส่วนอื่นๆ ของเดิม (เก็บไว้) ...
+
 
     // --- วางโค้ดใหม่ตรงนี้ ---
     async function handleLogin() {
