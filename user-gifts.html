@@ -28,13 +28,7 @@
       --danger-bg: #fdf0ee;
     }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -45,359 +39,217 @@
     }
 
     nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      height: 64px;
-      background: var(--bg);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px; background: var(--bg);
       border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 200; backdrop-filter: blur(8px);
     }
-
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--text-primary);
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600;
+      color: var(--text-primary); text-decoration: none;
     }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      list-style: none;
-    }
-
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
     .nav-links a {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: all 0.18s ease;
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 8px; font-size: 14px;
+      color: var(--text-secondary); text-decoration: none; transition: all 0.18s ease;
     }
+    .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+    .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
 
-    .nav-links a:hover {
-      color: var(--text-primary);
-      background: var(--accent-light);
-    }
-
-    .nav-links a.active {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .nav-links li:last-child a:hover {
-      color: var(--danger);
-      background: var(--danger-bg);
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 56px 48px 80px;
-    }
+    main { max-width: 1100px; margin: 0 auto; padding: 56px 48px 80px; }
 
     .page-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      animation: fadeUp 0.4s ease both;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 28px; animation: fadeUp 0.4s ease both;
     }
-
     .page-header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 36px;
-      font-weight: 500;
+      font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 500;
     }
+    .page-header p { color: var(--text-secondary); margin-top: 4px; font-size: 14px; font-weight: 300; }
 
-    .page-header p {
-      color: var(--text-secondary);
-      margin-top: 4px;
-      font-size: 14px;
-      font-weight: 300;
-    }
-
-    /* Filter bar */
     .filter-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
+      display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap;
       animation: fadeUp 0.4s ease 0.05s both;
     }
-
     .filter-btn {
-      padding: 7px 18px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.15s ease;
+      padding: 7px 18px; background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+      color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease;
     }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    .filter-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .filter-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
-
-    /* Search */
-    .search-wrap {
-      position: relative;
-      margin-bottom: 28px;
-      animation: fadeUp 0.4s ease 0.05s both;
-    }
-
+    .search-wrap { position: relative; margin-bottom: 28px; animation: fadeUp 0.4s ease 0.05s both; }
     .search-wrap svg {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-secondary);
-      pointer-events: none;
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-secondary); pointer-events: none;
     }
-
     .search-input {
-      width: 100%;
-      padding: 12px 14px 12px 42px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--text-primary);
-      outline: none;
-      transition: border-color 0.18s, box-shadow 0.18s;
+      width: 100%; padding: 12px 14px 12px 42px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-primary);
+      outline: none; transition: border-color 0.18s, box-shadow 0.18s;
     }
-
-    .search-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
-    }
-
-    .search-input::placeholder {
-      color: var(--text-secondary);
-    }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,150,90,0.12); }
+    .search-input::placeholder { color: var(--text-secondary); }
 
     /* Gift grid */
     .gifts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-      animation: fadeUp 0.4s ease 0.1s both;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px; animation: fadeUp 0.4s ease 0.1s both;
     }
 
     .gift-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; box-shadow: var(--shadow);
       transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
-
-    .gift-card:hover {
-      box-shadow: var(--shadow-hover);
-      transform: translateY(-3px);
-      border-color: var(--accent-light);
-    }
+    .gift-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); border-color: var(--accent-light); }
 
     .gift-img-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1/1;
-      overflow: hidden;
-      background: #ede8df;
+      position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #ede8df;
     }
+    .gift-slide-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: opacity 0.35s ease, transform 0.3s ease;
+    }
+    .gift-card:hover .gift-slide-img { transform: scale(1.04); }
 
-    .gift-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
+    /* Slideshow dots */
+    .img-dots {
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 4px;
     }
-
-    .gift-card:hover .gift-img-wrap img {
-      transform: scale(1.04);
+    .img-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,0.55); transition: background 0.3s;
     }
+    .img-dot.active { background: #fff; }
 
     .fav-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 34px;
-      height: 34px;
-      background: #fff;
-      border: none;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-      transition: all 0.18s ease;
+      position: absolute; top: 10px; right: 10px; width: 34px; height: 34px;
+      background: #fff; border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: all 0.18s ease;
     }
-
-    .fav-btn:hover {
-      transform: scale(1.1);
-    }
-
-    .fav-btn.active svg {
-      fill: #e74c3c;
-      stroke: #e74c3c;
-    }
+    .fav-btn:hover { transform: scale(1.1); }
+    .fav-btn.active svg { fill: #e74c3c; stroke: #e74c3c; }
 
     .gift-category-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 3px 10px;
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--accent-hover);
-      backdrop-filter: blur(4px);
+      position: absolute; top: 10px; left: 10px; padding: 3px 10px;
+      background: rgba(255,255,255,0.92); border-radius: 20px;
+      font-size: 11px; font-weight: 500; color: var(--accent-hover); backdrop-filter: blur(4px);
     }
 
-    .gift-info {
-      padding: 14px 16px 16px;
-    }
-
+    .gift-info { padding: 14px 16px 16px; }
     .gift-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-primary);
-      margin-bottom: 10px;
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-size: 14px; font-weight: 500; color: var(--text-primary);
+      margin-bottom: 12px; line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
     }
 
-    .gift-bottom {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .gift-price {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--text-primary);
-      white-space: nowrap;
-    }
-
-    .gift-rating {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      flex: 1;
-    }
-
+    /* View Details button */
     .view-btn {
-      padding: 7px 14px;
-      background: var(--btn-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      white-space: nowrap;
+      width: 100%; padding: 9px; background: var(--accent); border: none;
+      border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+      color: #fff; cursor: pointer; transition: background 0.15s; letter-spacing: 0.02em;
+    }
+    .view-btn:hover { background: var(--accent-hover); }
+
+    .no-result { grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-secondary); font-size: 14px; }
+
+    /* ── Detail Modal ─────────────────────────────────────────── */
+    .detail-overlay {
+      position: fixed; inset: 0; background: rgba(28,26,23,0.45);
+      display: none; align-items: center; justify-content: center;
+      z-index: 300; backdrop-filter: blur(4px); padding: 20px;
+    }
+    .detail-overlay.open { display: flex; }
+
+    .detail-modal {
+      background: var(--card-bg); border-radius: 20px; width: 100%;
+      max-width: 620px; max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(28,26,23,0.22);
+      animation: fadeUp 0.25s ease both;
     }
 
-    .view-btn:hover {
-      background: var(--btn-hover);
-      border-color: var(--accent-light);
-      color: var(--accent);
+    .detail-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 24px 24px 16px; border-bottom: 1px solid var(--border);
+    }
+    .detail-head h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500;
+    }
+    .detail-head p { color: var(--text-secondary); font-size: 13px; margin-top: 4px; line-height: 1.5; }
+
+    .detail-close {
+      width: 32px; height: 32px; border: none; background: var(--btn-bg);
+      border-radius: 50%; font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .detail-close:hover { background: var(--btn-hover); }
+
+    .detail-options { display: flex; flex-direction: column; gap: 14px; padding: 20px 24px 24px; }
+
+    .detail-opts-label {
+      font-size: 12px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 2px;
     }
 
-    .no-result {
-      grid-column: 1/-1;
-      text-align: center;
-      padding: 48px;
-      color: var(--text-secondary);
-      font-size: 14px;
+    .detail-opt-card {
+      display: flex; gap: 0; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; align-items: stretch;
+    }
+    .detail-opt-img {
+      width: 120px; height: 120px; object-fit: cover; flex-shrink: 0;
+    }
+    .detail-opt-info {
+      flex: 1; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .detail-opt-shop { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .detail-opt-price {
+      font-family: 'Cormorant Garamond', serif; font-size: 22px;
+      font-weight: 500; color: var(--text-primary); margin-top: 2px;
+    }
+    .detail-opt-rating { font-size: 12px; color: var(--accent); margin-top: 2px; }
+
+    .detail-opt-link {
+      display: inline-flex; align-items: center; gap: 5px; margin-top: 10px;
+      padding: 7px 14px; background: var(--accent); color: #fff;
+      border-radius: 8px; font-size: 13px; text-decoration: none;
+      transition: background 0.15s; align-self: flex-start;
+    }
+    .detail-opt-link:hover { background: var(--accent-hover); }
+    .detail-no-link {
+      margin-top: 10px; font-size: 12px; color: var(--text-secondary); font-style: italic;
     }
 
+    /* Toast */
     .toast {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 400;
-      background: var(--text-primary);
-      color: #fff;
-      padding: 13px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.2);
-      transform: translateY(16px);
-      opacity: 0;
-      transition: all 0.25s ease;
-      pointer-events: none;
+      position: fixed; bottom: 32px; right: 32px; z-index: 400;
+      background: var(--text-primary); color: #fff;
+      padding: 13px 20px; border-radius: 10px; font-size: 14px;
+      display: flex; align-items: center; gap: 9px;
+      box-shadow: 0 8px 24px rgba(28,26,23,0.2);
+      transform: translateY(16px); opacity: 0; transition: all 0.25s ease; pointer-events: none;
     }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .toast.show { opacity: 1; transform: translateY(0); }
 
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(14px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
-      nav {
-        padding: 0 20px;
-      }
-
-      main {
-        padding: 40px 20px 60px;
-      }
-
-      .gifts-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      nav { padding: 0 20px; }
+      main { padding: 40px 20px 60px; }
+      .gifts-grid { grid-template-columns: repeat(2, 1fr); }
+      .detail-opt-img { width: 90px; height: 90px; }
     }
   </style>
 </head>
@@ -408,30 +260,14 @@
       <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver"> Giver
     </a>
     <ul class="nav-links">
-      <li><a href="user-home.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8">
-            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-            <path d="M9 21V12h6v9" />
-          </svg> Home</a></li>
-      <li><a href="user-recipients.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.8">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-          </svg> Recipients</a></li>
-      <li><a href="user-favorites.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.8">
-            <polygon
-              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-          </svg> Favorites</a></li>
-      <li><a href="#" onclick="logout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.8">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg> Logout</a></li>
+      <li><a href="user-home.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg> Home</a></li>
+      <li><a href="user-recipients.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Recipients</a></li>
+      <li><a href="user-gifts.html" class="active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M19 12v9H5v-9"/><path d="M12 8V3m0 0L9 6m3-3 3 3"/></svg> Gifts</a></li>
+      <li><a href="user-favorites.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Favorites</a></li>
+      <li><a href="#" onclick="logout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</a></li>
     </ul>
   </nav>
+
   <main>
     <div class="page-header">
       <div>
@@ -441,26 +277,40 @@
     </div>
     <div class="search-wrap">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
       <input type="text" class="search-input" id="searchInput" placeholder="Search gifts..." oninput="applyFilters()">
     </div>
     <div class="filter-bar" id="filterBar">
       <button class="filter-btn active" data-cat="all" onclick="setFilter('all', this)">All</button>
-      <button class="filter-btn" data-cat="electronics" onclick="setFilter('electronics', this)">Electronics</button>
-      <button class="filter-btn" data-cat="home-decor" onclick="setFilter('home-decor', this)">Home Decor</button>
-      <button class="filter-btn" data-cat="fitness" onclick="setFilter('fitness', this)">Fitness</button>
-      <button class="filter-btn" data-cat="beauty" onclick="setFilter('beauty', this)">Beauty</button>
     </div>
     <div class="gifts-grid" id="giftsGrid"></div>
   </main>
+
+  <!-- Detail Modal -->
+  <div class="detail-overlay" id="detailModal" onclick="handleOverlayClick(event)">
+    <div class="detail-modal">
+      <div class="detail-head">
+        <div>
+          <h2 id="detailName"></h2>
+          <p id="detailDesc"></p>
+        </div>
+        <button class="detail-close" onclick="closeDetailModal()" title="Close">&times;</button>
+      </div>
+      <div class="detail-options">
+        <div class="detail-opts-label">Available Options</div>
+        <div id="detailOptions"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <polyline points="20 6 9 17 4 12" />
+      <polyline points="20 6 9 17 4 12"/>
     </svg>
     <span id="toastMsg"></span>
   </div>
+
   <script>
     const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
     if (!user || !user.id) window.location.href = 'login_register_page.html';
@@ -469,26 +319,35 @@
     const userId = user.id;
     let ALL_GIFTS = [];
     let favorites = [];
+    let allCategories = [];
     let activeFilter = 'all';
+    const slideshowTimers = new Map();
 
     async function init() {
       try {
-        const [giftsRes, favsRes] = await Promise.all([
+        const [giftsRes, favsRes, catsRes] = await Promise.all([
           fetch('/api/gifts'),
-          fetch(`/api/favorites?userId=${userId}`)
+          fetch(`/api/favorites?userId=${userId}`),
+          fetch('/api/categories')
         ]);
         ALL_GIFTS = giftsRes.ok ? await giftsRes.json() : [];
         favorites = favsRes.ok ? await favsRes.json() : [];
-      } catch (e) { ALL_GIFTS = []; favorites = []; }
+        allCategories = catsRes.ok ? await catsRes.json() : [];
+      } catch (e) { ALL_GIFTS = []; favorites = []; allCategories = []; }
       buildFilterBar();
       applyFilters();
+    }
+
+    function getCategoryName(id) {
+      const cat = allCategories.find(c => c.category_id === id);
+      return cat ? cat.category_name : (id || '');
     }
 
     function buildFilterBar() {
       const cats = [...new Set(ALL_GIFTS.map(g => g.category_id || g.category).filter(Boolean))];
       const bar = document.getElementById('filterBar');
       bar.innerHTML = `<button class="filter-btn active" data-cat="all" onclick="setFilter('all',this)">All</button>` +
-        cats.map(c => `<button class="filter-btn" data-cat="${c}" onclick="setFilter('${c}',this)">${c}</button>`).join('');
+        cats.map(c => `<button class="filter-btn" data-cat="${c}" onclick="setFilter('${c}',this)">${escHtml(getCategoryName(c))}</button>`).join('');
     }
 
     function isFav(id) { return favorites.includes(String(id)); }
@@ -530,18 +389,18 @@
       renderGrid(filtered);
     }
 
-    function getFirstImg(g) {
-      if (g.options && g.options.length > 0) return g.options[0].image_url || 'surprise(1).png';
-      return g.image || 'surprise(1).png';
-    }
-
-    function getFirstPrice(g) {
-      if (g.options && g.options.length > 0) return g.options[0].price || 0;
-      return g.price || 0;
+    function getAllImgs(g) {
+      if (!g.options || g.options.length === 0) return [g.image || 'surprise(1).png'];
+      const imgs = g.options.map(o => o.pic_link || o.image_url).filter(Boolean);
+      return imgs.length > 0 ? imgs : ['surprise(1).png'];
     }
 
     function renderGrid(gifts) {
       const grid = document.getElementById('giftsGrid');
+      // Clear old slideshows
+      slideshowTimers.forEach(t => clearInterval(t));
+      slideshowTimers.clear();
+
       if (gifts.length === 0) {
         grid.innerHTML = `<div class="no-result">No gifts found. Try a different filter or search term.</div>`;
         return;
@@ -550,15 +409,18 @@
         const id = g._id || g.id;
         const name = g.gift_name || g.name || '';
         const cat = g.category_id || g.category || '';
-        const imgSrc = getFirstImg(g);
-        const price = getFirstPrice(g);
+        const imgs = getAllImgs(g);
         const fav = isFav(id);
+        const dotsHtml = imgs.length > 1
+          ? `<div class="img-dots">${imgs.map((_,i) => `<span class="img-dot ${i===0?'active':''}"></span>`).join('')}</div>`
+          : '';
         return `
-        <div class="gift-card">
+        <div class="gift-card" id="card-${id}">
           <div class="gift-img-wrap">
-            <img src="${imgSrc}" alt="${escHtml(name)}"
+            <img class="gift-slide-img" src="${imgs[0]}" alt="${escHtml(name)}"
                  onerror="this.src='surprise(1).png';this.style.objectFit='contain';this.style.padding='24px';">
-            <span class="gift-category-badge">${escHtml(cat)}</span>
+            ${dotsHtml}
+            <span class="gift-category-badge">${escHtml(getCategoryName(cat))}</span>
             <button class="fav-btn ${fav ? 'active' : ''}" id="fav-${id}" title="Favorite"
                     onclick="toggleFav('${id}', this)">
               <svg width="16" height="16" viewBox="0 0 24 24"
@@ -570,18 +432,76 @@
           </div>
           <div class="gift-info">
             <div class="gift-name">${escHtml(name)}</div>
-            <div class="gift-bottom">
-              <span class="gift-price">฿${Number(price).toLocaleString()}</span>
-              <span class="gift-rating">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="1">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-                ${g.rating || '—'}
-              </span>
-            </div>
+            <button class="view-btn" onclick="openDetailModal('${id}')">View Details</button>
           </div>
         </div>`;
       }).join('');
+
+      // Start slideshows
+      gifts.forEach(g => {
+        const id = g._id || g.id;
+        const imgs = getAllImgs(g);
+        if (imgs.length <= 1) return;
+        const card = document.getElementById(`card-${id}`);
+        if (!card) return;
+        const imgEl = card.querySelector('.gift-slide-img');
+        const dots = card.querySelectorAll('.img-dot');
+        let cur = 0;
+        const t = setInterval(() => {
+          cur = (cur + 1) % imgs.length;
+          imgEl.style.opacity = '0';
+          setTimeout(() => {
+            imgEl.src = imgs[cur];
+            imgEl.style.opacity = '1';
+          }, 180);
+          dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+        }, 2500);
+        slideshowTimers.set(String(id), t);
+      });
+    }
+
+    function openDetailModal(id) {
+      const g = ALL_GIFTS.find(x => (x._id || x.id) === id || String(x._id || x.id) === String(id));
+      if (!g) return;
+      document.getElementById('detailName').textContent = g.gift_name || g.name || '';
+      document.getElementById('detailDesc').textContent = g.description || '';
+      const opts = g.options || [];
+      document.getElementById('detailOptions').innerHTML = opts.length === 0
+        ? '<p style="color:var(--text-secondary);font-size:14px;">No options available for this gift.</p>'
+        : opts.map(o => {
+            const img = o.pic_link || o.image_url || 'surprise(1).png';
+            const shop = o.shop_name || 'Shop';
+            const price = o.price ? '฿' + Number(o.price).toLocaleString() : '—';
+            const ratingHtml = o.rating
+              ? `<div class="detail-opt-rating">★ ${o.rating}</div>`
+              : '';
+            const linkHtml = o.shop_link
+              ? `<a class="detail-opt-link" href="${o.shop_link}" target="_blank" rel="noopener">Visit Shop ↗</a>`
+              : `<span class="detail-no-link">No link available</span>`;
+            return `<div class="detail-opt-card">
+              <img class="detail-opt-img" src="${img}" alt="${escHtml(shop)}"
+                   onerror="this.src='surprise(1).png';this.style.objectFit='contain';this.style.padding='12px';">
+              <div class="detail-opt-info">
+                <div>
+                  <div class="detail-opt-shop">${escHtml(shop)}</div>
+                  <div class="detail-opt-price">${price}</div>
+                  ${ratingHtml}
+                </div>
+                ${linkHtml}
+              </div>
+            </div>`;
+          }).join('');
+      document.getElementById('detailModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('detailModal')) closeDetailModal();
     }
 
     let toastTimer;
@@ -593,8 +513,12 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
-    function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function escHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
     function logout() { sessionStorage.removeItem('giver_user'); window.location.href = 'login_register_page.html'; }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetailModal(); });
 
     init();
   </script>
