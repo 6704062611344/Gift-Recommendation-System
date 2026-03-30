@@ -1146,8 +1146,9 @@
     window.location.href = 'login_register_page.html';
   }
 
-  loadCategoryOptions();
-  loadGifts();
+  // โหลด vocab+categories ก่อน แล้วค่อย render ตาราง
+  // เพื่อให้ vocabMap พร้อมก่อนที่ getTagLabel() จะถูกเรียก
+  loadCategoryOptions().then(() => loadGifts());
 </script>
 
 </body>
