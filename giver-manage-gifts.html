@@ -797,7 +797,6 @@
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="unisex">Unisex</option>
-            <option value="all">All</option>
           </select>
         </div>
       </div>
@@ -1046,7 +1045,9 @@
     document.getElementById('giftDesc').value     = g.description || '';
     document.getElementById('giftCategory').value = g.category_id;
     document.getElementById('giftGender').value   = g.target_gender_id || '';
-    document.getElementById('giftTags').value     = (g.tags || []).join(', ');
+    document.getElementById('giftTags').value = (g.tags || [])
+      .map(t => vocabMap[String(t)] || t)  // แปลง tag_id → term, fallback คือ text เดิม
+      .join(', ');
     document.getElementById('giftAge').value      = g.target_age_id || '';
     renderOptionsEditor(g.options || []);
     document.querySelector('.btn-save').textContent = 'Save Gift';
@@ -1060,7 +1061,14 @@
     const category_id      = document.getElementById('giftCategory').value;
     const target_gender_id = document.getElementById('giftGender').value;
     const target_age_id    = document.getElementById('giftAge').value.trim();
-    const tags = document.getElementById('giftTags').value.split(',').map(t => t.trim()).filter(Boolean);
+    // แปลง term → tag_id ถ้าหาเจอใน vocabMap, ไม่งั้นเก็บเป็น text
+    const termToTagId = {};
+    Object.entries(vocabMap).forEach(([tagId, term]) => { termToTagId[term.toLowerCase()] = tagId; });
+    const tags = document.getElementById('giftTags').value
+      .split(',')
+      .map(t => t.trim())
+      .filter(Boolean)
+      .map(t => termToTagId[t.toLowerCase()] || t); // tag_id ถ้าเจอ, ไม่งั้น text
 
     if (!gift_name || !category_id || !target_gender_id)
       return showToast('กรุณากรอก Gift Name, Category และ Target Gender', 'error');
