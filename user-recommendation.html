@@ -532,10 +532,11 @@
     if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
 
     const userId = user.id;
-    let ALL_GIFTS = [];
+    let ALL_GIFTS  = [];
     let VOCABULARY = [];
-    let RULES = [];
-    let favorites = [];
+    let RULES      = [];
+    let TAG_ID_MAP = {}; // tag_id → Vocabulary entry
+    let favorites  = [];
 
     /* ─── LOAD ALL DATA FROM API ─── */
     async function loadData() {
@@ -546,10 +547,13 @@
           fetch('/api/rules'),
           fetch(`/api/favorites?userId=${userId}`)
         ]);
-        ALL_GIFTS = giftsRes.ok ? await giftsRes.json() : [];
-        VOCABULARY = vocabRes.ok ? await vocabRes.json() : [];
-        RULES = rulesRes.ok ? await rulesRes.json() : [];
-        favorites = favsRes.ok ? await favsRes.json() : [];
+        ALL_GIFTS  = giftsRes.ok  ? await giftsRes.json()  : [];
+        VOCABULARY = vocabRes.ok  ? await vocabRes.json()  : [];
+        RULES      = rulesRes.ok  ? await rulesRes.json()  : [];
+        favorites  = favsRes.ok   ? await favsRes.json()   : [];
+        // สร้าง tagId → vocabulary lookup
+        TAG_ID_MAP = {};
+        VOCABULARY.forEach(v => { if (v.tag_id) TAG_ID_MAP[String(v.tag_id)] = v; });
       } catch (e) { console.error('Data load error', e); }
     }
 
@@ -594,19 +598,52 @@
 
     function getMatchedCategories(expandedInterests) {
       const categories = new Set();
+
+      // 1. จาก Rules: condition matches → target category
       RULES.forEach(rule => {
         const conditions = rule.condition || [];
         const matched = conditions.some(c => expandedInterests.includes(c.toLowerCase()));
         if (matched) {
-          (rule.target_category_ids || rule.categories || []).forEach(cat => categories.add(cat));
+          // รองรับทั้ง target_category_ids (array) และ target_category_id (string)
+          const cats = rule.target_category_ids
+            || (rule.target_category_id ? [rule.target_category_id] : [])
+            || rule.categories
+            || [];
+          cats.forEach(cat => categories.add(String(cat)));
         }
       });
+
+      // 2. จาก Vocabulary โดยตรง: term/synonym match → category_id
+      //    (วิธีนี้ทำงานได้แม้ไม่มี Rule ที่ตรง)
+      VOCABULARY.forEach(v => {
+        const terms = [v.term, ...(v.synonyms || [])].map(s => s.toLowerCase());
+        if (terms.some(t => expandedInterests.includes(t))) {
+          if (v.category_id) categories.add(String(v.category_id));
+        }
+      });
+
       return [...categories];
     }
 
-    function scoreGift(gift, expandedInterests) {
-      const tags = gift.tags || gift.keywords || [];
-      return tags.filter(k => expandedInterests.includes(k.toLowerCase())).length;
+    function scoreGift(gift, expandedInterests, matchedCategories) {
+      const tags = gift.tags || [];
+      let tagScore = 0;
+
+      tags.forEach(tagId => {
+        const vocab = TAG_ID_MAP[String(tagId)];
+        if (vocab) {
+          // tag_id → vocabulary term + synonyms → เทียบกับ expanded interests
+          const vocabTerms = [vocab.term, ...(vocab.synonyms || [])].map(s => s.toLowerCase());
+          if (vocabTerms.some(t => expandedInterests.includes(t))) tagScore += 1;
+        } else {
+          // fallback: ถ้า tag เป็น text โดยตรง
+          if (expandedInterests.includes(String(tagId).toLowerCase())) tagScore += 1;
+        }
+      });
+
+      // bonus +5 ถ้า gift อยู่ใน matched category
+      const inCategory = matchedCategories.includes(String(gift.category_id || gift.category || ''));
+      return tagScore + (inCategory ? 5 : 0);
     }
 
     function getGiftCategory(gift) {
@@ -624,16 +661,17 @@
 
     function getRecommendedGifts(recipient) {
       if (!recipient.interests || recipient.interests.length === 0) {
+        // ไม่มี interests → แสดงทุก gift เรียงตาม rating
         return [...ALL_GIFTS].sort((a, b) => (b.rating || 0) - (a.rating || 0));
       }
-      const expanded = expandInterests(recipient.interests);
-      const categories = getMatchedCategories(expanded);
+      const expanded    = expandInterests(recipient.interests);
+      const categories  = getMatchedCategories(expanded);
       const scored = ALL_GIFTS.map(g => ({
         ...g,
-        _score: scoreGift(g, expanded) + (categories.includes(getGiftCategory(g)) ? 5 : 0)
+        _score: scoreGift(g, expanded, categories)
       }));
       return scored
-        .filter(g => g._score > 0 || categories.includes(getGiftCategory(g)))
+        .filter(g => g._score > 0)
         .sort((a, b) => b._score - a._score || (b.rating || 0) - (a.rating || 0));
     }
 

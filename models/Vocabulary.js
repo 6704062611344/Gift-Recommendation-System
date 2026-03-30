@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const VocabularySchema = new mongoose.Schema({
+  tag_id: {
+    type: String,
+    default: ''
+  },
   term: {
     type: String,
     required: true,
@@ -15,7 +19,7 @@ const VocabularySchema = new mongoose.Schema({
     required: true,
   },
   tag_type: {
-    type: String, // e.g., 'function', 'emotion', 'context'
+    type: String,
     default: 'general',
   }
 });

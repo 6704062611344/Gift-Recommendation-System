@@ -164,21 +164,27 @@ async function importVocabulary(workbook, sheetName) {
   console.log(`  📋 Vocabulary headers: [${headers.join(', ')}]`);
 
   // หา index ของแต่ละคอลัมน์
+  const tagIdIdx    = headers.findIndex(h => h === 'tag_id' || h.includes('รหัสแท็ก') || h.includes('id'));
   const termIdx     = headers.findIndex(h => h === 'term' || h.includes('คำศัพท์'));
   const catIdx      = headers.findIndex(h => h.includes('category_id') || h.includes('รหัสหมวดหมู่'));
   const tagTypeIdx  = headers.findIndex(h => h.includes('tag_type') || h.includes('ประเภท'));
+  console.log(`  📋 tag_id column index: ${tagIdIdx}, term index: ${termIdx}`);
 
-  // คอลัมน์ synonyms = ทุกคอลัมน์ระหว่าง term และ category_id (B ถึง F)
+  // คอลัมน์ synonyms = ทุกคอลัมน์ระหว่าง term และ category_id
   const synStart = termIdx + 1;
-  const synEnd   = catIdx > synStart ? catIdx : synStart + 5; // B-F (สูงสุด 5 คอลัมน์)
+  const synEnd   = catIdx > synStart ? catIdx : synStart + 5;
   console.log(`  📋 Synonym columns: index ${synStart} ถึง ${synEnd - 1}`);
 
   await Vocabulary.deleteMany({});
   const dataRows = rows.slice(1); // ข้าม header row
-  const formatted = dataRows.map(row => {
+  const formatted = dataRows.map((row, rowIndex) => {
     const term        = termIdx >= 0 ? row[termIdx]?.toString().trim() : '';
     const category_id = catIdx >= 0  ? row[catIdx]?.toString().trim()  : '';
     const tag_type    = tagTypeIdx >= 0 ? row[tagTypeIdx]?.toString().trim() || 'general' : 'general';
+    // อ่าน tag_id จากคอลัมน์ที่ตรวจพบ หรือใช้ row index + 1 เป็น fallback
+    const tag_id      = tagIdIdx >= 0 && row[tagIdIdx]?.toString().trim()
+      ? row[tagIdIdx].toString().trim()
+      : String(rowIndex + 1);
 
     // รวบ synonyms จาก column B-F (หรือ synStart ถึง synEnd)
     const synonyms = [];
@@ -187,7 +193,7 @@ async function importVocabulary(workbook, sheetName) {
       if (val && val !== '') synonyms.push(val);
     }
 
-    return { term, synonyms, category_id, tag_type };
+    return { tag_id, term, synonyms, category_id, tag_type };
   }).filter(d => d.term !== '' && d.category_id !== '');
 
   if (formatted.length > 0) {
