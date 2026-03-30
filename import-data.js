@@ -29,7 +29,7 @@ const LOCAL_FILE = path.join(__dirname, 'Giver_Gift.xlsx');
 async function fetchAndParseExcel(url) {
   // ✅ ถ้ามีไฟล์ local ให้อ่านจาก local แทน (เร็วกว่ามาก)
   if (fs.existsSync(LOCAL_FILE)) {
-    console.log(`📂 พบไฟล์ local: data.xlsx — อ่านจากไฟล์ local แทน (ไม่ต้อง download)`);
+    console.log(`📂 พบไฟล์ local: Giver_Gift.xlsx — อ่านจากไฟล์ local แทน (ไม่ต้อง download)`);
     try {
       const workbook = xlsx.readFile(LOCAL_FILE);
       return workbook;
