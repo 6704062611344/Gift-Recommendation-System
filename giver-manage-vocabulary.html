@@ -781,14 +781,14 @@
         <p>Define terms and synonyms for better matching</p>
       </div>
       <button class="add-btn" id="addTermBtn" onclick="openAddModal()">
-        <img src="icon/surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        <img src="icon\surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
         + Add Term
       </button>
     </div>
 
     <!-- SEARCH -->
     <div class="search-wrap">
-      <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+      <img src="icon\surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
       <input type="text" class="search-input" id="searchInput" placeholder="Search" oninput="filterVocab()">
     </div>
 
@@ -818,7 +818,7 @@
       <div class="modal-header">
         <h3 id="modalTitle">Add Term</h3>
         <button class="modal-close" onclick="closeModal('termModal')">
-          <img src="icon/surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+          <img src="icon\surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
         </button>
       </div>
       <div class="modal-body">
@@ -851,7 +851,7 @@
     <div class="modal">
       <div class="modal-del-body">
         <div class="del-icon-wrap">
-          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+          <img src="icon\surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
         </div>
         <h3>Delete Term</h3>
         <p>Are you sure you want to delete <strong id="deleteTermName"></strong>?<br>This action cannot be undone.</p>
@@ -865,7 +865,7 @@
 
   <!-- TOAST -->
   <div class="toast" id="toast">
-    <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <img src="icon\surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
     <span id="toastMsg"></span>
   </div>
 
@@ -908,7 +908,7 @@
         tbody.innerHTML = `
         <tr class="empty-row">
           <td colspan="4">
-            <img src="icon/surprise (1).png" style="width:40px;height:40px;object-fit:contain;" alt="icon">
+            <img src="icon\surprise (1).png" style="width:40px;height:40px;object-fit:contain;" alt="icon">
             <p>No vocabulary terms found.</p>
           </td>
         </tr>`;
@@ -1033,7 +1033,7 @@
         const pill = document.createElement('span');
         pill.className = 'tag-pill';
         pill.innerHTML = `${escHtml(syn)}<button type="button" onclick="removeSynonym(${i})" aria-label="Remove ${escHtml(syn)}">
-        <img src="icon/surprise (1).png" style="width:10px;height:10px;object-fit:contain;" alt="icon">
+        <img src="icon\surprise (1).png" style="width:10px;height:10px;object-fit:contain;" alt="icon">
       </button>`;
         wrap.insertBefore(pill, input);
       });

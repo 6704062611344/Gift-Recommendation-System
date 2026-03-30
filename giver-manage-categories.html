@@ -496,13 +496,13 @@
       <p>Organize gifts into categories</p>
     </div>
     <button class="add-btn" onclick="openAddModal()">
-      <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+      <img src="icon\package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
       Add Categories
     </button>
   </div>
 
   <div class="search-wrap">
-    <img src="icon/categories.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <img src="icon\categories.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
     <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="filterCategories()">
   </div>
 
@@ -515,7 +515,7 @@
     <div class="modal-header">
       <h3 id="modalTitle">Add Category</h3>
       <button class="modal-close" onclick="closeModal('catModal')">
-        <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        <img src="icon\categories.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
       </button>
     </div>
     <div class="modal-body">
@@ -544,7 +544,7 @@
   <div class="modal">
     <div class="modal-del-body">
       <div class="del-icon-wrap">
-        <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+        <img src="icon\surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
       </div>
       <h3>Delete Category</h3>
       <p>Are you sure you want to delete <strong id="deleteCatName"></strong>?<br>This action cannot be undone.</p>
@@ -558,7 +558,7 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast">
-  <img src="icon/delete.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+  <img src="icon\delete.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
   <span id="toastMsg"></span>
 </div>
 
@@ -582,7 +582,7 @@
   function renderGrid(data) {
     const grid = document.getElementById('categoriesGrid');
     if (!data.length) {
-      grid.innerHTML = `<div class="empty-state"><img src="icon/categories.png" style="width:40px;height:40px;object-fit:contain;" alt="icon"><p>No categories found.</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><img src="icon\categories.png" style="width:40px;height:40px;object-fit:contain;" alt="icon"><p>No categories found.</p></div>`;
       return;
     }
     grid.innerHTML = data.map(c => `

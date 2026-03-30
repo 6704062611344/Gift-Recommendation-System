@@ -233,10 +233,10 @@
       <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver"> Giver
     </a>
     <ul class="nav-links">
-      <li><a href="user-home.html"><img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Home</a></li>
-      <li><a href="user-recipients.html"><img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Recipients</a></li>
-      <li><a href="user-favorites.html" class="active"><img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Favorites</a></li>
-      <li><a href="#" onclick="logout()"><img src="icon/star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Logout</a></li>
+      <li><a href="user-home.html"><img src="icon\home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Home</a></li>
+      <li><a href="user-recipients.html"><img src="icon\home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Recipients</a></li>
+      <li><a href="user-favorites.html" class="active"><img src="icon\group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Favorites</a></li>
+      <li><a href="#" onclick="logout()"><img src="icon\star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Logout</a></li>
     </ul>
   </nav>
 
@@ -268,7 +268,7 @@
   </div>
 
   <div class="toast" id="toast">
-    <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <img src="icon\surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
     <span id="toastMsg"></span>
   </div>
 
@@ -339,7 +339,7 @@
       if (favGifts.length === 0) {
         grid.innerHTML = `
         <div class="empty-state" style="grid-column:1/-1;">
-          <img src="icon/surprise (1).png" style="width:48px;height:48px;object-fit:contain;" alt="icon">
+          <img src="icon\surprise (1).png" style="width:48px;height:48px;object-fit:contain;" alt="icon">
           <h3>No favorites yet</h3>
           <p>Browse gifts and tap the ♥ to save your favorites here.</p>
           <a href="user-gifts.html" class="browse-btn">Browse Gifts</a>
@@ -363,7 +363,7 @@
             ${dotsHtml}
             <span class="gift-category-badge">${escHtml(getCategoryName(cat))}</span>
             <button class="fav-btn active" onclick="toggleFav('${id}', this)" title="Remove from favorites">
-              <img src="icon/star (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+              <img src="icon\star (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
             </button>
           </div>
           <div class="gift-info">
