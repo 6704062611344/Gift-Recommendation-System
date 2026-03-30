@@ -927,8 +927,13 @@
     }
     empty.style.display = 'none';
     tbody.innerHTML = data.map(g => {
-      const tags = (g.tags || []).slice(0, 2).map(t => `<span class="tag-chip">${getTagLabel(t)}</span>`).join('');
-      const more = (g.tags || []).length > 2 ? `<span class="tag-more">+${g.tags.length - 2}</span>` : '';
+      const MAX_TAGS = 4;
+      const allTagLabels = (g.tags || []).map(t => getTagLabel(t));
+      const tags = allTagLabels.slice(0, MAX_TAGS).map(label => `<span class="tag-chip">${label}</span>`).join('');
+      const hiddenCount = allTagLabels.length - MAX_TAGS;
+      const more = hiddenCount > 0
+        ? `<span class="tag-more" title="${allTagLabels.slice(MAX_TAGS).join(', ')}">+${hiddenCount}</span>`
+        : '';
       const opts = g.options && g.options.length > 0
         ? g.options.map((o, i) => {
             const img = o.pic_link || o.image_url || 'surprise(1).png';
