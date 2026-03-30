@@ -311,6 +311,70 @@
     font-style: italic;
   }
 
+  /* OPTIONS EDITOR */
+  .options-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .btn-add-opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 13px;
+    background: var(--accent-light);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .btn-add-opt:hover { background: var(--accent); color: #fff; }
+
+  .option-editor-row {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+
+  .option-editor-row-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .opt-row-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-remove-opt {
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border: none;
+    background: var(--danger-bg);
+    color: var(--danger);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+
+  .btn-remove-opt:hover { background: var(--danger); color: #fff; }
+
   /* CATEGORY BADGE */
   .badge-cat {
     display: inline-flex;
@@ -743,31 +807,22 @@
         <input type="text" class="form-input" id="giftTags" placeholder="e.g. tech, books, fitness">
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Target Age Range (optional)</label>
-          <input type="text" class="form-input" id="giftAge" placeholder="e.g. 18-35">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Price (฿) — Option แรก</label>
-          <input type="text" class="form-input" id="giftPrice" placeholder="0">
-        </div>
+      <div class="form-group">
+        <label class="form-label">Target Age Range (optional)</label>
+        <input type="text" class="form-input" id="giftAge" placeholder="e.g. 18-35">
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Shop Name — Option แรก</label>
-          <input type="text" class="form-input" id="giftShopName" placeholder="e.g. Shopee">
+      <div>
+        <div class="options-editor-header">
+          <label class="form-label">Options</label>
+          <button type="button" class="btn-add-opt" onclick="addOption()">+ Add Option</button>
         </div>
-        <div class="form-group">
-          <label class="form-label">Shop Link — Option แรก</label>
-          <input type="url" class="form-input" id="giftStore" placeholder="https://...">
-        </div>
+        <div id="optionsEditor"></div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Image URL — Option แรก</label>
-        <input type="url" class="form-input" id="giftImage" placeholder="https://...">
+        <label class="form-label">Rating (0–5 ดาว)</label>
+        <input type="number" class="form-input" id="giftRating" placeholder="e.g. 4.5" min="0" max="5" step="0.1">
       </div>
     </div>
     <div class="modal-footer" style="flex-direction:row-reverse;gap:10px;">
@@ -805,6 +860,7 @@
   const API_CATS  = '/api/categories';
 
   let allGifts = [];
+  let allCategories = [];
   let editingId = null;
   let deletingId = null;
 
@@ -813,10 +869,16 @@
     try {
       const res = await fetch(API_CATS);
       const cats = await res.json();
+      allCategories = cats;
       const sel = document.getElementById('giftCategory');
       sel.innerHTML = '<option value="">Select category</option>' +
         cats.map(c => `<option value="${c.category_id}">${c.category_id} — ${c.category_name}</option>`).join('');
     } catch (e) {}
+  }
+
+  function getCategoryName(id) {
+    const cat = allCategories.find(c => c.category_id === id);
+    return cat ? cat.category_name : id;
   }
 
   async function loadGifts() {
@@ -867,12 +929,13 @@
             </div>`;
           }).join('')
         : `<span class="no-options">No options</span>`;
+      const ratingBadge = g.rating ? `<br><span style="color:var(--accent);font-size:12px;">★ ${g.rating}</span>` : '';
       return `
         <tr>
-          <td>${g.gift_name}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
+          <td>${g.gift_name}${ratingBadge}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
           <td class="td-desc">${g.description || ''}</td>
           <td><div class="options-list">${opts}</div></td>
-          <td><span class="badge-cat">${g.category_id}</span></td>
+          <td><span class="badge-cat">${getCategoryName(g.category_id)}</span></td>
           <td><div class="tags-cell">${tags}${more}</div></td>
           <td>
             <div class="actions-cell">
@@ -899,16 +962,57 @@
     ));
   }
 
+  let optIdx = 0;
+
+  function renderOptionsEditor(options) {
+    document.getElementById('optionsEditor').innerHTML = '';
+    optIdx = 0;
+    if (!options || options.length === 0) { addOption(); return; }
+    options.forEach(o => addOption(o));
+  }
+
+  function addOption(data = {}) {
+    const i = optIdx++;
+    const container = document.getElementById('optionsEditor');
+    const row = document.createElement('div');
+    row.className = 'option-editor-row';
+    row.innerHTML = `
+      <div class="option-editor-row-hd">
+        <span class="opt-row-label">Option ${i + 1}</span>
+        <button type="button" class="btn-remove-opt" onclick="this.closest('.option-editor-row').remove();renumberOpts()" title="Remove">&times;</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Price (฿)</label>
+          <input type="text" class="form-input opt-price" placeholder="0" value="${data.price || ''}"></div>
+        <div class="form-group"><label class="form-label">Shop Name</label>
+          <input type="text" class="form-input opt-shopname" placeholder="e.g. Shopee" value="${(data.shop_name || '').replace(/"/g,'&quot;')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Shop Link</label>
+          <input type="url" class="form-input opt-shoplink" placeholder="https://..." value="${(data.shop_link || '').replace(/"/g,'&quot;')}"></div>
+        <div class="form-group"><label class="form-label">Image URL</label>
+          <input type="url" class="form-input opt-imgurl" placeholder="https://..." value="${(data.pic_link || '').replace(/"/g,'&quot;')}"></div>
+      </div>`;
+    container.appendChild(row);
+  }
+
+  function renumberOpts() {
+    document.querySelectorAll('#optionsEditor .opt-row-label').forEach((el, i) => {
+      el.textContent = `Option ${i + 1}`;
+    });
+  }
+
   function openAddModal() {
     editingId = null;
     document.getElementById('modalTitle').textContent = 'Add New Gift';
-    ['giftId','giftName','giftDesc','giftPrice','giftTags','giftStore','giftAge','giftImage','giftShopName'].forEach(id => {
+    ['giftId','giftName','giftDesc','giftTags','giftAge','giftRating'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = '';
     });
     document.getElementById('giftId').disabled = false;
     document.getElementById('giftCategory').value = '';
     document.getElementById('giftGender').value = '';
+    renderOptionsEditor([]);
     document.querySelector('.btn-save').textContent = 'Add Gift';
     openModal('giftModal');
   }
@@ -925,12 +1029,8 @@
     document.getElementById('giftGender').value   = g.target_gender_id || '';
     document.getElementById('giftTags').value     = (g.tags || []).join(', ');
     document.getElementById('giftAge').value      = g.target_age_id || '';
-    // Fill first option
-    const opt = g.options?.[0] || {};
-    document.getElementById('giftPrice').value    = opt.price || '';
-    document.getElementById('giftShopName').value = opt.shop_name || '';
-    document.getElementById('giftStore').value    = opt.shop_link || '';
-    document.getElementById('giftImage').value    = opt.pic_link || '';
+    renderOptionsEditor(g.options || []);
+    document.getElementById('giftRating').value   = g.rating || '';
     document.querySelector('.btn-save').textContent = 'Save Gift';
     openModal('giftModal');
   }
@@ -943,19 +1043,19 @@
     const target_gender_id = document.getElementById('giftGender').value;
     const target_age_id    = document.getElementById('giftAge').value.trim();
     const tags = document.getElementById('giftTags').value.split(',').map(t => t.trim()).filter(Boolean);
-    const price     = document.getElementById('giftPrice').value.trim();
-    const shop_name = document.getElementById('giftShopName').value.trim();
-    const shop_link = document.getElementById('giftStore').value.trim();
-    const pic_link  = document.getElementById('giftImage').value.trim();
 
     if (!gift_name || !category_id || !target_gender_id)
       return showToast('กรุณากรอก Gift Name, Category และ Target Gender', 'error');
 
-    const options = (price || shop_link || pic_link)
-      ? [{ price, shop_name, shop_link, pic_link }]
-      : [];
+    const rating = parseFloat(document.getElementById('giftRating').value) || 0;
+    const options = [...document.querySelectorAll('#optionsEditor .option-editor-row')].map(row => ({
+      price:     row.querySelector('.opt-price').value.trim(),
+      shop_name: row.querySelector('.opt-shopname').value.trim(),
+      shop_link: row.querySelector('.opt-shoplink').value.trim(),
+      pic_link:  row.querySelector('.opt-imgurl').value.trim()
+    })).filter(o => o.price || o.shop_name || o.shop_link || o.pic_link);
 
-    const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options };
+    const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options, rating };
 
     try {
       if (editingId) {

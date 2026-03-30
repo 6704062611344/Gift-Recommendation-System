@@ -885,6 +885,7 @@
     const API_VOC = '/api/vocabulary';
 
     let allVocab = [];
+    let allCategories = [];
     let editingId = null;
     let deletingId = null;
     let currentSynonyms = [];
@@ -896,6 +897,18 @@
         allVocab = await res.json();
         renderTable(allVocab);
       } catch (err) { showToast('ไม่สามารถโหลดข้อมูลได้'); }
+    }
+
+    async function loadCategories() {
+      try {
+        const res = await fetch('/api/categories');
+        allCategories = await res.json();
+      } catch (e) {}
+    }
+
+    function getCategoryName(id) {
+      const cat = allCategories.find(c => c.category_id === id);
+      return cat ? cat.category_name : (id || '—');
     }
 
     function renderTable(data) {
@@ -924,7 +937,7 @@
             ${(v.synonyms || []).map(s => `<span class="tag-outline">${escHtml(s)}</span>`).join('')}
           </div>
         </td>
-        <td><span class="tag-category">${escHtml(v.category_id || '')}</span></td>
+        <td><span class="tag-category">${getCategoryName(v.category_id)}</span></td>
         <td>
           <div class="row-actions">
             <button class="action-btn edit" title="Edit" onclick="openEditModal('${v._id}')">
@@ -1099,7 +1112,7 @@
       window.location.href = 'login_register_page.html';
     }
 
-    loadVocab();
+    (async () => { await loadCategories(); loadVocab(); })();
   </script>
 </body>
 

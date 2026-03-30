@@ -249,13 +249,14 @@ app.get('/api/gifts/:id', async (req, res) => {
 
 app.post('/api/gifts', async (req, res) => {
     try {
-        const { gift_id, gift_name, description, category_id, target_gender_id, target_age_id, tags, options } = req.body;
+        const { gift_id, gift_name, description, category_id, target_gender_id, target_age_id, tags, options, rating } = req.body;
         if (!gift_id || !gift_name || !category_id || !target_gender_id)
             return res.status(400).json({ message: 'gift_id, gift_name, category_id, target_gender_id จำเป็น' });
         const gift = await new Gift({
             gift_id, gift_name, description, category_id,
             target_gender_id, target_age_id,
-            tags: tags || [], options: options || []
+            tags: tags || [], options: options || [],
+            rating: rating || 0
         }).save();
         res.status(201).json(gift);
     } catch (err) {
@@ -266,10 +267,10 @@ app.post('/api/gifts', async (req, res) => {
 
 app.put('/api/gifts/:id', async (req, res) => {
     try {
-        const { gift_name, description, category_id, target_gender_id, target_age_id, tags, options } = req.body;
+        const { gift_name, description, category_id, target_gender_id, target_age_id, tags, options, rating } = req.body;
         const updated = await Gift.findByIdAndUpdate(
             req.params.id,
-            { $set: { gift_name, description, category_id, target_gender_id, target_age_id, tags, options } },
+            { $set: { gift_name, description, category_id, target_gender_id, target_age_id, tags, options, rating } },
             { new: true }
         );
         if (!updated) return res.status(404).json({ message: 'ไม่พบ Gift' });
