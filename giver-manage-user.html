@@ -574,12 +574,6 @@
       <input type="text" class="search-input" placeholder="Search by name, username or email…" id="searchInput" oninput="applyFilter()">
     </div>
 
-    <!-- FILTER TABS -->
-    <div class="filter-tabs">
-      <button class="filter-tab active" id="tab-all" onclick="setFilter('all')">All</button>
-      <button class="filter-tab" id="tab-user" onclick="setFilter('user')">Users</button>
-      <button class="filter-tab" id="tab-admin" onclick="setFilter('admin')">Admins</button>
-    </div>
 
     <!-- USERS TABLE -->
     <div class="table-card">
@@ -596,7 +590,6 @@
               <th>#</th>
               <th>User</th>
               <th>Email</th>
-              <th>Role</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -653,26 +646,6 @@
     </div>
   </div>
 
-  <!-- DEMOTE MODAL -->
-  <div class="modal-overlay" id="demoteModal">
-    <div class="modal">
-      <div class="modal-del-body">
-        <div class="del-icon-wrap danger">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="9"/>
-            <line x1="15" y1="9" x2="9" y2="15"/>
-            <line x1="9" y1="9" x2="15" y2="15"/>
-          </svg>
-        </div>
-        <h3>Demote from Admin</h3>
-        <p>Remove admin access from <strong id="demoteUserName"></strong>?<br>They will become a regular user.</p>
-      </div>
-      <div class="modal-del-footer">
-        <button class="btn-cancel" onclick="closeModal('demoteModal')">Cancel</button>
-        <button class="btn-delete" onclick="confirmDemote()">Demote</button>
-      </div>
-    </div>
-  </div>
 
   <!-- TOAST -->
   <div class="toast" id="toast">
@@ -691,11 +664,9 @@
     /* ─── STATE ─── */
     const API_BASE = '';
     let allUsers = [];
-    let filterRole = 'all';
     let searchQuery = '';
     let deletingId = null;
     let promotingId = null;
-    let demotingId = null;
 
     /* ─── LOAD DATA ─── */
     async function loadUsers() {
@@ -727,15 +698,15 @@
       const title = document.getElementById('tableTitle');
 
       const q = searchQuery.toLowerCase();
+      // แสดงเฉพาะ role === 'user' เท่านั้น
       let filtered = allUsers.filter(u =>
-        (u.name || '').toLowerCase().includes(q) ||
-        (u.username || '').toLowerCase().includes(q) ||
-        (u.email || '').toLowerCase().includes(q)
+        u.role === 'user' &&
+        (
+          (u.name || '').toLowerCase().includes(q) ||
+          (u.username || '').toLowerCase().includes(q) ||
+          (u.email || '').toLowerCase().includes(q)
+        )
       );
-
-      if (filterRole !== 'all') {
-        filtered = filtered.filter(u => u.role === filterRole);
-      }
 
       title.textContent = `All Users (${filtered.length})`;
 
@@ -748,18 +719,11 @@
 
       tbody.innerHTML = filtered.map((u, idx) => {
         const initial = (u.name || u.username || '?')[0];
-        const isAdmin = u.role === 'admin';
         const isSelf  = u._id === sessionUser.id;
 
-        const promoteBtn = !isAdmin
-          ? `<button class="action-btn promote" title="Promote to Admin" onclick="openPromoteModal('${u._id}','${escHtml(u.name)}')">
+        const promoteBtn = `<button class="action-btn promote" title="Promote to Admin" onclick="openPromoteModal('${u._id}','${escHtml(u.name)}')">
                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                  <polyline points="18 15 12 9 6 15"/>
-               </svg>
-             </button>`
-          : `<button class="action-btn demote" title="Demote from Admin" onclick="openDemoteModal('${u._id}','${escHtml(u.name)}')">
-               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                 <polyline points="6 9 12 15 18 9"/>
                </svg>
              </button>`;
 
@@ -786,12 +750,6 @@
               </div>
             </td>
             <td style="color:var(--text-secondary);">${escHtml(u.email)}</td>
-            <td>
-              <span class="role-badge ${isAdmin ? 'admin' : 'user'}">
-                <span class="role-dot"></span>
-                ${isAdmin ? 'Admin' : 'User'}
-              </span>
-            </td>
             <td>
               <div class="actions-cell">
                 ${promoteBtn}
@@ -854,24 +812,6 @@
       } catch (e) { showToast('Cannot connect to server.', 'error'); }
     }
 
-    /* ─── DEMOTE ─── */
-    function openDemoteModal(id, name) {
-      demotingId = id;
-      document.getElementById('demoteUserName').textContent = `"${name}"`;
-      openModal('demoteModal');
-    }
-
-    async function confirmDemote() {
-      if (!demotingId) return;
-      try {
-        const res = await fetch(`${API_BASE}/api/admin/demote/${demotingId}`, { method: 'PUT' });
-        const data = await res.json();
-        if (!res.ok) { showToast(data.message || 'Error demoting admin.', 'error'); return; }
-        showToast('Admin demoted to User.', 'success');
-        closeModal('demoteModal');
-        await loadUsers();
-      } catch (e) { showToast('Cannot connect to server.', 'error'); }
-    }
 
     /* ─── MODAL HELPERS ─── */
     function openModal(id)  { document.getElementById(id).classList.add('open'); }

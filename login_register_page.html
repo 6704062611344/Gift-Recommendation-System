@@ -394,21 +394,61 @@
                 transform: translateY(0);
             }
         }
+        /* ─── PASSWORD STRENGTH ─── */
+        .strength-bar-wrap {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        .strength-bar-wrap .bar {
+            flex: 1;
+            height: 3px;
+            border-radius: 999px;
+            background: rgba(69,54,49,.12);
+            transition: background .25s ease;
+        }
+        .strength-bar-wrap .bar.weak   { background: #e74c3c; }
+        .strength-bar-wrap .bar.fair   { background: #e67e22; }
+        .strength-bar-wrap .bar.good   { background: #f1c40f; }
+        .strength-bar-wrap .bar.strong { background: #27ae60; }
+
+        .strength-label {
+            font-size: .7rem;
+            font-weight: 500;
+            margin-top: 5px;
+            letter-spacing: .03em;
+            min-height: 14px;
+            transition: color .2s;
+        }
+
+        .pw-reqs {
+            list-style: none;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .pw-reqs li {
+            font-size: .72rem;
+            color: rgba(107,93,82,.5);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color .2s;
+        }
+        .pw-reqs li.met { color: #27ae60; }
+        .pw-reqs li::before {
+            content: '○';
+            font-size: .65rem;
+            flex-shrink: 0;
+        }
+        .pw-reqs li.met::before { content: '●'; }
+
         /* ─── RESPONSIVE ─── */
-        
         @media (max-width: 520px) {
-            nav {
-                padding: 16px 20px;
-            }
-            .auth-card {
-                padding: 36px 28px 32px;
-            }
-            footer {
-                padding: 16px 20px;
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
-            }
+            nav { padding: 16px 20px; }
+            .auth-card { padding: 36px 28px 32px; }
+            footer { padding: 16px 20px; flex-direction: column; gap: 8px; text-align: center; }
         }
     </style>
 </head>
@@ -481,11 +521,6 @@
                 </p>
 
                 <div class="form-group">
-                    <label for="reg-name">Name</label>
-                    <input type="text" id="reg-name" placeholder="Enter your full name" />
-                </div>
-
-                <div class="form-group">
                     <label for="reg-username">Username</label>
                     <input type="text" id="reg-username" placeholder="Choose a username" />
                 </div>
@@ -497,7 +532,23 @@
 
                 <div class="form-group">
                     <label for="reg-password">Password</label>
-                    <input type="password" id="reg-password" placeholder="Create a password" />
+                    <input type="password" id="reg-password" placeholder="Create a password" oninput="checkPasswordStrength(this.value)" />
+                    <!-- Strength bar -->
+                    <div class="strength-bar-wrap">
+                        <span class="bar" id="pw-bar-1"></span>
+                        <span class="bar" id="pw-bar-2"></span>
+                        <span class="bar" id="pw-bar-3"></span>
+                        <span class="bar" id="pw-bar-4"></span>
+                    </div>
+                    <div class="strength-label" id="pw-strength-label"></div>
+                    <!-- Requirements -->
+                    <ul class="pw-reqs">
+                        <li id="req-len">At least 8 characters</li>
+                        <li id="req-upper">Uppercase letter (A–Z)</li>
+                        <li id="req-lower">Lowercase letter (a–z)</li>
+                        <li id="req-number">Number (0–9)</li>
+                        <li id="req-special">Special character (!@#$%^&*…)</li>
+                    </ul>
                 </div>
 
                 <div class="form-group">

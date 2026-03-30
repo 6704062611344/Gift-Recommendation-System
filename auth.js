@@ -138,19 +138,14 @@ async function handleLogin() {
 async function handleRegister() {
     clearError('register-error');
 
-    const name = document.getElementById('reg-name').value.trim();
     const username = document.getElementById('reg-username').value.trim();
     const email = document.getElementById('reg-email').value.trim().toLowerCase();
     const password = document.getElementById('reg-password').value;
     const confirm = document.getElementById('reg-confirm').value;
 
     // Client-side validation
-    if (!name || !username || !email || !password || !confirm) {
+    if (!username || !email || !password || !confirm) {
         showError('register-error', 'Please fill in all fields.');
-        return;
-    }
-    if (name.length < 2) {
-        showError('register-error', 'Name must be at least 2 characters.');
         return;
     }
     if (username.length < 3) {
@@ -165,8 +160,24 @@ async function handleRegister() {
         showError('register-error', 'Please enter a valid email address.');
         return;
     }
-    if (password.length < 6) {
-        showError('register-error', 'Password must be at least 6 characters.');
+    if (password.length < 8) {
+        showError('register-error', 'Password must be at least 8 characters.');
+        return;
+    }
+    if (!/[A-Z]/.test(password)) {
+        showError('register-error', 'Password must contain at least one uppercase letter.');
+        return;
+    }
+    if (!/[a-z]/.test(password)) {
+        showError('register-error', 'Password must contain at least one lowercase letter.');
+        return;
+    }
+    if (!/[0-9]/.test(password)) {
+        showError('register-error', 'Password must contain at least one number.');
+        return;
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) {
+        showError('register-error', 'Password must contain at least one special character.');
         return;
     }
     if (password !== confirm) {
@@ -180,7 +191,7 @@ async function handleRegister() {
         const response = await fetch(`${API_BASE}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, username, email, password })
+            body: JSON.stringify({ name: username, username, email, password })
         });
 
         const data = await response.json();
@@ -191,7 +202,7 @@ async function handleRegister() {
         }
 
         // Clear form fields
-        ['reg-name', 'reg-username', 'reg-email', 'reg-password', 'reg-confirm']
+        ['reg-username', 'reg-email', 'reg-password', 'reg-confirm']
             .forEach(id => { document.getElementById(id).value = ''; });
 
         showSuccess('register-success', 'Registration successful! Switching to login…');
@@ -226,3 +237,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') handleRegister();
     });
 });
+
+// ─── Password Strength Checker ────────────────────────────────────────────────
+function checkPasswordStrength(val) {
+    const reqs = {
+        len:     val.length >= 8,
+        upper:   /[A-Z]/.test(val),
+        lower:   /[a-z]/.test(val),
+        number:  /[0-9]/.test(val),
+        special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(val)
+    };
+
+    // Update requirement items
+    Object.entries(reqs).forEach(([key, met]) => {
+        const el = document.getElementById('req-' + key);
+        if (el) el.classList.toggle('met', met);
+    });
+
+    // Score
+    const score = Object.values(reqs).filter(Boolean).length;
+    const bars  = [1, 2, 3, 4].map(i => document.getElementById('pw-bar-' + i));
+    const label = document.getElementById('pw-strength-label');
+
+    const levels = [
+        { cls: '',       text: '',          color: '' },
+        { cls: 'weak',   text: 'Weak',      color: '#e74c3c' },
+        { cls: 'weak',   text: 'Weak',      color: '#e74c3c' },
+        { cls: 'fair',   text: 'Fair',      color: '#e67e22' },
+        { cls: 'good',   text: 'Good',      color: '#f1c40f' },
+        { cls: 'strong', text: 'Strong ✓',  color: '#27ae60' }
+    ];
+
+    const lvl = val.length === 0 ? levels[0] : levels[Math.max(1, score)];
+
+    bars.forEach((bar, i) => {
+        bar.className = 'bar';
+        if (i < score && val.length > 0) bar.classList.add(lvl.cls);
+    });
+
+    if (label) {
+        label.textContent = lvl.text;
+        label.style.color = lvl.color;
+    }
+}
