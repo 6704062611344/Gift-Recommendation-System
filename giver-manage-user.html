@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giver — Manage Users</title>
+  <link rel="icon" href="surprise(1).png" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ece4;
+      --card-bg: #faf8f4;
+      --border: #e2ddd5;
+      --text-primary: #1c1a17;
+      --text-secondary: #7a7268;
+      --accent: #b8965a;
+      --accent-light: #e8dcc8;
+      --accent-hover: #9a7a44;
+      --btn-bg: #ede8df;
+      --btn-hover: #e0d9cd;
+      --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
+      --danger: #c0392b;
+      --danger-bg: #fdf0ee;
+      --success: #27ae60;
+      --success-bg: #eafaf1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+    .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+
+    /* MAIN */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 300;
+    }
+
+    /* SEARCH */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 28px;
+      animation: fadeUp 0.4s ease 0.05s both;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .search-input::placeholder { color: var(--text-secondary); }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
+
+    /* FILTER TABS */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.4s ease 0.08s both;
+    }
+
+    .filter-tab {
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 400;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .filter-tab:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent-hover); }
+    .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+
+    /* TABLE CARD */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeUp 0.4s ease 0.1s both;
+    }
+
+    .table-card-header {
+      padding: 24px 32px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-card-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .table-card-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-top: 3px;
+    }
+
+    /* TABLE */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    table {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: #f5f2ed;
+      border-bottom: 1px solid var(--border);
+    }
+
+    thead th:first-child { padding-left: 32px; }
+    thead th:last-child { padding-right: 32px; text-align: right; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f7f4ef; }
+
+    tbody td {
+      padding: 16px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    tbody td:first-child { padding-left: 32px; }
+    tbody td:last-child { padding-right: 32px; }
+
+    /* AVATAR */
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      border: 1px solid #ddd0b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent-hover);
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-name { font-weight: 500; }
+    .user-username { font-size: 12px; color: var(--text-secondary); }
+
+    /* ROLE BADGE */
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .role-badge.admin {
+      background: var(--accent-light);
+      border: 1px solid #ddd0b8;
+      color: var(--accent-hover);
+    }
+
+    .role-badge.user {
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .role-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ACTIONS CELL */
+    .actions-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .action-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: var(--text-secondary);
+    }
+
+    .action-btn.promote:hover {
+      background: var(--accent-light);
+      border-color: #ddd0b8;
+      color: var(--accent-hover);
+    }
+
+    .action-btn.demote:hover {
+      background: #fff8ec;
+      border-color: #f0d98a;
+      color: #a07c10;
+    }
+
+    .action-btn.del:hover {
+      background: var(--danger-bg);
+      border-color: #f0c4be;
+      color: var(--danger);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 32px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state svg { margin-bottom: 16px; opacity: 0.35; }
+    .empty-state p { font-size: 14px; font-weight: 300; }
+
+    /* MODAL OVERLAY */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 23, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 60px rgba(28, 26, 23, 0.18);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.22s ease;
+    }
+
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-del-body {
+      padding: 32px 28px 12px;
+      text-align: center;
+    }
+
+    .del-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .del-icon-wrap.danger { background: var(--danger-bg); color: var(--danger); }
+    .del-icon-wrap.promote-icon { background: var(--accent-light); color: var(--accent-hover); }
+
+    .modal-del-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .modal-del-body p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .modal-del-footer {
+      display: flex;
+      gap: 10px;
+      padding: 20px 28px 28px;
+      justify-content: center;
+    }
+
+    .btn-cancel {
+      padding: 10px 22px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+
+    .btn-cancel:hover { background: var(--btn-hover); }
+
+    .btn-delete {
+      padding: 10px 22px;
+      background: var(--danger);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete:hover { background: #a93226; }
+
+    .btn-promote {
+      padding: 10px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-promote:hover { background: var(--accent-hover); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 400;
+      background: var(--text-primary);
+      color: #fff;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.2);
+      transform: translateY(16px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success svg { color: #6fcf97; }
+    .toast.error svg { color: #eb5757; }
+
+    /* ANIMATION */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      main { padding: 40px 24px 60px; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .filter-tabs { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="giver-dashboard.html">
+      <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;">
+      Giver
+    </a>
+    <ul class="nav-links">
+      <li><a href="giver-dashboard.html">
+          <img src="icon-dashboard.png" style="width:15px;height:15px;object-fit:contain;">
+          Dashboard
+        </a></li>
+      <li><a href="giver-manage-gifts.html">
+          <img src="icon-gifts.png" style="width:15px;height:15px;object-fit:contain;">
+          Gifts
+        </a></li>
+      <li><a href="giver-manage-categories.html">
+          <img src="icon-categories.png" style="width:15px;height:15px;object-fit:contain;">
+          Categories
+        </a></li>
+      <li><a href="giver-manage-rules.html">
+          <img src="icon-rules.png" style="width:15px;height:15px;object-fit:contain;">
+          Rules
+        </a></li>
+      <li><a href="giver-manage-vocabulary.html">
+          <img src="icon-vocabulary.png" style="width:15px;height:15px;object-fit:contain;">
+          Vocabulary
+        </a></li>
+      <li><a href="giver-manage-admin.html">
+          <img src="icon-admin.png" style="width:15px;height:15px;object-fit:contain;">
+          Admin
+        </a></li>
+      <li><a href="giver-manage-user.html" class="active">
+          <img src="icon-admin.png" style="width:15px;height:15px;object-fit:contain;">
+          Users
+        </a></li>
+      <li><a href="#" onclick="logout()">
+          <img src="icon-logout.png" style="width:15px;height:15px;object-fit:contain;">
+          Logout
+        </a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1>Manage Users</h1>
+      <p>View and manage all registered users</p>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" class="search-input" placeholder="Search by name, username or email…" id="searchInput" oninput="applyFilter()">
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" id="tab-all" onclick="setFilter('all')">All</button>
+      <button class="filter-tab" id="tab-user" onclick="setFilter('user')">Users</button>
+      <button class="filter-tab" id="tab-admin" onclick="setFilter('admin')">Admins</button>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <div>
+          <h2 id="tableTitle">All Users (0)</h2>
+          <p>Registered members of the system</p>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="userEmpty" style="display:none;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" />
+        </svg>
+        <p>No users found.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- DELETE USER MODAL -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap danger">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </div>
+        <h3>Delete User</h3>
+        <p>Are you sure you want to delete <strong id="deleteUserName"></strong>?<br>This action cannot be undone.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMOTE MODAL -->
+  <div class="modal-overlay" id="promoteModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap promote-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <h3>Promote to Admin</h3>
+        <p>Grant admin access to <strong id="promoteUserName"></strong>?<br>They will be able to manage the system.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('promoteModal')">Cancel</button>
+        <button class="btn-promote" onclick="confirmPromote()">Promote</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMOTE MODAL -->
+  <div class="modal-overlay" id="demoteModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap danger">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="9"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h3>Demote from Admin</h3>
+        <p>Remove admin access from <strong id="demoteUserName"></strong>?<br>They will become a regular user.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('demoteModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmDemote()">Demote</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    /* ─── AUTH CHECK ─── */
+    const sessionUser = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
+    if (!sessionUser || !sessionUser.role) window.location.href = 'login_register_page.html';
+    if (sessionUser.role !== 'admin') window.location.href = 'user-home.html';
+
+    /* ─── STATE ─── */
+    const API_BASE = '';
+    let allUsers = [];
+    let filterRole = 'all';
+    let searchQuery = '';
+    let deletingId = null;
+    let promotingId = null;
+    let demotingId = null;
+
+    /* ─── LOAD DATA ─── */
+    async function loadUsers() {
+      setTableLoading();
+      try {
+        const res = await fetch(`${API_BASE}/api/users`);
+        allUsers = res.ok ? await res.json() : [];
+      } catch (e) {
+        showToast('Cannot connect to server.', 'error');
+        allUsers = [];
+      }
+      renderTable();
+    }
+
+    /* ─── LOADING SKELETON ─── */
+    function setTableLoading() {
+      document.getElementById('userTableBody').innerHTML = Array(4).fill(`
+        <tr>
+          ${Array(5).fill(`<td><span style="display:inline-block;width:75%;height:13px;background:#e8e2d8;border-radius:4px;"></span></td>`).join('')}
+        </tr>
+      `).join('');
+      document.getElementById('userEmpty').style.display = 'none';
+    }
+
+    /* ─── RENDER TABLE ─── */
+    function renderTable() {
+      const tbody = document.getElementById('userTableBody');
+      const empty = document.getElementById('userEmpty');
+      const title = document.getElementById('tableTitle');
+
+      const q = searchQuery.toLowerCase();
+      let filtered = allUsers.filter(u =>
+        (u.name || '').toLowerCase().includes(q) ||
+        (u.username || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q)
+      );
+
+      if (filterRole !== 'all') {
+        filtered = filtered.filter(u => u.role === filterRole);
+      }
+
+      title.textContent = `All Users (${filtered.length})`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      tbody.innerHTML = filtered.map((u, idx) => {
+        const initial = (u.name || u.username || '?')[0];
+        const isAdmin = u.role === 'admin';
+        const isSelf  = u._id === sessionUser.id;
+
+        const promoteBtn = !isAdmin
+          ? `<button class="action-btn promote" title="Promote to Admin" onclick="openPromoteModal('${u._id}','${escHtml(u.name)}')">
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                 <polyline points="18 15 12 9 6 15"/>
+               </svg>
+             </button>`
+          : `<button class="action-btn demote" title="Demote from Admin" onclick="openDemoteModal('${u._id}','${escHtml(u.name)}')">
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                 <polyline points="6 9 12 15 18 9"/>
+               </svg>
+             </button>`;
+
+        const deleteBtn = !isSelf
+          ? `<button class="action-btn del" title="Delete user" onclick="openDeleteModal('${u._id}','${escHtml(u.name)}')">
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                 <polyline points="3 6 5 6 21 6"/>
+                 <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                 <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
+               </svg>
+             </button>`
+          : '';
+
+        return `
+          <tr>
+            <td style="color:var(--text-secondary);font-size:13px;">${idx + 1}</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar">${initial}</div>
+                <div>
+                  <div class="user-name">${escHtml(u.name)}${isSelf ? ' <span style="font-size:11px;color:var(--accent);font-weight:400;">(you)</span>' : ''}</div>
+                  <div class="user-username">@${escHtml(u.username || '—')}</div>
+                </div>
+              </div>
+            </td>
+            <td style="color:var(--text-secondary);">${escHtml(u.email)}</td>
+            <td>
+              <span class="role-badge ${isAdmin ? 'admin' : 'user'}">
+                <span class="role-dot"></span>
+                ${isAdmin ? 'Admin' : 'User'}
+              </span>
+            </td>
+            <td>
+              <div class="actions-cell">
+                ${promoteBtn}
+                ${deleteBtn}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    /* ─── FILTER / SEARCH ─── */
+    function setFilter(role) {
+      filterRole = role;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(`tab-${role}`).classList.add('active');
+      renderTable();
+    }
+
+    function applyFilter() {
+      searchQuery = document.getElementById('searchInput').value;
+      renderTable();
+    }
+
+    /* ─── DELETE ─── */
+    function openDeleteModal(id, name) {
+      deletingId = id;
+      document.getElementById('deleteUserName').textContent = `"${name}"`;
+      openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+      if (!deletingId) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/users/${deletingId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.message || 'Error deleting user.', 'error'); return; }
+        showToast('User deleted successfully.', 'success');
+        closeModal('deleteModal');
+        await loadUsers();
+      } catch (e) { showToast('Cannot connect to server.', 'error'); }
+    }
+
+    /* ─── PROMOTE ─── */
+    function openPromoteModal(id, name) {
+      promotingId = id;
+      document.getElementById('promoteUserName').textContent = `"${name}"`;
+      openModal('promoteModal');
+    }
+
+    async function confirmPromote() {
+      if (!promotingId) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/promote/${promotingId}`, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.message || 'Error promoting user.', 'error'); return; }
+        showToast('User promoted to Admin.', 'success');
+        closeModal('promoteModal');
+        await loadUsers();
+      } catch (e) { showToast('Cannot connect to server.', 'error'); }
+    }
+
+    /* ─── DEMOTE ─── */
+    function openDemoteModal(id, name) {
+      demotingId = id;
+      document.getElementById('demoteUserName').textContent = `"${name}"`;
+      openModal('demoteModal');
+    }
+
+    async function confirmDemote() {
+      if (!demotingId) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/demote/${demotingId}`, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.message || 'Error demoting admin.', 'error'); return; }
+        showToast('Admin demoted to User.', 'success');
+        closeModal('demoteModal');
+        await loadUsers();
+      } catch (e) { showToast('Cannot connect to server.', 'error'); }
+    }
+
+    /* ─── MODAL HELPERS ─── */
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+      el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
+    });
+
+    /* ─── TOAST ─── */
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.className = 'toast ' + type + ' show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    /* ─── UTILS ─── */
+    function escHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function logout() {
+      sessionStorage.removeItem('giver_user');
+      window.location.href = 'login_register_page.html';
+    }
+
+    /* ─── INIT ─── */
+    loadUsers();
+  </script>
+
+</body>
+
+</html>
