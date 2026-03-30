@@ -252,18 +252,32 @@
       display: block;
       transition: opacity 0.35s ease, transform 0.3s ease;
     }
-    .gift-card:hover .gift-slide-img { transform: scale(1.04); }
+
+    .gift-card:hover .gift-slide-img {
+      transform: scale(1.04);
+    }
 
     /* Slideshow dots */
     .img-dots {
-      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 4px;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
     }
+
     .img-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: rgba(255,255,255,0.55); transition: background 0.3s;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      transition: background 0.3s;
     }
-    .img-dot.active { background: #fff; }
+
+    .img-dot.active {
+      background: #fff;
+    }
 
     /* Favorite button */
     .fav-btn {
@@ -282,8 +296,15 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
       transition: all 0.18s ease;
     }
-    .fav-btn:hover { transform: scale(1.1); }
-    .fav-btn.active svg { fill: #e74c3c; stroke: #e74c3c; }
+
+    .fav-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .fav-btn.active svg {
+      fill: #e74c3c;
+      stroke: #e74c3c;
+    }
 
     /* Category badge */
     .gift-category-badge {
@@ -300,7 +321,9 @@
     }
 
     /* Gift info */
-    .gift-info { padding: 14px 16px 16px; }
+    .gift-info {
+      padding: 14px 16px 16px;
+    }
 
     .gift-name {
       font-size: 14px;
@@ -328,62 +351,164 @@
       transition: background 0.15s;
       letter-spacing: 0.02em;
     }
-    .view-btn:hover { background: var(--accent-hover); }
+
+    .view-btn:hover {
+      background: var(--accent-hover);
+    }
 
     /* ── DETAIL MODAL ── */
     .detail-overlay {
-      position: fixed; inset: 0; background: rgba(28,26,23,0.45);
-      display: none; align-items: center; justify-content: center;
-      z-index: 300; backdrop-filter: blur(4px); padding: 20px;
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 23, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      backdrop-filter: blur(4px);
+      padding: 20px;
     }
-    .detail-overlay.open { display: flex; }
+
+    .detail-overlay.open {
+      display: flex;
+    }
+
     .detail-modal {
-      background: var(--card-bg); border-radius: 20px; width: 100%;
-      max-width: 620px; max-height: 85vh; overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(28,26,23,0.22);
+      background: var(--card-bg);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(28, 26, 23, 0.22);
       animation: fadeUp 0.25s ease both;
     }
+
     .detail-head {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      padding: 24px 24px 16px; border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--border);
     }
-    .detail-head h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; }
-    .detail-head p { color: var(--text-secondary); font-size: 13px; margin-top: 4px; line-height: 1.5; }
+
+    .detail-head h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 500;
+    }
+
+    .detail-head p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
     .detail-close {
-      width: 32px; height: 32px; border: none; background: var(--btn-bg);
-      border-radius: 50%; font-size: 20px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--btn-bg);
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
       transition: background 0.15s;
     }
-    .detail-close:hover { background: var(--btn-hover); }
-    .detail-options { display: flex; flex-direction: column; gap: 14px; padding: 20px 24px 24px; }
+
+    .detail-close:hover {
+      background: var(--btn-hover);
+    }
+
+    .detail-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px 24px 24px;
+    }
+
     .detail-opts-label {
-      font-size: 12px; font-weight: 500; text-transform: uppercase;
-      letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 2px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
     }
+
     .detail-opt-card {
-      display: flex; background: var(--bg); border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden; align-items: stretch;
+      display: flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      align-items: stretch;
     }
-    .detail-opt-img { width: 120px; height: 120px; object-fit: cover; flex-shrink: 0; }
+
+    .detail-opt-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
     .detail-opt-info {
-      flex: 1; padding: 14px 16px;
-      display: flex; flex-direction: column; justify-content: space-between;
+      flex: 1;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-    .detail-opt-shop { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+
+    .detail-opt-shop {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
     .detail-opt-price {
-      font-family: 'Cormorant Garamond', serif; font-size: 22px;
-      font-weight: 500; color: var(--text-primary); margin-top: 2px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-top: 2px;
     }
-    .detail-opt-rating { font-size: 12px; color: var(--accent); margin-top: 2px; }
+
+    .detail-opt-rating {
+      font-size: 12px;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
     .detail-opt-link {
-      display: inline-flex; align-items: center; gap: 5px; margin-top: 10px;
-      padding: 7px 14px; background: var(--accent); color: #fff;
-      border-radius: 8px; font-size: 13px; text-decoration: none;
-      transition: background 0.15s; align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 7px 14px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 13px;
+      text-decoration: none;
+      transition: background 0.15s;
+      align-self: flex-start;
     }
-    .detail-opt-link:hover { background: var(--accent-hover); }
-    .detail-no-link { margin-top: 10px; font-size: 12px; color: var(--text-secondary); font-style: italic; }
+
+    .detail-opt-link:hover {
+      background: var(--accent-hover);
+    }
+
+    .detail-no-link {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
 
     /* ── EMPTY STATE ── */
     .empty-state {
@@ -480,15 +605,15 @@
           Home
         </a></li>
       <li><a href="user-recipients.html">
-          <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
           Recipients
         </a></li>
       <li><a href="user-favorites.html">
-          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+          <img src="icon/star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
           Favorites
         </a></li>
       <li><a href="#" onclick="logout()">
-          <img src="icon/star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+          <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
           Logout
         </a></li>
     </ul>
@@ -549,11 +674,11 @@
     if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
 
     const userId = user.id;
-    let ALL_GIFTS    = [];
-    let VOCABULARY   = [];
-    let RULES        = [];
-    let TAG_ID_MAP   = {};
-    let favorites    = [];
+    let ALL_GIFTS = [];
+    let VOCABULARY = [];
+    let RULES = [];
+    let TAG_ID_MAP = {};
+    let favorites = [];
     let allCategories = [];
     const slideshowTimers = new Map();
 
@@ -567,11 +692,11 @@
           fetch(`/api/favorites?userId=${userId}`),
           fetch('/api/categories')
         ]);
-        ALL_GIFTS     = giftsRes.ok  ? await giftsRes.json()  : [];
-        VOCABULARY    = vocabRes.ok  ? await vocabRes.json()  : [];
-        RULES         = rulesRes.ok  ? await rulesRes.json()  : [];
-        favorites     = favsRes.ok   ? await favsRes.json()   : [];
-        allCategories = catsRes.ok   ? await catsRes.json()   : [];
+        ALL_GIFTS = giftsRes.ok ? await giftsRes.json() : [];
+        VOCABULARY = vocabRes.ok ? await vocabRes.json() : [];
+        RULES = rulesRes.ok ? await rulesRes.json() : [];
+        favorites = favsRes.ok ? await favsRes.json() : [];
+        allCategories = catsRes.ok ? await catsRes.json() : [];
         TAG_ID_MAP = {};
         VOCABULARY.forEach(v => { if (v.tag_id) TAG_ID_MAP[String(v.tag_id)] = v; });
       } catch (e) { console.error('Data load error', e); }
@@ -613,7 +738,7 @@
           const synonyms = v.synonyms || [];
           // Bug Fix: ใช้ toLowerCase() เพื่อ case-insensitive matching
           const termLower = (v.term || '').toLowerCase();
-          const synLower  = synonyms.map(s => s.toLowerCase());
+          const synLower = synonyms.map(s => s.toLowerCase());
           if (termLower === lower || synLower.includes(lower)) {
             // Bug Fix: เก็บ lowercase เสมอเพื่อให้ includes() ทำงานถูกต้อง
             expanded.add(termLower);
@@ -698,8 +823,8 @@
         // ไม่มี interests → แสดงทุก gift เรียงตาม rating
         return [...ALL_GIFTS].sort((a, b) => getGiftRating(b) - getGiftRating(a));
       }
-      const expanded    = expandInterests(recipient.interests);
-      const categories  = getMatchedCategories(expanded);
+      const expanded = expandInterests(recipient.interests);
+      const categories = getMatchedCategories(expanded);
       const scored = ALL_GIFTS.map(g => ({
         ...g,
         _score: scoreGift(g, expanded, categories)
@@ -726,14 +851,14 @@
       document.getElementById('detailOptions').innerHTML = opts.length === 0
         ? '<p style="color:var(--text-secondary);font-size:14px;">No options available for this gift.</p>'
         : opts.map(o => {
-            const img   = o.pic_link || o.image_url || 'surprise(1).png';
-            const shop  = o.shop_name || 'Shop';
-            const price = o.price ? '฿' + Number(o.price).toLocaleString() : '—';
-            const ratingHtml = o.rating ? `<div class="detail-opt-rating">★ ${o.rating}</div>` : '';
-            const linkHtml = o.shop_link
-              ? `<a class="detail-opt-link" href="${o.shop_link}" target="_blank" rel="noopener">Visit Shop ↗</a>`
-              : `<span class="detail-no-link">No link available</span>`;
-            return `<div class="detail-opt-card">
+          const img = o.pic_link || o.image_url || 'surprise(1).png';
+          const shop = o.shop_name || 'Shop';
+          const price = o.price ? '฿' + Number(o.price).toLocaleString() : '—';
+          const ratingHtml = o.rating ? `<div class="detail-opt-rating">★ ${o.rating}</div>` : '';
+          const linkHtml = o.shop_link
+            ? `<a class="detail-opt-link" href="${o.shop_link}" target="_blank" rel="noopener">Visit Shop ↗</a>`
+            : `<span class="detail-no-link">No link available</span>`;
+          return `<div class="detail-opt-card">
               <img class="detail-opt-img" src="${img}" alt="${escHtml(shop)}"
                    onerror="this.src='surprise(1).png';this.style.objectFit='contain';this.style.padding='12px';">
               <div class="detail-opt-info">
@@ -745,7 +870,7 @@
                 ${linkHtml}
               </div>
             </div>`;
-          }).join('');
+        }).join('');
       document.getElementById('detailModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -802,13 +927,13 @@
       }
 
       grid.innerHTML = recommended.map(g => {
-        const id   = g._id || g.id;
+        const id = g._id || g.id;
         const name = g.gift_name || g.name || '';
-        const cat  = g.category_id || g.category || '';
+        const cat = g.category_id || g.category || '';
         const imgs = getAllImgs(g);
-        const fav  = isFav(id);
+        const fav = isFav(id);
         const dotsHtml = imgs.length > 1
-          ? `<div class="img-dots">${imgs.map((_,i) => `<span class="img-dot ${i===0?'active':''}"></span>`).join('')}</div>`
+          ? `<div class="img-dots">${imgs.map((_, i) => `<span class="img-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>`
           : '';
         return `
         <div class="gift-card" id="card-${id}">
@@ -832,13 +957,13 @@
 
       // Start slideshows
       recommended.forEach(g => {
-        const id   = g._id || g.id;
+        const id = g._id || g.id;
         const imgs = getAllImgs(g);
         if (imgs.length <= 1) return;
         const card = document.getElementById(`card-${id}`);
         if (!card) return;
         const imgEl = card.querySelector('.gift-slide-img');
-        const dots  = card.querySelectorAll('.img-dot');
+        const dots = card.querySelectorAll('.img-dot');
         let cur = 0;
         const t = setInterval(() => {
           cur = (cur + 1) % imgs.length;
@@ -892,4 +1017,5 @@
     init();
   </script>
 </body>
+
 </html>
