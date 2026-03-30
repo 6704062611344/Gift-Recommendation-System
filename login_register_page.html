@@ -487,7 +487,7 @@
                     <button class="forgot-link">Forgot password?</button>
                 </div>
 
-                <button class="btn-submit" onclick="handleLogin()">Login</button>
+                <button class="btn-submit" id="btn-login" onclick="handleLogin()">Login</button>
 
                 <div class="switch-hint">
                     Don't have an account? <button onclick="switchTab('register')">Register here</button>
@@ -525,7 +525,7 @@
                     <input type="password" id="reg-confirm" placeholder="Repeat your password" />
                 </div>
 
-                <button class="btn-submit" onclick="handleRegister()">Register</button>
+                <button class="btn-submit" id="btn-register" onclick="handleRegister()">Register</button>
 
                 <div class="switch-hint">
                     Already have an account? <button onclick="switchTab('login')">Login here</button>
@@ -544,143 +544,7 @@
         <span>© 2026 Giver — Gift Recommendation System</span>
     </footer>
 
-    <script>
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            document.getElementById('panel-' + tab).classList.add('active');
-        }
-
-        // Auto-switch tab based on URL hash (#register opens register tab)
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.location.hash === '#register') {
-                switchTab('register');
-            }
-        });
-
-        // Quick-fill demo credentials into login form
-        function quickFill(email, password) {
-            document.getElementById('login-email').value = email;
-            document.getElementById('login-password').value = password;
-            document.getElementById('login-email').focus();
-        }
-
-        // Demo accounts — replace with real backend call
-        const USERS = [
-            // ── Admin accounts ──
-            {
-                email: 'admin@giver.com',
-                password: 'admin1234',
-                role: 'admin',
-                name: 'Admin',
-                username: 'admin'
-            },
-            {
-                email: 'admin2@giver.com',
-                password: 'admin5678',
-                role: 'admin',
-                name: 'Admin 2',
-                username: 'admin2'
-            },
-            // ── Test user accounts ──
-            {
-                email: 'user@giver.com',
-                password: 'user1234',
-                role: 'user',
-                name: 'Test User',
-                username: 'testuser'
-            },
-            {
-                email: 'user2@giver.com',
-                password: 'user5678',
-                role: 'user',
-                name: 'Test User 2',
-                username: 'testuser2'
-            },
-        ];
-
-        function showError(msg) {
-            let el = document.getElementById('login-error');
-            if (!el) {
-                el = document.createElement('div');
-                el.id = 'login-error';
-                el.style.cssText = 'background:#fdf0ee;border:1px solid #f0c4be;color:#c0392b;font-size:.78rem;padding:10px 14px;border-radius:4px;margin-bottom:16px;text-align:center;';
-                const btn = document.querySelector('#panel-login .btn-submit');
-                btn.parentNode.insertBefore(el, btn);
-            }
-            el.textContent = msg;
-            el.style.display = 'block';
-        }
-
-        function clearError() {
-            const el = document.getElementById('login-error');
-            if (el) el.style.display = 'none';
-        }
-
-        function handleLogin() {
-            clearError();
-            const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const pass = document.getElementById('login-password').value;
-
-            if (!email || !pass) {
-                showError('Please fill in all fields.');
-                return;
-            }
-
-            const matched = USERS.find(u => u.email === email && u.password === pass);
-
-            if (!matched) {
-                showError('Invalid email or password.');
-                return;
-            }
-
-            // Store session (demo — use proper auth in production)
-            sessionStorage.setItem('giver_user', JSON.stringify({
-                name: matched.name,
-                email: matched.email,
-                role: matched.role,
-                username: matched.username
-            }));
-
-            if (matched.role === 'admin') {
-                window.location.href = 'giver-dashboard.html';
-            } else {
-                window.location.href = 'user-home.html';
-            }
-        }
-
-        async function handleRegister(event) {
-    event.preventDefault(); // กันไม่ให้หน้าเว็บรีโหลด
-
-    // 1. ดึงข้อมูลจาก Input
-    const name = document.getElementById('name').value;
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    try {
-        // 2. ส่งข้อมูลไปที่ Backend API ที่เราเขียนไว้
-        const response = await fetch('http://localhost:3000/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, username, email, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("สมัครสมาชิกสำเร็จ!");
-            window.location.href = "login.html"; // ย้ายไปหน้า Login
-        } else {
-            alert("เกิดข้อผิดพลาด: " + data.message);
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("ไม่สามารถติดต่อ Server ได้");
-    }
-}
-    </script>
+    <script src="auth.js"></script>
 </body>
 
 </html>
