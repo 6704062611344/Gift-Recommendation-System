@@ -862,28 +862,40 @@
   let editingId = null;
   let deletingId = null;
 
-  // โหลด Categories เข้า select และโหลด Vocabulary สำหรับ tag lookup
+  // โหลด Categories + Tag lookup (ใช้ /api/tags ก่อน, fallback /api/vocabulary)
   async function loadCategoryOptions() {
     try {
-      const [catRes, tagsRes] = await Promise.all([
+      const [catRes, tagsRes, vocabRes] = await Promise.all([
         fetch(API_CATS),
-        fetch(API_TAGS)
+        fetch(API_TAGS),
+        fetch(API_VOCAB)
       ]);
-      const cats = await catRes.json();
-      const tags = tagsRes.ok ? await tagsRes.json() : [];
+      const cats  = await catRes.json();
+      const tags  = tagsRes.ok  ? await tagsRes.json()  : [];
+      const vocab = vocabRes.ok ? await vocabRes.json() : [];
       allCategories = cats;
 
-      // สร้าง map: tags_id → tags_name จาก tags_detail
+      // สร้าง vocabMap จาก /api/tags (tags_id → tags_name)
       vocabMap = {};
       tags.forEach(t => {
         const tid = t.tags_id != null ? String(t.tags_id).trim() : '';
         if (tid !== '') vocabMap[tid] = t.tags_name;
       });
-      console.log(`[tagMap] entries: ${Object.keys(vocabMap).length}`, vocabMap);
+
+      // Fallback: ถ้า /api/tags ว่าง ใช้ /api/vocabulary แทน (tag_id → term)
+      if (Object.keys(vocabMap).length === 0) {
+        vocab.forEach(v => {
+          const tid = v.tag_id != null ? String(v.tag_id).trim() : '';
+          if (tid !== '') vocabMap[tid] = v.term;
+        });
+        console.log('[vocabMap] using vocabulary fallback, entries:', Object.keys(vocabMap).length);
+      } else {
+        console.log('[tagMap] entries:', Object.keys(vocabMap).length);
+      }
 
       const sel = document.getElementById('giftCategory');
       sel.innerHTML = '<option value="">Select category</option>' +
-        cats.map(c => `<option value="${c.category_id}">${c.category_id} — ${c.category_name}</option>`).join('');
+        cats.map(c => `<option value="${c.category_id}">${c.category_name}</option>`).join('');
     } catch (e) {
       console.error('[loadCategoryOptions] error:', e);
     }
