@@ -5,7 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Giver – Gift Recommendation System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
     <style>
         *,
         *::before,
@@ -14,8 +16,8 @@
             margin: 0;
             padding: 0;
         }
-        
-         :root {
+
+        :root {
             /* ── Colors from design system ── */
             --col-salmon: #C65D51;
             --col-rose: #D4867A;
@@ -48,19 +50,20 @@
             --gold: var(--col-beige1);
             --step-bg: var(--col-beige3);
         }
-        
+
         html {
             scroll-behavior: smooth;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
             overflow-x: hidden;
         }
+
         /* ─── NAVBAR ─── */
-        
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -72,7 +75,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .nav-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.45rem;
@@ -82,13 +85,13 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 20px;
             align-items: center;
         }
-        
+
         .nav-links a {
             text-decoration: none;
             color: var(--text);
@@ -99,11 +102,11 @@
             gap: 6px;
             transition: color .2s;
         }
-        
+
         .nav-links a:hover {
             color: var(--accent);
         }
-        
+
         .btn-register {
             background: var(--text-dark) !important;
             color: #fff !important;
@@ -111,8 +114,9 @@
             border-radius: 3px;
             font-weight: 500 !important;
         }
+
         /* ─── HERO ─── */
-        
+
         .hero {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -120,7 +124,7 @@
             background: var(--bg-hero);
             overflow: hidden;
         }
-        
+
         .hero-left {
             padding: 72px 56px 64px;
             display: flex;
@@ -128,7 +132,7 @@
             justify-content: center;
             animation: fadeUp .85s ease both;
         }
-        
+
         .hero-badge {
             font-family: 'Inter', sans-serif;
             font-size: .7rem;
@@ -141,7 +145,7 @@
             padding-bottom: 3px;
             margin-bottom: 28px;
         }
-        
+
         .hero-left h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(2.2rem, 3.6vw, 3.1rem);
@@ -150,12 +154,12 @@
             color: var(--text-dark);
             margin-bottom: 20px;
         }
-        
+
         .hero-left h1 em {
             font-style: italic;
             color: var(--accent);
         }
-        
+
         .hero-left p {
             font-size: .9rem;
             line-height: 1.75;
@@ -164,14 +168,14 @@
             margin-bottom: 36px;
             font-weight: 300;
         }
-        
+
         .hero-ctas {
             display: flex;
             gap: 14px;
             align-items: center;
             margin-bottom: 52px;
         }
-        
+
         .btn-primary {
             background: var(--text-dark);
             color: #fff;
@@ -189,12 +193,12 @@
             border-radius: 2px;
             text-decoration: none;
         }
-        
+
         .btn-primary:hover {
             background: var(--col-brown2);
             transform: translateY(-1px);
         }
-        
+
         .btn-ghost {
             background: transparent;
             color: var(--text);
@@ -206,37 +210,38 @@
             text-underline-offset: 3px;
             font-weight: 400;
         }
-        
+
         .hero-stats {
             display: flex;
             gap: 40px;
         }
-        
+
         .stat-item {
             display: flex;
             flex-direction: column;
         }
-        
+
         .stat-number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.7rem;
             font-weight: 600;
             color: var(--text-dark);
         }
-        
+
         .stat-label {
             font-size: .68rem;
             color: var(--col-brown2);
             margin-top: 2px;
             letter-spacing: .04em;
         }
+
         /* hero right – collage */
-        
+
         .hero-right {
             position: relative;
             overflow: hidden;
         }
-        
+
         .collage {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -244,33 +249,34 @@
             height: 100%;
             gap: 3px;
         }
-        
+
         .collage-cell {
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        
+
         .collage-cell img {
             width: 64px;
             height: 64px;
             opacity: .25;
         }
+
         /* ─── HOW IT WORKS ─── */
-        
+
         .how-section {
             background: var(--bg-section);
             padding: 84px 52px;
         }
-        
+
         .section-eyebrow {
             display: flex;
             align-items: center;
             gap: 16px;
             margin-bottom: 28px;
         }
-        
+
         .section-eyebrow span {
             font-size: .7rem;
             letter-spacing: .18em;
@@ -278,13 +284,13 @@
             color: rgba(255, 255, 255, .45);
             font-family: 'Inter', sans-serif;
         }
-        
+
         .eyebrow-line {
             width: 44px;
             height: 1px;
             background: rgba(255, 255, 255, .25);
         }
-        
+
         .how-section h2 {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(1.9rem, 3vw, 2.7rem);
@@ -292,18 +298,18 @@
             color: #FAF8F5;
             margin-bottom: 52px;
         }
-        
+
         .how-section h2 em {
             font-style: italic;
             color: var(--gold);
         }
-        
+
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 18px;
         }
-        
+
         .step-card {
             background: var(--step-bg);
             border-radius: 3px;
@@ -311,12 +317,12 @@
             position: relative;
             transition: transform .25s, box-shadow .25s;
         }
-        
+
         .step-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 14px 36px rgba(0, 0, 0, .22);
         }
-        
+
         .step-number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2.4rem;
@@ -327,14 +333,14 @@
             right: 18px;
             line-height: 1;
         }
-        
+
         .step-icon {
             width: 42px;
             height: 42px;
             margin-bottom: 18px;
             color: var(--accent);
         }
-        
+
         .step-card h3 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.08rem;
@@ -342,21 +348,22 @@
             color: var(--text-dark);
             margin-bottom: 10px;
         }
-        
+
         .step-card p {
             font-size: .8rem;
             line-height: 1.65;
             color: var(--col-brown2);
             font-weight: 300;
         }
+
         /* ─── CTA ─── */
-        
+
         .cta-section {
             padding: 104px 52px;
             text-align: center;
             background: var(--bg);
         }
-        
+
         .sparkle-group {
             display: flex;
             justify-content: center;
@@ -364,12 +371,12 @@
             gap: 12px;
             margin-bottom: 18px;
         }
-        
+
         .sparkle {
             color: var(--gold);
             font-size: 1rem;
         }
-        
+
         .cta-label {
             font-size: .7rem;
             letter-spacing: .16em;
@@ -377,7 +384,7 @@
             color: var(--col-brown2);
             font-family: 'Inter', sans-serif;
         }
-        
+
         .cta-section h2 {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(2rem, 3.6vw, 2.9rem);
@@ -385,12 +392,12 @@
             color: var(--text-dark);
             margin-bottom: 14px;
         }
-        
+
         .cta-section h2 em {
             font-style: italic;
             color: var(--accent);
         }
-        
+
         .cta-section p {
             font-size: .9rem;
             color: var(--text);
@@ -401,13 +408,13 @@
             line-height: 1.65;
             font-weight: 300;
         }
-        
+
         .cta-buttons {
             display: flex;
             justify-content: center;
             gap: 14px;
         }
-        
+
         .btn-outline {
             border: 1.5px solid var(--text-dark);
             color: var(--text-dark);
@@ -420,13 +427,14 @@
             border-radius: 2px;
             transition: background .2s, color .2s;
         }
-        
+
         .btn-outline:hover {
             background: var(--text-dark);
             color: #fff;
         }
+
         /* ─── FOOTER ─── */
-        
+
         footer {
             background: var(--col-cream);
             border-top: 1px solid rgba(69, 54, 49, .1);
@@ -438,7 +446,7 @@
             color: var(--col-brown2);
             font-family: 'Inter', sans-serif;
         }
-        
+
         .footer-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.05rem;
@@ -448,13 +456,15 @@
             align-items: center;
             gap: 6px;
         }
+
         /* ─── ANIMATIONS ─── */
-        
+
         @keyframes fadeUp {
             from {
                 opacity: 0;
                 transform: translateY(26px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -468,14 +478,16 @@
     <!-- NAVBAR -->
     <nav>
         <div class="nav-logo">
-            <img src="icon/surprise (1).png" style="width:22px;height:22px;object-fit:contain;"> Giver
+            <img src="surprise(1).png" style="width:22px;height:22px;object-fit:contain;"> Giver
         </div>
         <div class="nav-links">
             <a href="login_register_page.html">
-                <img src="icon/surprise (1).png" style="width:13px;height:13px;object-fit:contain;"> Login
+                <img src="enter (1).png" style="width:13px;height:13px;object-fit:contain;"> Login
             </a>
             <a href="login_register_page.html#register" class="btn-register">
-                <img src="icon/surprise (1).png" style="width:13px;height:13px;object-fit:contain;display:inline;vertical-align:middle;margin-right:4px;"> Register
+                <img src="register.png"
+                    style="width:13px;height:13px;object-fit:contain;display:inline;vertical-align:middle;margin-right:4px;">
+                Register
             </a>
         </div>
     </nav>
@@ -485,10 +497,15 @@
         <div class="hero-left">
             <span class="hero-badge">Gift Recommendation System</span>
             <h1>Discover the Gift<br>That Feels <em>Perfect</em><br>for Everyone</h1>
-            <p>An intelligent gift recommendation system that helps you find the most thoughtful gifts — tailored by interests, budget, and relationship.</p>
+            <p>An intelligent gift recommendation system that helps you find the most thoughtful gifts — tailored by
+                interests, budget, and relationship.</p>
             <div class="hero-ctas">
-                <button class="btn-primary" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">GET STARTED &rarr;</button>
-                <button class="btn-ghost" onclick="document.querySelector('.how-section').scrollIntoView({behavior:'smooth'})">How It Works</button>
+                <button class="btn-primary"
+                    onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">GET STARTED
+                    &rarr;</button>
+                <button class="btn-ghost"
+                    onclick="document.querySelector('.how-section').scrollIntoView({behavior:'smooth'})">How It
+                    Works</button>
             </div>
             <div class="hero-stats">
                 <div class="stat-item">
@@ -534,23 +551,25 @@
             <!-- Step 1: Add Recipient — person icon -->
             <div class="step-card">
                 <span class="step-number">01</span>
-                <img src="icon/surprise (1).png" class="step-icon" style="object-fit:contain;">
+                <img src="group.png" class="step-icon" style="object-fit:contain;">
                 <h3>Add a Recipient</h3>
-                <p>Save recipient details such as their name, relationship, and interests so the system can make accurate matches.</p>
+                <p>Save recipient details such as their name, relationship, and interests so the system can make
+                    accurate matches.</p>
             </div>
 
             <!-- Step 2: Analysis — settings/gear icon -->
             <div class="step-card">
                 <span class="step-number">02</span>
-                <img src="icon/surprise (1).png" class="step-icon" style="object-fit:contain;">
+                <img src="ai-chip.png" class="step-icon" style="object-fit:contain;">
                 <h3>Analysis</h3>
-                <p>Our engine processes the data and intelligently matches it against a catalog of 500+ curated gifts.</p>
+                <p>Our engine processes the data and intelligently matches it against a catalog of 500+ curated gifts.
+                </p>
             </div>
 
             <!-- Step 3: Choose Gift — gift box icon -->
             <div class="step-card">
                 <span class="step-number">03</span>
-                <img src="icon/surprise (1).png" class="step-icon" style="object-fit:contain;">
+                <img src="gift.png" class="step-icon" style="object-fit:contain;">
                 <h3>Choose a Gift</h3>
                 <p>Compare and pick from the suggestions, complete with details, pricing, and reviews.</p>
             </div>
@@ -558,7 +577,7 @@
             <!-- Step 4: Buy — shopping bag icon -->
             <div class="step-card">
                 <span class="step-number">04</span>
-                <img src="icon/surprise (1).png" class="step-icon" style="object-fit:contain;">
+                <img src="shopping-bag.png" class="step-icon" style="object-fit:contain;">
                 <h3>Buy with One Click</h3>
                 <p>Jump directly to the online store. No middlemen — fast, seamless, and affiliate-free.</p>
             </div>
@@ -576,7 +595,8 @@
         <h2>Ready to Give the <em>Perfect Gift?</em></h2>
         <p>Sign up for free today and discover the ideal gift for everyone you care about.</p>
         <div class="cta-buttons">
-            <button class="btn-primary" onclick="location.href='login_register_page.html#register'">Create Free Account &rarr;</button>
+            <button class="btn-primary" onclick="location.href='login_register_page.html#register'">Create Free Account
+                &rarr;</button>
             <button class="btn-outline" onclick="location.href='login_register_page.html'">Sign In</button>
         </div>
     </section>
@@ -584,53 +604,53 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-logo">
-            <img src="icon/surprise (1).png" style="width:18px;height:18px;object-fit:contain;"> Giver
+            <img src="icon\surprise (1).png" style="width:18px;height:18px;object-fit:contain;"> Giver
         </div>
-        <span>© 2025 Giver — Gift Recommendation System</span>
+        <span>© 2026 Giver — Gift Recommendation System</span>
     </footer>
 
-<script>
-  async function loadHeroStats() {
-    try {
-      const [giftsRes, usersRes] = await Promise.all([
-        fetch('/api/gifts'),
-        fetch('/api/users')
-      ]);
-      const gifts = giftsRes.ok ? await giftsRes.json() : [];
-      const users = usersRes.ok ? await usersRes.json() : [];
+    <script>
+        async function loadHeroStats() {
+            try {
+                const [giftsRes, usersRes] = await Promise.all([
+                    fetch('/api/gifts'),
+                    fetch('/api/users')
+                ]);
+                const gifts = giftsRes.ok ? await giftsRes.json() : [];
+                const users = usersRes.ok ? await usersRes.json() : [];
 
-      // นับ options รวมด้วย: แต่ละ gift มี options array
-      let totalGifts = 0;
-      gifts.forEach(g => {
-        totalGifts += 1; // ตัว gift เอง
-        if (Array.isArray(g.options)) totalGifts += g.options.length;
-      });
+                // นับ options รวมด้วย: แต่ละ gift มี options array
+                let totalGifts = 0;
+                gifts.forEach(g => {
+                    totalGifts += 1; // ตัว gift เอง
+                    if (Array.isArray(g.options)) totalGifts += g.options.length;
+                });
 
-      // เฉพาะ role === 'user'
-      const userCount = users.filter(u => u.role === 'user').length;
+                // เฉพาะ role === 'user'
+                const userCount = users.filter(u => u.role === 'user').length;
 
-      animateCount('stat-gifts', totalGifts);
-      animateCount('stat-users', userCount);
-    } catch (e) {
-      console.error('Failed to load stats', e);
-    }
-  }
+                animateCount('stat-gifts', totalGifts);
+                animateCount('stat-users', userCount);
+            } catch (e) {
+                console.error('Failed to load stats', e);
+            }
+        }
 
-  function animateCount(id, target) {
-    const el = document.getElementById(id);
-    if (!el || target === 0) { if (el) el.textContent = '0'; return; }
-    let start = 0;
-    const step = target / 40;
-    const tick = () => {
-      start = Math.min(start + step, target);
-      el.textContent = Math.round(start);
-      if (start < target) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
+        function animateCount(id, target) {
+            const el = document.getElementById(id);
+            if (!el || target === 0) { if (el) el.textContent = '0'; return; }
+            let start = 0;
+            const step = target / 40;
+            const tick = () => {
+                start = Math.min(start + step, target);
+                el.textContent = Math.round(start);
+                if (start < target) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        }
 
-  window.addEventListener('DOMContentLoaded', loadHeroStats);
-</script>
+        window.addEventListener('DOMContentLoaded', loadHeroStats);
+    </script>
 </body>
 
 </html>
