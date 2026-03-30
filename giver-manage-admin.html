@@ -651,10 +651,244 @@
 </div>
 
 <script>
+  /* ─── CONFIG ─── */
+  const API_BASE = 'https://gift-recommendation-system-dqbx.onrender.com';
+
   /* ─── AUTH CHECK ─── */
   const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
   if (!user || !user.role) window.location.href = 'login_register_page.html';
   if (user.role !== 'admin') window.location.href = 'user-home.html';
+
+  /* ─── STATE ─── */
+  let admins          = [];
+  let requests        = [];
+  let deletingAdminId = null;
+  let rejectingReqId  = null;
+  let approvingReqId  = null;
+  let searchQuery     = '';
+
+  /* ─── FETCH DATA FROM API ─── */
+  async function loadAll() {
+    setTableLoading('adminTableBody', 4);
+    setTableLoading('reqTableBody', 4);
+    try {
+      const [adminsRes, reqsRes] = await Promise.all([
+        fetch(`${API_BASE}/api/admin/list`),
+        fetch(`${API_BASE}/api/admin/requests`)
+      ]);
+      admins   = adminsRes.ok   ? await adminsRes.json()  : [];
+      requests = reqsRes.ok     ? await reqsRes.json()    : [];
+    } catch(e) {
+      showToast('Cannot connect to server.', 'error');
+      admins   = [];
+      requests = [];
+    }
+    renderAdmins();
+    renderRequests();
+  }
+
+  /* ─── LOADING SKELETON ─── */
+  function setTableLoading(tbodyId, cols) {
+    const tbody = document.getElementById(tbodyId);
+    tbody.innerHTML = Array(3).fill(`
+      <tr>
+        ${Array(cols).fill(`<td><span style="display:inline-block;width:80%;height:14px;background:#e8e2d8;border-radius:4px;"></span></td>`).join('')}
+      </tr>
+    `).join('');
+  }
+
+  /* ─── RENDER ADMINS ─── */
+  function renderAdmins() {
+    const tbody = document.getElementById('adminTableBody');
+    const empty = document.getElementById('adminEmpty');
+    const title = document.getElementById('adminTableTitle');
+
+    const q = searchQuery.toLowerCase();
+    const filtered = admins.filter(a =>
+      (a.name || '').toLowerCase().includes(q) ||
+      (a.email || '').toLowerCase().includes(q)
+    );
+
+    title.textContent = `All Admin (${filtered.length})`;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    tbody.innerHTML = filtered.map((a, idx) => `
+      <tr>
+        <td><span class="priority-badge">${idx + 1}</span></td>
+        <td style="font-weight:500;">${escHtml(a.name)}</td>
+        <td style="color:var(--text-secondary);">${escHtml(a.email)}</td>
+        <td>
+          <div class="actions-cell">
+            <button class="action-btn del" title="Remove admin" onclick="openDeleteAdminModal('${a._id}', '${escHtml(a.name)}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  /* ─── RENDER REQUESTS ─── */
+  function renderRequests() {
+    const tbody = document.getElementById('reqTableBody');
+    const empty = document.getElementById('reqEmpty');
+    const title = document.getElementById('reqTableTitle');
+
+    const q = searchQuery.toLowerCase();
+    const filtered = requests.filter(r =>
+      (r.name || '').toLowerCase().includes(q) ||
+      (r.email || '').toLowerCase().includes(q)
+    );
+
+    title.textContent = `All Requests (${filtered.length})`;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    tbody.innerHTML = filtered.map(r => `
+      <tr>
+        <td style="font-weight:500;">${escHtml(r.name)}</td>
+        <td style="color:var(--text-secondary);">${escHtml(r.email)}</td>
+        <td><span class="status-badge pending"><span class="status-dot"></span>Pending</span></td>
+        <td>
+          <div class="actions-cell">
+            <button class="action-btn-text approve" onclick="openApproveModal('${r._id}', '${escHtml(r.name)}')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Approve</span>
+            </button>
+            <button class="action-btn-text reject" onclick="openRejectModal('${r._id}', '${escHtml(r.name)}')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Reject</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  /* ─── SEARCH ─── */
+  function applySearch() {
+    searchQuery = document.getElementById('searchInput').value;
+    renderAdmins();
+    renderRequests();
+  }
+
+  /* ─── DELETE / DEMOTE ADMIN ─── */
+  function openDeleteAdminModal(id, name) {
+    deletingAdminId = id;
+    document.getElementById('deleteAdminName').textContent = '"' + name + '"';
+    openModal('deleteAdminModal');
+  }
+
+  async function confirmDeleteAdmin() {
+    if (!deletingAdminId) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/demote/${deletingAdminId}`, { method: 'PUT' });
+      const data = await res.json();
+      if (!res.ok) { showToast(data.message || 'Error removing admin.', 'error'); return; }
+      showToast('Admin removed successfully.', 'success');
+      closeModal('deleteAdminModal');
+      await loadAll();
+    } catch(e) {
+      showToast('Cannot connect to server.', 'error');
+    }
+  }
+
+  /* ─── APPROVE REQUEST ─── */
+  function openApproveModal(id, name) {
+    approvingReqId = id;
+    document.getElementById('approveReqName').textContent = '"' + name + '"';
+    openModal('approveModal');
+  }
+
+  async function confirmApprove() {
+    if (!approvingReqId) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/promote/${approvingReqId}`, { method: 'PUT' });
+      const data = await res.json();
+      if (!res.ok) { showToast(data.message || 'Error approving request.', 'error'); return; }
+      showToast('Request approved. Admin added.', 'success');
+      closeModal('approveModal');
+      await loadAll();
+    } catch(e) {
+      showToast('Cannot connect to server.', 'error');
+    }
+  }
+
+  /* ─── REJECT REQUEST ─── */
+  function openRejectModal(id, name) {
+    rejectingReqId = id;
+    document.getElementById('rejectReqName').textContent = '"' + name + '"';
+    openModal('rejectModal');
+  }
+
+  async function confirmReject() {
+    if (!rejectingReqId) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/reject/${rejectingReqId}`, { method: 'PUT' });
+      const data = await res.json();
+      if (!res.ok) { showToast(data.message || 'Error rejecting request.', 'error'); return; }
+      showToast('Request rejected.', 'success');
+      closeModal('rejectModal');
+      await loadAll();
+    } catch(e) {
+      showToast('Cannot connect to server.', 'error');
+    }
+  }
+
+  /* ─── MODAL HELPERS ─── */
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
+  });
+
+  /* ─── TOAST ─── */
+  let toastTimer;
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.className = 'toast ' + type + ' show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  /* ─── UTILS ─── */
+  function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function logout() {
+    sessionStorage.removeItem('giver_user');
+    window.location.href = 'login_register_page.html';
+  }
+
+  /* ─── INIT ─── */
+  loadAll();
+</script>
+
+</body>
+</html>
+
 
   /* ─── STORAGE KEYS ─── */
   const ADMINS_KEY   = 'giver_admins';
