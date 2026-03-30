@@ -4,7 +4,8 @@ const GiftOptionSchema = new mongoose.Schema({
   price: { type: String, default: '0' },
   shop_name: { type: String, default: '' },
   shop_link: { type: String, default: '' },
-  pic_link: { type: String, default: '' }
+  pic_link: { type: String, default: '' },
+  rating: { type: Number, default: 0, min: 0, max: 5 }
 }, { _id: false });
 
 const GiftSchema = new mongoose.Schema({
@@ -15,8 +16,7 @@ const GiftSchema = new mongoose.Schema({
   target_gender_id: { type: String, required: true },
   target_age_id: { type: String, default: '' },
   tags: { type: [String], default: [] },
-  options: { type: [GiftOptionSchema], default: [] },
-  rating: { type: Number, default: 0, min: 0, max: 5 }
+  options: { type: [GiftOptionSchema], default: [] }
 });
 
 module.exports = mongoose.model('Gift', GiftSchema);

@@ -820,10 +820,7 @@
         <div id="optionsEditor"></div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Rating (0–5 ดาว)</label>
-        <input type="number" class="form-input" id="giftRating" placeholder="e.g. 4.5" min="0" max="5" step="0.1">
-      </div>
+
     </div>
     <div class="modal-footer" style="flex-direction:row-reverse;gap:10px;">
       <button class="btn-save" style="flex:1;padding:13px;" onclick="saveGift()">Add Gift</button>
@@ -923,16 +920,15 @@
               <img class="opt-thumb" src="${img}" alt="" onerror="this.src='surprise(1).png';this.style.objectFit='contain';">
               <div class="opt-info">
                 <span class="opt-shop">${shop}</span>
-                <span class="opt-price">${price}</span>
+                <span class="opt-price">${price}${o.rating ? ` <span style="color:var(--accent)">★ ${o.rating}</span>` : ''}</span>
               </div>
               ${link}
             </div>`;
           }).join('')
         : `<span class="no-options">No options</span>`;
-      const ratingBadge = g.rating ? `<br><span style="color:var(--accent);font-size:12px;">★ ${g.rating}</span>` : '';
       return `
         <tr>
-          <td>${g.gift_name}${ratingBadge}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
+          <td>${g.gift_name}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
           <td class="td-desc">${g.description || ''}</td>
           <td><div class="options-list">${opts}</div></td>
           <td><span class="badge-cat">${getCategoryName(g.category_id)}</span></td>
@@ -992,6 +988,10 @@
           <input type="url" class="form-input opt-shoplink" placeholder="https://..." value="${(data.shop_link || '').replace(/"/g,'&quot;')}"></div>
         <div class="form-group"><label class="form-label">Image URL</label>
           <input type="url" class="form-input opt-imgurl" placeholder="https://..." value="${(data.pic_link || '').replace(/"/g,'&quot;')}"></div>
+      </div>
+      <div class="form-group" style="max-width:160px;">
+        <label class="form-label">Rating (0–5 ดาว)</label>
+        <input type="number" class="form-input opt-rating" placeholder="e.g. 4.5" min="0" max="5" step="0.1" value="${data.rating || ''}">
       </div>`;
     container.appendChild(row);
   }
@@ -1005,7 +1005,7 @@
   function openAddModal() {
     editingId = null;
     document.getElementById('modalTitle').textContent = 'Add New Gift';
-    ['giftId','giftName','giftDesc','giftTags','giftAge','giftRating'].forEach(id => {
+    ['giftId','giftName','giftDesc','giftTags','giftAge'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = '';
     });
@@ -1030,7 +1030,6 @@
     document.getElementById('giftTags').value     = (g.tags || []).join(', ');
     document.getElementById('giftAge').value      = g.target_age_id || '';
     renderOptionsEditor(g.options || []);
-    document.getElementById('giftRating').value   = g.rating || '';
     document.querySelector('.btn-save').textContent = 'Save Gift';
     openModal('giftModal');
   }
@@ -1047,15 +1046,15 @@
     if (!gift_name || !category_id || !target_gender_id)
       return showToast('กรุณากรอก Gift Name, Category และ Target Gender', 'error');
 
-    const rating = parseFloat(document.getElementById('giftRating').value) || 0;
     const options = [...document.querySelectorAll('#optionsEditor .option-editor-row')].map(row => ({
       price:     row.querySelector('.opt-price').value.trim(),
       shop_name: row.querySelector('.opt-shopname').value.trim(),
       shop_link: row.querySelector('.opt-shoplink').value.trim(),
-      pic_link:  row.querySelector('.opt-imgurl').value.trim()
+      pic_link:  row.querySelector('.opt-imgurl').value.trim(),
+      rating:    parseFloat(row.querySelector('.opt-rating')?.value) || 0
     })).filter(o => o.price || o.shop_name || o.shop_link || o.pic_link);
 
-    const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options, rating };
+    const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options };
 
     try {
       if (editingId) {
