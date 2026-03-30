@@ -907,7 +907,14 @@
   }
 
   function getCategoryName(id) {
-    const cat = allCategories.find(c => c.category_id === id);
+    if (!id) return '—';
+    // compare แบบ String เสมอ เพื่อรองรับกรณี number vs string mismatch
+    const cat = allCategories.find(c => String(c.category_id) === String(id));
+    if (!cat && allCategories.length > 0) {
+      // debug: แสดงว่า category_id ในฐานข้อมูลมีรูปแบบอะไร
+      console.warn(`[getCategoryName] "${id}" not found. Available IDs:`,
+        allCategories.slice(0, 5).map(c => c.category_id));
+    }
     return cat ? cat.category_name : id;
   }
 
