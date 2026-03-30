@@ -178,6 +178,11 @@
     animation: fadeUp 0.4s ease 0.1s both;
   }
 
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .table-card-header {
     padding: 28px 32px 20px;
     border-bottom: 1px solid var(--border);
@@ -199,8 +204,18 @@
   /* TABLE */
   table {
     width: 100%;
+    min-width: 860px;
     border-collapse: collapse;
+    table-layout: fixed;
   }
+
+  /* column widths */
+  thead th:nth-child(1) { width: 140px; } /* Name */
+  thead th:nth-child(2) { width: 180px; } /* Description */
+  thead th:nth-child(3) { width: 200px; } /* Options */
+  thead th:nth-child(4) { width: 120px; } /* Category */
+  thead th:nth-child(5) { width: 200px; } /* Tags */
+  thead th:nth-child(6) { width: 90px;  } /* Actions */
 
   thead th {
     padding: 14px 16px;
@@ -238,14 +253,16 @@
     color: var(--text-secondary);
     font-size: 13px;
     font-weight: 300;
-    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
   }
 
   .options-list {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    min-width: 200px;
+    width: 100%;
   }
 
   .opt-item {
@@ -393,8 +410,8 @@
   .tags-cell {
     display: flex;
     align-items: center;
-    gap: 6px;
-    flex-wrap: nowrap;
+    gap: 4px;
+    flex-wrap: wrap;
   }
 
   .tag-chip {
@@ -735,6 +752,7 @@
       <h2 id="tableTitle">All Gifts (6)</h2>
       <p>Manage your gift catalog</p>
     </div>
+    <div class="table-scroll">
     <table>
       <thead>
         <tr>
@@ -748,6 +766,7 @@
       </thead>
       <tbody id="giftsTableBody"></tbody>
     </table>
+    </div>
     <div class="empty-state" id="emptyState" style="display:none;">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <p>No gifts match your search.</p>
