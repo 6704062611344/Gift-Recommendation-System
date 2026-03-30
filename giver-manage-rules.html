@@ -908,44 +908,35 @@
   </div>
 
   <script>
-    /* ─── DATA ─── */
-    const RULES_KEY = 'giver_rules';
-    const DEFAULT_RULES = [
-      { id: 1, priority: 1, name: 'Tech Enthusiast', condition: 'interests includes tech OR gadgets', categories: ['electronics'] },
-      { id: 2, priority: 2, name: 'Home Lover', condition: 'interests includes home OR decoration', categories: ['home-decor', 'kitchen'] }
-    ];
+    const API_RULES = '/api/rules';
 
-    function loadRules() {
-      try {
-        const raw = localStorage.getItem(RULES_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          // Validate: must have proper rule fields, not skeleton data
-          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].name && parsed[0].categories) {
-            return parsed;
-          }
-        }
-      } catch (e) { }
-      // Seed with proper defaults
-      localStorage.setItem(RULES_KEY, JSON.stringify(DEFAULT_RULES));
-      return [...DEFAULT_RULES];
-    }
-
-    function saveRules() {
-      localStorage.setItem(RULES_KEY, JSON.stringify(rules));
-    }
-
-    let rules = loadRules();
+    let allRules = [];
     let editingId = null;
     let deletingId = null;
-    let nextId = rules.length ? Math.max(...rules.map(r => r.id)) + 1 : 1;
     let currentTags = [];
 
-    /* ─── RENDER ─── */
+    // ── Load & Render ──────────────────────────────────────────────────────────
+    async function loadRules() {
+      try {
+        const res = await fetch(API_RULES);
+        const data = await res.json();
+        // normalise: condition array → display string, target_category_ids → categories
+        allRules = data.map(r => ({
+          _id: r._id,
+          priority: r.priority,
+          name: r.name,
+          condition: Array.isArray(r.condition) ? r.condition.join(' OR ') : (r.condition || ''),
+          categories: r.target_category_ids || []
+        }));
+        renderTable(allRules);
+      } catch (err) {
+        showToast('ไม่สามารถโหลดข้อมูลได้');
+      }
+    }
+
     function renderTable(data) {
       const tbody = document.getElementById('rulesBody');
       const countEl = document.getElementById('rulesCount');
-
       countEl.textContent = `All Rules (${data.length})`;
 
       if (data.length === 0) {
@@ -973,10 +964,10 @@
         </td>
         <td>
           <div class="row-actions">
-            <button class="action-btn edit" title="Edit" onclick="openEditModal(${r.id})">
+            <button class="action-btn edit" title="Edit" onclick="openEditModal('${r._id}')">
               <img src="icon-edit.png" style="width:15px;height:15px;object-fit:contain;" alt="Edit">
             </button>
-            <button class="action-btn del" title="Delete" onclick="openDeleteModal(${r.id})">
+            <button class="action-btn del" title="Delete" onclick="openDeleteModal('${r._id}', '${escHtml(r.name)}')">
               <img src="icon-delete.png" style="width:15px;height:15px;object-fit:contain;" alt="Delete">
             </button>
           </div>
@@ -987,7 +978,7 @@
 
     function filterRules() {
       const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = rules.filter(r =>
+      const filtered = allRules.filter(r =>
         r.name.toLowerCase().includes(q) ||
         r.condition.toLowerCase().includes(q) ||
         r.categories.some(c => c.toLowerCase().includes(q))
@@ -995,12 +986,12 @@
       renderTable(filtered);
     }
 
-    /* ─── MODALS ─── */
+    // ── Modals ─────────────────────────────────────────────────────────────────
     function openAddModal() {
       editingId = null;
       document.getElementById('modalTitle').textContent = 'Add Rule';
       document.getElementById('ruleName').value = '';
-      document.getElementById('rulePriority').value = rules.length + 1;
+      document.getElementById('rulePriority').value = allRules.length + 1;
       document.getElementById('ruleCondition').value = '';
       currentTags = [];
       renderTagPills();
@@ -1010,7 +1001,7 @@
 
     function openEditModal(id) {
       editingId = id;
-      const r = rules.find(x => x.id === id);
+      const r = allRules.find(x => x._id === id);
       document.getElementById('modalTitle').textContent = 'Edit Rule';
       document.getElementById('ruleName').value = r.name;
       document.getElementById('rulePriority').value = r.priority;
@@ -1020,44 +1011,70 @@
       openModal('ruleModal');
     }
 
-    function saveRule() {
+    async function saveRule() {
       const name = document.getElementById('ruleName').value.trim();
       const priority = parseInt(document.getElementById('rulePriority').value, 10);
-      const condition = document.getElementById('ruleCondition').value.trim();
+      const conditionRaw = document.getElementById('ruleCondition').value.trim();
 
       if (!name) { showToast('Please enter a rule name.'); return; }
       if (!priority || priority < 1) { showToast('Please enter a valid priority.'); return; }
-      if (!condition) { showToast('Please enter a condition.'); return; }
+      if (!conditionRaw) { showToast('Please enter a condition.'); return; }
       if (currentTags.length === 0) { showToast('Add at least one category.'); return; }
 
-      if (editingId) {
-        const idx = rules.findIndex(x => x.id === editingId);
-        rules[idx] = { id: editingId, priority, name, condition, categories: [...currentTags] };
-        showToast('Rule updated.');
-      } else {
-        rules.push({ id: nextId++, priority, name, condition, categories: [...currentTags] });
-        showToast('Rule added.');
-      }
+      // split condition string → array of keywords (split by OR/AND/comma)
+      const conditionArr = conditionRaw
+        .split(/\s+OR\s+|\s+AND\s+|,/)
+        .map(s => s.trim())
+        .filter(Boolean);
 
-      rules.sort((a, b) => a.priority - b.priority);
-      saveRules();
-      closeModal('ruleModal');
-      filterRules();
+      const body = {
+        name,
+        priority,
+        condition: conditionArr,
+        target_category_ids: [...currentTags]
+      };
+
+      try {
+        if (editingId) {
+          const res = await fetch(`${API_RULES}/${editingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          if (!res.ok) { const d = await res.json(); return showToast(d.message); }
+          showToast('อัปเดต Rule สำเร็จ');
+        } else {
+          const res = await fetch(API_RULES, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          if (!res.ok) { const d = await res.json(); return showToast(d.message); }
+          showToast('เพิ่ม Rule สำเร็จ');
+        }
+        closeModal('ruleModal');
+        loadRules();
+      } catch (err) {
+        showToast('เกิดข้อผิดพลาด');
+      }
     }
 
-    function openDeleteModal(id) {
+    function openDeleteModal(id, name) {
       deletingId = id;
-      const r = rules.find(x => x.id === id);
-      document.getElementById('deleteRuleName').textContent = '"' + r.name + '"';
+      document.getElementById('deleteRuleName').textContent = `"${name}"`;
       openModal('deleteModal');
     }
 
-    function confirmDelete() {
-      rules = rules.filter(x => x.id !== deletingId);
-      saveRules();
-      closeModal('deleteModal');
-      filterRules();
-      showToast('Rule deleted.');
+    async function confirmDelete() {
+      try {
+        const res = await fetch(`${API_RULES}/${deletingId}`, { method: 'DELETE' });
+        if (!res.ok) { const d = await res.json(); return showToast(d.message); }
+        closeModal('deleteModal');
+        showToast('ลบ Rule สำเร็จ');
+        loadRules();
+      } catch (err) {
+        showToast('เกิดข้อผิดพลาด');
+      }
     }
 
     function openModal(id) { document.getElementById(id).classList.add('open'); }
@@ -1070,13 +1087,11 @@
       if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
     });
 
-    /* ─── TAG INPUT ─── */
+    // ── Tag Input (Recommended Categories) ────────────────────────────────────
     function renderTagPills() {
       const wrap = document.getElementById('tagsInputWrap');
       const input = document.getElementById('tagInput');
-      // Remove existing pills
       wrap.querySelectorAll('.tag-pill').forEach(p => p.remove());
-      // Re-insert pills before input
       currentTags.forEach((tag, i) => {
         const pill = document.createElement('span');
         pill.className = 'tag-pill';
@@ -1112,10 +1127,7 @@
     });
 
     document.getElementById('tagInput').addEventListener('blur', function () {
-      if (this.value.trim()) {
-        addTag(this.value);
-        this.value = '';
-      }
+      if (this.value.trim()) { addTag(this.value); this.value = ''; }
       document.getElementById('tagsInputWrap').classList.remove('focused');
     });
 
@@ -1127,7 +1139,7 @@
       document.getElementById('tagInput').focus();
     });
 
-    /* ─── TOAST ─── */
+    // ── Toast ──────────────────────────────────────────────────────────────────
     let toastTimer;
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -1137,9 +1149,9 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    /* ─── UTILITY ─── */
+    // ── Utility ────────────────────────────────────────────────────────────────
     function escHtml(str) {
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function logout() {
@@ -1147,8 +1159,8 @@
       window.location.href = 'login_register_page.html';
     }
 
-    /* ─── INIT ─── */
-    renderTable(rules);
+    // ── Init ───────────────────────────────────────────────────────────────────
+    loadRules();
   </script>
 </body>
 

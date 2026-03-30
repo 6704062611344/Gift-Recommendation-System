@@ -516,6 +516,10 @@
     </div>
     <div class="modal-body">
       <div class="form-group">
+        <label class="form-label">Category ID</label>
+        <input type="text" class="form-input" id="catId" placeholder="e.g. C01">
+      </div>
+      <div class="form-group">
         <label class="form-label">Category Name</label>
         <input type="text" class="form-input" id="catName" placeholder="e.g. Electronics">
       </div>
@@ -555,50 +559,39 @@
 </div>
 
 <script>
-  const CAT_KEY = 'giver_categories';
-  const DEFAULT_CATS = [
-    { id: 1, name: 'Electronics', desc: 'Gadgets and electronic devices' },
-    { id: 2, name: 'Home Decor', desc: 'Items for home decoration' },
-    { id: 3, name: 'Kitchen', desc: 'Kitchen appliances and tools' },
-    { id: 4, name: 'Fitness', desc: 'Fitness and wellness products' },
-    { id: 5, name: 'Books', desc: 'Books and literature' },
-  ];
-
-  function loadCategories() {
-    try {
-      const raw = localStorage.getItem(CAT_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch(e) {}
-    localStorage.setItem(CAT_KEY, JSON.stringify(DEFAULT_CATS));
-    return [...DEFAULT_CATS];
-  }
-
-  function saveCategories() {
-    localStorage.setItem(CAT_KEY, JSON.stringify(categories));
-  }
-
-  let categories = loadCategories();
+  const API = '/api/categories';
+  let allCategories = [];
   let editingId = null;
   let deletingId = null;
-  let nextId = categories.length ? Math.max(...categories.map(c => c.id)) + 1 : 1;
+
+  // ── Fetch & Render ──────────────────────────────────────────────────────────
+  async function loadCategories() {
+    try {
+      const res = await fetch(API);
+      allCategories = await res.json();
+      renderGrid(allCategories);
+    } catch (err) {
+      showToast('ไม่สามารถโหลดข้อมูลได้', 'error');
+    }
+  }
 
   function renderGrid(data) {
     const grid = document.getElementById('categoriesGrid');
-    if (data.length === 0) {
+    if (!data.length) {
       grid.innerHTML = `<div class="empty-state"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg><p>No categories found.</p></div>`;
       return;
     }
     grid.innerHTML = data.map(c => `
       <div class="cat-card">
         <div class="cat-info">
-          <div class="cat-name">${c.name}</div>
-          <div class="cat-desc">${c.desc}</div>
+          <div class="cat-name">${c.category_name} <span style="font-size:12px;color:var(--text-secondary);font-weight:300;">(${c.category_id})</span></div>
+          <div class="cat-desc">${c.category_description || ''}</div>
         </div>
         <div class="cat-actions">
-          <button class="action-btn edit" title="Edit" onclick="openEditModal(${c.id})">
+          <button class="action-btn edit" title="Edit" onclick="openEditModal('${c._id}')">
             <img src="icon-edit.png" style="width:15px;height:15px;object-fit:contain;">
           </button>
-          <button class="action-btn del" title="Delete" onclick="openDeleteModal(${c.id})">
+          <button class="action-btn del" title="Delete" onclick="openDeleteModal('${c._id}', '${c.category_name}')">
             <img src="icon-delete.png" style="width:15px;height:15px;object-fit:contain;">
           </button>
         </div>
@@ -608,15 +601,19 @@
 
   function filterCategories() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = categories.filter(c =>
-      c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)
-    );
-    renderGrid(filtered);
+    renderGrid(allCategories.filter(c =>
+      (c.category_name || '').toLowerCase().includes(q) ||
+      (c.category_description || '').toLowerCase().includes(q) ||
+      (c.category_id || '').toLowerCase().includes(q)
+    ));
   }
 
+  // ── Add/Edit Modal ──────────────────────────────────────────────────────────
   function openAddModal() {
     editingId = null;
     document.getElementById('modalTitle').textContent = 'Add Category';
+    document.getElementById('catId').value = '';
+    document.getElementById('catId').disabled = false;
     document.getElementById('catName').value = '';
     document.getElementById('catDesc').value = '';
     openModal('catModal');
@@ -624,46 +621,61 @@
 
   function openEditModal(id) {
     editingId = id;
-    const c = categories.find(x => x.id === id);
+    const c = allCategories.find(x => x._id === id);
     document.getElementById('modalTitle').textContent = 'Edit Category';
-    document.getElementById('catName').value = c.name;
-    document.getElementById('catDesc').value = c.desc;
+    document.getElementById('catId').value = c.category_id;
+    document.getElementById('catId').disabled = true; // ไม่ให้แก้ ID
+    document.getElementById('catName').value = c.category_name;
+    document.getElementById('catDesc').value = c.category_description || '';
     openModal('catModal');
   }
 
-  function saveCategory() {
-    const name = document.getElementById('catName').value.trim();
-    const desc = document.getElementById('catDesc').value.trim();
-    if (!name) { showToast('Please enter a category name.', 'error'); return; }
+  async function saveCategory() {
+    const category_id   = document.getElementById('catId').value.trim();
+    const category_name = document.getElementById('catName').value.trim();
+    const category_description = document.getElementById('catDesc').value.trim();
+    if (!category_name) { showToast('กรุณากรอกชื่อ Category', 'error'); return; }
 
-    if (editingId) {
-      const idx = categories.findIndex(x => x.id === editingId);
-      categories[idx] = { id: editingId, name, desc };
-      showToast('Category updated.', 'success');
-    } else {
-      categories.push({ id: nextId++, name, desc });
-      showToast('Category added.', 'success');
-    }
-    saveCategories();
-    closeModal('catModal');
-    filterCategories();
+    try {
+      if (editingId) {
+        await fetch(`${API}/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category_name, category_description })
+        });
+        showToast('อัปเดต Category สำเร็จ');
+      } else {
+        if (!category_id) { showToast('กรุณากรอก Category ID', 'error'); return; }
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category_id, category_name, category_description })
+        });
+        if (!res.ok) { const d = await res.json(); showToast(d.message, 'error'); return; }
+        showToast('เพิ่ม Category สำเร็จ');
+      }
+      closeModal('catModal');
+      loadCategories();
+    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
   }
 
-  function openDeleteModal(id) {
+  // ── Delete Modal ────────────────────────────────────────────────────────────
+  function openDeleteModal(id, name) {
     deletingId = id;
-    const c = categories.find(x => x.id === id);
-    document.getElementById('deleteCatName').textContent = '"' + c.name + '"';
+    document.getElementById('deleteCatName').textContent = `"${name}"`;
     openModal('deleteModal');
   }
 
-  function confirmDelete() {
-    categories = categories.filter(x => x.id !== deletingId);
-    saveCategories();
-    closeModal('deleteModal');
-    filterCategories();
-    showToast('Category deleted.', 'success');
+  async function confirmDelete() {
+    try {
+      await fetch(`${API}/${deletingId}`, { method: 'DELETE' });
+      closeModal('deleteModal');
+      showToast('ลบ Category สำเร็จ');
+      loadCategories();
+    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
   }
 
+  // ── Utilities ───────────────────────────────────────────────────────────────
   function openModal(id) { document.getElementById(id).classList.add('open'); }
   function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
@@ -675,7 +687,7 @@
   });
 
   let toastTimer;
-  function showToast(msg, type = 'success') {
+  function showToast(msg) {
     const toast = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
     toast.className = 'toast show';
@@ -688,7 +700,7 @@
     window.location.href = 'login_register_page.html';
   }
 
-  renderGrid(categories);
+  loadCategories();
 </script>
 </body>
 </html>

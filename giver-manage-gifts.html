@@ -636,12 +636,12 @@
 
       <div class="form-row" style="margin-top:12px;">
         <div class="form-group">
-          <label class="form-label">Gift Name</label>
-          <input type="text" class="form-input" id="giftName" placeholder="">
+          <label class="form-label">Gift ID</label>
+          <input type="text" class="form-input" id="giftId" placeholder="e.g. G001">
         </div>
         <div class="form-group">
-          <label class="form-label">External Store</label>
-          <input type="url" class="form-input" id="giftStore" placeholder="https://.........">
+          <label class="form-label">Gift Name</label>
+          <input type="text" class="form-input" id="giftName" placeholder="">
         </div>
       </div>
 
@@ -655,11 +655,6 @@
           <label class="form-label">Categories</label>
           <select class="form-select" id="giftCategory">
             <option value="">Select category</option>
-            <option value="electronics">electronics</option>
-            <option value="home-decor">home-decor</option>
-            <option value="kitchen">kitchen</option>
-            <option value="fitness">fitness</option>
-            <option value="fashion">fashion</option>
           </select>
         </div>
         <div class="form-group">
@@ -669,31 +664,41 @@
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="unisex">Unisex</option>
+            <option value="all">All</option>
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Tags</label>
-        <input type="text" class="form-input" id="giftTags" placeholder="e.g., tech, books, fitness">
+        <label class="form-label">Tags (คั่นด้วย ,)</label>
+        <input type="text" class="form-input" id="giftTags" placeholder="e.g. tech, books, fitness">
       </div>
 
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Target Age Range (optional)</label>
-          <input type="text" class="form-input" id="giftAge" placeholder="e.g., 18-35">
+          <input type="text" class="form-input" id="giftAge" placeholder="e.g. 18-35">
         </div>
         <div class="form-group">
-          <label class="form-label">Image URL (optional)</label>
-          <input type="url" class="form-input" id="giftImage" placeholder="https://.........">
+          <label class="form-label">Price (฿) — Option แรก</label>
+          <input type="text" class="form-input" id="giftPrice" placeholder="0">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Price (฿)</label>
-          <input type="number" class="form-input" id="giftPrice" placeholder="0">
+          <label class="form-label">Shop Name — Option แรก</label>
+          <input type="text" class="form-input" id="giftShopName" placeholder="e.g. Shopee">
         </div>
+        <div class="form-group">
+          <label class="form-label">Shop Link — Option แรก</label>
+          <input type="url" class="form-input" id="giftStore" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Image URL — Option แรก</label>
+        <input type="url" class="form-input" id="giftImage" placeholder="https://...">
       </div>
     </div>
     <div class="modal-footer" style="flex-direction:row-reverse;gap:10px;">
@@ -727,75 +732,69 @@
 </div>
 
 <script>
-  /* ─── SHARED STORAGE KEY ─── */
-  const GIFTS_KEY = 'giver_gifts';
+  const API_GIFTS = '/api/gifts';
+  const API_CATS  = '/api/categories';
 
-  /* ─── DEFAULT SEED DATA ─── */
-  const DEFAULT_GIFTS = [
-    { id: 1, name: 'Wireless Headphones',  desc: 'Premium noise-cancelling wireless headphones', price: 2990, category: 'electronics', tags: ['music', 'tech', 'lifestyle'],      rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lp8lsxyghpn7bf', gender: 'unisex', age: '18-40', store: '' },
-    { id: 2, name: 'Handmade Candle Set',   desc: 'Artisan scented candles in elegant packaging',  price: 890,  category: 'home-decor',   tags: ['home', 'relaxation', 'gift'],       rating: 4.9, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r991-lrwkr4vqq08mb3', gender: 'unisex', age: '18-60', store: '' },
-    { id: 3, name: 'Coffee Maker',          desc: 'Automatic coffee maker with grinder',           price: 4500, category: 'kitchen',       tags: ['coffee', 'kitchen', 'morning'],     rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lzge93xvzl9k1d', gender: 'unisex', age: '20-50', store: '' },
-    { id: 4, name: 'Yoga Mat Set',          desc: 'Premium yoga mat with carrying strap',          price: 1290, category: 'fitness',       tags: ['fitness', 'yoga', 'wellness'],      rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lx6r2s5m6nl040', gender: 'female', age: '18-45', store: '' },
-    { id: 5, name: 'Leather Wallet',        desc: 'Slim genuine leather bifold wallet',            price: 1590, category: 'fashion',       tags: ['leather', 'fashion', 'accessories'],rating: 4.6, image: 'https://down-th.img.susercontent.com/file/th-11134207-7qukw-lhivt3rrfpxkbb', gender: 'male',   age: '20-50', store: '' },
-    { id: 6, name: 'Herb Garden Kit',       desc: 'Indoor growing kit with seeds and pots',        price: 750,  category: 'home-decor',   tags: ['garden', 'home', 'nature'],         rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lylxol4efpvo75', gender: 'unisex', age: '18-60', store: '' },
-  ];
-
-  /* ─── LOAD FROM STORAGE ─── */
-  function loadGifts() {
-    const stored = localStorage.getItem(GIFTS_KEY);
-    if (stored) {
-      try { return JSON.parse(stored); } catch(e) {}
-    }
-    // First run: seed default data
-    localStorage.setItem(GIFTS_KEY, JSON.stringify(DEFAULT_GIFTS));
-    return [...DEFAULT_GIFTS];
-  }
-
-  function saveGifts() {
-    localStorage.setItem(GIFTS_KEY, JSON.stringify(gifts));
-  }
-
-  let gifts = loadGifts();
+  let allGifts = [];
   let editingId = null;
   let deletingId = null;
-  let nextId = gifts.length ? Math.max(...gifts.map(g => g.id)) + 1 : 1;
 
-  function fmtPrice(p) {
-    return '฿' + Number(p).toLocaleString();
+  // โหลด Categories เข้า select
+  async function loadCategoryOptions() {
+    try {
+      const res = await fetch(API_CATS);
+      const cats = await res.json();
+      const sel = document.getElementById('giftCategory');
+      sel.innerHTML = '<option value="">Select category</option>' +
+        cats.map(c => `<option value="${c.category_id}">${c.category_id} — ${c.category_name}</option>`).join('');
+    } catch (e) {}
+  }
+
+  async function loadGifts() {
+    try {
+      const res = await fetch(API_GIFTS);
+      allGifts = await res.json();
+      renderTable(allGifts);
+      document.getElementById('tableTitle').textContent = `All Gifts (${allGifts.length})`;
+    } catch (err) {
+      showToast('ไม่สามารถโหลดข้อมูลได้', 'error');
+    }
+  }
+
+  function getFirstPrice(g) {
+    if (g.options && g.options.length > 0) return g.options[0].price || '-';
+    return '-';
   }
 
   function renderTable(data) {
     const tbody = document.getElementById('giftsTableBody');
     const empty = document.getElementById('emptyState');
-    const title = document.getElementById('tableTitle');
+    document.getElementById('tableTitle').textContent = `All Gifts (${data.length})`;
 
-    title.textContent = `All Gifts (${data.length})`;
-
-    if (data.length === 0) {
+    if (!data.length) {
       tbody.innerHTML = '';
       empty.style.display = 'block';
       return;
     }
     empty.style.display = 'none';
-
     tbody.innerHTML = data.map(g => {
-      const tags = g.tags.slice(0, 2).map(t =>
-        `<span class="tag-chip">${t}</span>`
-      ).join('');
-      const more = g.tags.length > 2 ? `<span class="tag-more">+${g.tags.length - 2}</span>` : '';
+      const tags = (g.tags || []).slice(0, 2).map(t => `<span class="tag-chip">${t}</span>`).join('');
+      const more = (g.tags || []).length > 2 ? `<span class="tag-more">+${g.tags.length - 2}</span>` : '';
+      const price = getFirstPrice(g);
+      const optCount = g.options?.length || 0;
       return `
         <tr>
-          <td>${g.name}</td>
-          <td class="td-desc">${g.desc}</td>
-          <td class="td-price">${fmtPrice(g.price)}</td>
-          <td><span class="badge-cat">${g.category}</span></td>
+          <td>${g.gift_name}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
+          <td class="td-desc">${g.description || ''}</td>
+          <td class="td-price">${price ? '฿' + price : '-'}${optCount > 1 ? `<span style="font-size:11px;color:var(--text-secondary)"> +${optCount-1}</span>` : ''}</td>
+          <td><span class="badge-cat">${g.category_id}</span></td>
           <td><div class="tags-cell">${tags}${more}</div></td>
           <td>
             <div class="actions-cell">
-              <button class="action-btn edit" title="Edit" onclick="openEditModal(${g.id})">
+              <button class="action-btn edit" title="Edit" onclick="openEditModal('${g._id}')">
                 <img src="icon-edit.png" style="width:14px;height:14px;object-fit:contain;">
               </button>
-              <button class="action-btn del" title="Delete" onclick="openDeleteModal(${g.id})">
+              <button class="action-btn del" title="Delete" onclick="openDeleteModal('${g._id}', '${g.gift_name.replace(/'/g,'\\&apos;')}')">
                 <img src="icon-delete.png" style="width:14px;height:14px;object-fit:contain;">
               </button>
             </div>
@@ -807,19 +806,22 @@
 
   function filterGifts() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = gifts.filter(g =>
-      g.name.toLowerCase().includes(q) ||
-      g.desc.toLowerCase().includes(q) ||
-      g.category.toLowerCase().includes(q) ||
-      g.tags.some(t => t.toLowerCase().includes(q))
-    );
-    renderTable(filtered);
+    renderTable(allGifts.filter(g =>
+      (g.gift_name || '').toLowerCase().includes(q) ||
+      (g.description || '').toLowerCase().includes(q) ||
+      (g.category_id || '').toLowerCase().includes(q) ||
+      (g.tags || []).some(t => t.toLowerCase().includes(q))
+    ));
   }
 
   function openAddModal() {
     editingId = null;
     document.getElementById('modalTitle').textContent = 'Add New Gift';
-    ['giftName','giftDesc','giftPrice','giftTags','giftStore','giftAge','giftImage'].forEach(id => document.getElementById(id).value = '');
+    ['giftId','giftName','giftDesc','giftPrice','giftTags','giftStore','giftAge','giftImage','giftShopName'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('giftId').disabled = false;
     document.getElementById('giftCategory').value = '';
     document.getElementById('giftGender').value = '';
     document.querySelector('.btn-save').textContent = 'Add Gift';
@@ -828,63 +830,85 @@
 
   function openEditModal(id) {
     editingId = id;
-    const g = gifts.find(x => x.id === id);
+    const g = allGifts.find(x => x._id === id);
     document.getElementById('modalTitle').textContent = 'Edit Gift';
-    document.getElementById('giftName').value     = g.name;
-    document.getElementById('giftDesc').value     = g.desc;
-    document.getElementById('giftPrice').value    = g.price;
-    document.getElementById('giftCategory').value = g.category;
-    document.getElementById('giftTags').value     = g.tags.join(', ');
-    document.getElementById('giftStore').value    = g.store  || '';
-    document.getElementById('giftGender').value   = g.gender || '';
-    document.getElementById('giftAge').value      = g.age    || '';
-    document.getElementById('giftImage').value    = g.image  || '';
+    document.getElementById('giftId').value       = g.gift_id;
+    document.getElementById('giftId').disabled    = true;
+    document.getElementById('giftName').value     = g.gift_name;
+    document.getElementById('giftDesc').value     = g.description || '';
+    document.getElementById('giftCategory').value = g.category_id;
+    document.getElementById('giftGender').value   = g.target_gender_id || '';
+    document.getElementById('giftTags').value     = (g.tags || []).join(', ');
+    document.getElementById('giftAge').value      = g.target_age_id || '';
+    // Fill first option
+    const opt = g.options?.[0] || {};
+    document.getElementById('giftPrice').value    = opt.price || '';
+    document.getElementById('giftShopName').value = opt.shop_name || '';
+    document.getElementById('giftStore').value    = opt.shop_link || '';
+    document.getElementById('giftImage').value    = opt.pic_link || '';
     document.querySelector('.btn-save').textContent = 'Save Gift';
     openModal('giftModal');
   }
 
-  function saveGift() {
-    const name     = document.getElementById('giftName').value.trim();
-    const desc     = document.getElementById('giftDesc').value.trim();
-    const price    = parseInt(document.getElementById('giftPrice').value) || 0;
-    const category = document.getElementById('giftCategory').value;
-    const tagsRaw  = document.getElementById('giftTags').value;
-    const tags     = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
-    const store    = document.getElementById('giftStore').value.trim();
-    const gender   = document.getElementById('giftGender').value;
-    const age      = document.getElementById('giftAge').value.trim();
-    const image    = document.getElementById('giftImage').value.trim();
+  async function saveGift() {
+    const gift_id          = document.getElementById('giftId').value.trim();
+    const gift_name        = document.getElementById('giftName').value.trim();
+    const description      = document.getElementById('giftDesc').value.trim();
+    const category_id      = document.getElementById('giftCategory').value;
+    const target_gender_id = document.getElementById('giftGender').value;
+    const target_age_id    = document.getElementById('giftAge').value.trim();
+    const tags = document.getElementById('giftTags').value.split(',').map(t => t.trim()).filter(Boolean);
+    const price     = document.getElementById('giftPrice').value.trim();
+    const shop_name = document.getElementById('giftShopName').value.trim();
+    const shop_link = document.getElementById('giftStore').value.trim();
+    const pic_link  = document.getElementById('giftImage').value.trim();
 
-    if (!name || !category) { showToast('Please fill in name and category.', 'error'); return; }
+    if (!gift_name || !category_id || !target_gender_id)
+      return showToast('กรุณากรอก Gift Name, Category และ Target Gender', 'error');
 
-    if (editingId) {
-      const idx = gifts.findIndex(x => x.id === editingId);
-      const existing = gifts[idx];
-      gifts[idx] = { id: editingId, name, desc, price, category, tags, store, gender, age, image, rating: existing.rating || 4.5 };
-      showToast('Gift updated successfully.', 'success');
-    } else {
-      gifts.push({ id: nextId++, name, desc, price, category, tags, store, gender, age, image, rating: 4.5 });
-      showToast('Gift added successfully.', 'success');
-    }
+    const options = (price || shop_link || pic_link)
+      ? [{ price, shop_name, shop_link, pic_link }]
+      : [];
 
-    saveGifts();  // ← persist to localStorage
-    closeModal('giftModal');
-    filterGifts();
+    const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options };
+
+    try {
+      if (editingId) {
+        const res = await fetch(`${API_GIFTS}/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) { const d = await res.json(); return showToast(d.message, 'error'); }
+        showToast('อัปเดต Gift สำเร็จ');
+      } else {
+        if (!gift_id) return showToast('กรุณากรอก Gift ID', 'error');
+        const res = await fetch(API_GIFTS, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gift_id, ...body })
+        });
+        if (!res.ok) { const d = await res.json(); return showToast(d.message, 'error'); }
+        showToast('เพิ่ม Gift สำเร็จ');
+      }
+      closeModal('giftModal');
+      loadGifts();
+    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
   }
 
-  function openDeleteModal(id) {
+  function openDeleteModal(id, name) {
     deletingId = id;
-    const g = gifts.find(x => x.id === id);
-    document.getElementById('deleteGiftName').textContent = '"' + g.name + '"';
+    document.getElementById('deleteGiftName').textContent = `"${name}"`;
     openModal('deleteModal');
   }
 
-  function confirmDelete() {
-    gifts = gifts.filter(x => x.id !== deletingId);
-    saveGifts();  // ← persist to localStorage
-    closeModal('deleteModal');
-    filterGifts();
-    showToast('Gift deleted.', 'success');
+  async function confirmDelete() {
+    try {
+      await fetch(`${API_GIFTS}/${deletingId}`, { method: 'DELETE' });
+      closeModal('deleteModal');
+      showToast('ลบ Gift สำเร็จ');
+      loadGifts();
+    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
   }
 
   function openModal(id)  { document.getElementById(id).classList.add('open'); }
@@ -893,16 +917,15 @@
   document.querySelectorAll('.modal-overlay').forEach(el => {
     el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
   });
-
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
   });
 
   let toastTimer;
-  function showToast(msg, type = 'success') {
+  function showToast(msg) {
     const toast = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
-    toast.className = 'toast ' + type + ' show';
+    toast.className = 'toast show';
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
   }
@@ -912,8 +935,8 @@
     window.location.href = 'login_register_page.html';
   }
 
-  // Init
-  renderTable(gifts);
+  loadCategoryOptions();
+  loadGifts();
 </script>
 
 </body>
