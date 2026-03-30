@@ -5,7 +5,7 @@
  * Connects to the Express/MongoDB backend at /api/auth/*
  */
 
-const API_BASE = 'https://your-app.onrender.com';
+const API_BASE = 'https://gift-recommendation-system-dqbx.onrender.com';
 
 // ─── Tab Switcher ──────────────────────────────────────────────────────────────
 function switchTab(tab) {
