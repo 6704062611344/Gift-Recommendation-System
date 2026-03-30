@@ -360,8 +360,8 @@
         favorites = data.giftIds;
         const active = favorites.includes(String(id));
         btn.classList.toggle('active', active);
-        btn.querySelector('svg').setAttribute('fill', active ? '#e74c3c' : 'none');
-        btn.querySelector('svg').setAttribute('stroke', active ? '#e74c3c' : '#7a7268');
+        const iconImg = btn.querySelector('img');
+        if (iconImg) iconImg.src = active ? 'icon/heart (1).png' : 'icon/heart.png';
         showToast(active ? 'Added to favorites! ♥' : 'Removed from favorites.');
       } catch (e) { showToast('Error updating favorites.'); }
     }
@@ -419,7 +419,7 @@
             <span class="gift-category-badge">${escHtml(getCategoryName(cat))}</span>
             <button class="fav-btn ${fav ? 'active' : ''}" id="fav-${id}" title="Favorite"
                     onclick="toggleFav('${id}', this)">
-              <img src="icon/star (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+              <img src="${fav ? 'icon/heart (1).png' : 'icon/heart.png'}" style="width:16px;height:16px;object-fit:contain;" alt="icon">
             </button>
           </div>
           <div class="gift-info">
