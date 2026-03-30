@@ -109,7 +109,7 @@ async function handleLogin() {
 
         // Store session
         sessionStorage.setItem('giver_user', JSON.stringify({
-            id: data.user._id,
+            id: data.user.id,
             name: data.user.name,
             email: data.user.email,
             role: data.user.role,

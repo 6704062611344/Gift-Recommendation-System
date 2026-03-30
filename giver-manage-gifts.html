@@ -241,10 +241,74 @@
     max-width: 220px;
   }
 
-  .td-price {
-    font-weight: 500;
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 200px;
+  }
+
+  .opt-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  .opt-thumb {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: var(--btn-bg);
+  }
+
+  .opt-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .opt-shop {
+    font-size: 12px;
+    color: var(--text-secondary);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  .opt-price {
+    font-weight: 500;
     color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  .opt-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--accent-light);
+    color: var(--accent);
+    text-decoration: none;
+    flex-shrink: 0;
+    font-size: 13px;
+    transition: background 0.15s;
+  }
+
+  .opt-link:hover { background: var(--accent); color: #fff; }
+
+  .no-options {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
   }
 
   /* CATEGORY BADGE */
@@ -612,7 +676,7 @@
         <tr>
           <th>Name</th>
           <th>Description</th>
-          <th>Price</th>
+          <th>Options</th>
           <th>Category</th>
           <th>Tags</th>
           <th>Actions</th>
@@ -785,13 +849,29 @@
     tbody.innerHTML = data.map(g => {
       const tags = (g.tags || []).slice(0, 2).map(t => `<span class="tag-chip">${t}</span>`).join('');
       const more = (g.tags || []).length > 2 ? `<span class="tag-more">+${g.tags.length - 2}</span>` : '';
-      const price = getFirstPrice(g);
-      const optCount = g.options?.length || 0;
+      const opts = g.options && g.options.length > 0
+        ? g.options.map((o, i) => {
+            const img = o.pic_link || o.image_url || 'surprise(1).png';
+            const shop = o.shop_name || `Option ${i + 1}`;
+            const price = o.price ? '฿' + Number(o.price).toLocaleString() : '-';
+            const link = o.shop_link
+              ? `<a class="opt-link" href="${o.shop_link}" target="_blank" title="Open shop">↗</a>`
+              : '';
+            return `<div class="opt-item">
+              <img class="opt-thumb" src="${img}" alt="" onerror="this.src='surprise(1).png';this.style.objectFit='contain';">
+              <div class="opt-info">
+                <span class="opt-shop">${shop}</span>
+                <span class="opt-price">${price}</span>
+              </div>
+              ${link}
+            </div>`;
+          }).join('')
+        : `<span class="no-options">No options</span>`;
       return `
         <tr>
           <td>${g.gift_name}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
           <td class="td-desc">${g.description || ''}</td>
-          <td class="td-price">${price ? '฿' + price : '-'}${optCount > 1 ? `<span style="font-size:11px;color:var(--text-secondary)"> +${optCount-1}</span>` : ''}</td>
+          <td><div class="options-list">${opts}</div></td>
           <td><span class="badge-cat">${g.category_id}</span></td>
           <td><div class="tags-cell">${tags}${more}</div></td>
           <td>
