@@ -1,56 +1,58 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const xlsx = require('xlsx');
-const Gift = require('./models/Gift');
+const Tag = require('./models/Tag');
 
 async function run() {
   console.log('Connecting to MongoDB...');
-  await mongoose.connect(process.env.MONGO_URI);
-  console.log('Connected!');
-
-  // อ่าน tag mapping จาก Excel
-  const wb = xlsx.readFile('Giver_Gift.xlsx');
-  const ws = wb.Sheets['gift_id,tag_id'];
-  const rows = xlsx.utils.sheet_to_json(ws, { defval: '' });
-  console.log(`Read ${rows.length} rows from gift_id,tag_id sheet`);
-
-  // สร้าง tagMap: gift_id → [tag_id, ...]
-  const tagMap = {};
-  rows.forEach(r => {
-    const gid = String(r['gift_id'] || '').trim();
-    const tid = String(r['tag_id'] || '').trim();
-    if (gid && tid) {
-      if (!tagMap[gid]) tagMap[gid] = [];
-      tagMap[gid].push(tid);
-    }
+  await mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000
   });
+  console.log('✅ Connected!');
 
-  const giftIds = Object.keys(tagMap);
-  console.log(`Found tags for ${giftIds.length} gifts`);
-  console.log(`Sample: gift 1 → [${tagMap['1'].join(', ')}]`);
+  // อ่านจาก Excel
+  const wb   = xlsx.readFile('Giver_Gift.xlsx');
+  const ws   = wb.Sheets['tags_detail'];
+  const rows = xlsx.utils.sheet_to_json(ws, { header: 1, defval: '' });
+  const headers = rows[0].map(h => h.toString().toLowerCase().trim());
+  console.log('Headers:', headers);
 
-  // อัปเดต tags ของทุก gift
-  let updated = 0;
-  for (const gid of giftIds) {
-    const result = await Gift.updateOne(
-      { gift_id: gid },
-      { $set: { tags: tagMap[gid] } }
-    );
-    if (result.modifiedCount > 0) updated++;
-  }
+  const idIdx   = headers.findIndex(h => h === 'tags_id'   || h === 'tag_id');
+  const nameIdx = headers.findIndex(h => h === 'tags_name' || h === 'tag_name');
+  const typeIdx = headers.findIndex(h => h === 'tag_type'  || h === 'type');
 
-  console.log(`✅ Updated tags for ${updated} gifts`);
+  const docs = rows.slice(1)
+    .map(r => ({
+      tags_id:   String(r[idIdx]   ?? '').trim(),
+      tags_name: String(r[nameIdx] ?? '').trim(),
+      tag_type:  typeIdx >= 0 ? String(r[typeIdx] ?? 'general').trim() : 'general'
+    }))
+    .filter(d => d.tags_id !== '' && d.tags_name !== '');
 
-  // ตรวจสอบ gift 1
-  const g1 = await Gift.findOne({ gift_id: '1' });
-  console.log(`Gift 1 tags in DB now: [${g1 ? g1.tags.join(', ') : 'NOT FOUND'}]`);
+  console.log(`📋 Tags from Excel: ${docs.length}`);
 
-  mongoose.disconnect();
+  // bulkWrite upsert ทีเดียวทั้งหมด — เร็วกว่า loop มาก
+  const ops = docs.map(d => ({
+    updateOne: {
+      filter: { tags_id: d.tags_id },
+      update: { $set: d },
+      upsert: true
+    }
+  }));
+
+  const result = await Tag.bulkWrite(ops, { ordered: false });
+  console.log(`✅ Upserted: ${result.upsertedCount}  Modified: ${result.modifiedCount}`);
+
+  const total = await Tag.countDocuments();
+  console.log(`📊 Total tags in DB: ${total}`);
+
+  await mongoose.disconnect();
   console.log('Done!');
 }
 
 run().catch(err => {
-  console.error('Error:', err.message);
+  console.error('❌ Error:', err.message);
   mongoose.disconnect();
   process.exit(1);
 });
