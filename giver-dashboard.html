@@ -547,12 +547,14 @@
                 const admins = adminRes.ok ? await adminRes.json() : [];
                 const users = usersRes.ok ? await usersRes.json() : [];
 
+                const justUsers = users.filter(u => u.role === 'user');
+                
                 countUp(document.getElementById('countGifts'), gifts.length, 600);
                 countUp(document.getElementById('countCategories'), cats.length, 600);
                 countUp(document.getElementById('countRules'), rules.length, 600);
                 countUp(document.getElementById('countVocab'), vocab.length, 600);
                 countUp(document.getElementById('countAdmin'), admins.length, 600);
-                countUp(document.getElementById('countUsers'), users.length, 600);
+                countUp(document.getElementById('countUsers'), justUsers.length, 600);
             } catch (err) {
                 console.error('Dashboard load error:', err);
             }
