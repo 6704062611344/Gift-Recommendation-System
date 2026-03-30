@@ -488,19 +488,7 @@
         if (!user || !user.role) window.location.href = 'login_register_page.html';
         if (user.role !== 'admin') window.location.href = 'user-home.html';
 
-        /* ─── LOAD COUNTS FROM localStorage ─── */
-        function getCount(key, fallback) {
-            try {
-                const raw = localStorage.getItem(key);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) return parsed.length;
-                }
-            } catch(e) {}
-            // Don't seed — just return fallback count, let manage pages handle seeding
-            return fallback;
-        }
-
+        /* ─── COUNT UP ANIMATION ─── */
         function countUp(el, target, duration) {
             if (!el) return;
             let start = 0;
@@ -513,21 +501,34 @@
             requestAnimationFrame(tick);
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const giftsCount      = getCount('giver_gifts',      6);
-            const categoriesCount = getCount('giver_categories', 5);
-            const rulesCount      = getCount('giver_rules',      2);
-            const vocabCount      = getCount('giver_vocabulary', 2);
-            // Admin count: 2 demo admins + any registered admins
-            const registeredUsers = JSON.parse(localStorage.getItem('giver_registered_users') || '[]');
-            const adminCount = 2 + registeredUsers.filter(u => u.role === 'admin').length;
+        /* ─── LOAD COUNTS FROM API ─── */
+        async function loadDashboard() {
+            try {
+                const [giftsRes, catsRes, rulesRes, vocabRes, adminRes] = await Promise.all([
+                    fetch('/api/gifts'),
+                    fetch('/api/categories'),
+                    fetch('/api/rules'),
+                    fetch('/api/vocabulary'),
+                    fetch('/api/admin/list')
+                ]);
 
-            countUp(document.getElementById('countGifts'),      giftsCount,      600);
-            countUp(document.getElementById('countCategories'), categoriesCount, 600);
-            countUp(document.getElementById('countRules'),      rulesCount,      600);
-            countUp(document.getElementById('countVocab'),      vocabCount,      600);
-            countUp(document.getElementById('countAdmin'),      adminCount,      600);
-        });
+                const gifts      = giftsRes.ok   ? await giftsRes.json()   : [];
+                const cats       = catsRes.ok    ? await catsRes.json()    : [];
+                const rules      = rulesRes.ok   ? await rulesRes.json()   : [];
+                const vocab      = vocabRes.ok   ? await vocabRes.json()   : [];
+                const admins     = adminRes.ok   ? await adminRes.json()   : [];
+
+                countUp(document.getElementById('countGifts'),      gifts.length,  600);
+                countUp(document.getElementById('countCategories'), cats.length,   600);
+                countUp(document.getElementById('countRules'),      rules.length,  600);
+                countUp(document.getElementById('countVocab'),      vocab.length,  600);
+                countUp(document.getElementById('countAdmin'),      admins.length, 600);
+            } catch (err) {
+                console.error('Dashboard load error:', err);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadDashboard);
 
         function logout() {
             sessionStorage.removeItem('giver_user');
