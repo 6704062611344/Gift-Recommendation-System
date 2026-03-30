@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giver — Admin Dashboard</title>
     <link rel="icon" href="icon/surprise (1).png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        rel="stylesheet">
     <style>
-         :root {
+        :root {
             --bg: #f0ece4;
             --card-bg: #faf8f4;
             --border: #e2ddd5;
@@ -22,7 +24,7 @@
             --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
             --shadow-hover: 0 4px 12px rgba(28, 26, 23, 0.1), 0 16px 40px rgba(28, 26, 23, 0.08);
         }
-        
+
         *,
         *::before,
         *::after {
@@ -30,7 +32,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--bg);
@@ -39,8 +41,9 @@
             font-size: 15px;
             line-height: 1.5;
         }
+
         /* NAV */
-        
+
         nav {
             display: flex;
             align-items: center;
@@ -54,7 +57,7 @@
             z-index: 100;
             backdrop-filter: blur(8px);
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
@@ -66,7 +69,7 @@
             letter-spacing: 0.01em;
             text-decoration: none;
         }
-        
+
         .logo-icon {
             width: 36px;
             height: 36px;
@@ -74,14 +77,14 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .nav-links {
             display: flex;
             align-items: center;
             gap: 4px;
             list-style: none;
         }
-        
+
         .nav-links a {
             display: flex;
             align-items: center;
@@ -95,42 +98,43 @@
             transition: all 0.18s ease;
             letter-spacing: 0.01em;
         }
-        
+
         .nav-links a:hover {
             color: var(--text-primary);
             background: var(--accent-light);
         }
-        
+
         .nav-links a.active {
             color: var(--accent);
             font-weight: 500;
         }
-        
+
         .nav-links a svg {
             flex-shrink: 0;
         }
-        
+
         .nav-links li:last-child a {
             color: var(--text-secondary);
         }
-        
+
         .nav-links li:last-child a:hover {
             color: #c0392b;
             background: #fdf0ee;
         }
+
         /* MAIN */
-        
+
         main {
             max-width: 1200px;
             margin: 0 auto;
             padding: 56px 48px 80px;
         }
-        
+
         .page-header {
             margin-bottom: 48px;
             animation: fadeUp 0.5s ease both;
         }
-        
+
         .page-header h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 42px;
@@ -139,22 +143,24 @@
             color: var(--text-primary);
             line-height: 1.1;
         }
-        
+
         .page-header p {
             color: var(--text-secondary);
             margin-top: 6px;
             font-size: 15px;
             font-weight: 300;
         }
+
         /* GRID */
-        
+
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
+
         /* CARD */
-        
+
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -167,40 +173,40 @@
             flex-direction: column;
             gap: 0;
         }
-        
+
         .card:hover {
             box-shadow: var(--shadow-hover);
             transform: translateY(-2px);
             border-color: var(--accent-light);
         }
-        
+
         .card:nth-child(1) {
             animation-delay: 0.05s;
         }
-        
+
         .card:nth-child(2) {
             animation-delay: 0.10s;
         }
-        
+
         .card:nth-child(3) {
             animation-delay: 0.15s;
         }
-        
+
         .card:nth-child(4) {
             animation-delay: 0.20s;
         }
-        
+
         .card:nth-child(5) {
             animation-delay: 0.25s;
         }
-        
+
         .card-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             margin-bottom: 20px;
         }
-        
+
         .card-label {
             font-size: 13px;
             font-weight: 500;
@@ -208,7 +214,7 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
-        
+
         .card-title {
             font-family: 'Cormorant Garamond', serif;
             font-size: 17px;
@@ -216,7 +222,7 @@
             color: var(--text-primary);
             margin-top: 2px;
         }
-        
+
         .card-icon {
             width: 40px;
             height: 40px;
@@ -228,7 +234,7 @@
             color: var(--accent);
             flex-shrink: 0;
         }
-        
+
         .card-number {
             font-family: 'Cormorant Garamond', serif;
             font-size: 52px;
@@ -238,14 +244,14 @@
             letter-spacing: -0.02em;
             margin-bottom: 24px;
         }
-        
+
         .card-desc {
             font-size: 13px;
             color: var(--text-secondary);
             font-weight: 300;
             margin-top: 3px;
         }
-        
+
         .manage-btn {
             display: flex;
             align-items: center;
@@ -266,53 +272,60 @@
             letter-spacing: 0.01em;
             text-decoration: none;
         }
-        
+
         .manage-btn:hover {
             background: var(--btn-hover);
             border-color: var(--accent-light);
             color: var(--accent);
         }
-        
+
         .manage-btn:active {
             transform: scale(0.99);
         }
+
         /* DIVIDER LINE */
-        
+
         .card-divider {
             height: 1px;
             background: var(--border);
             margin: 20px 0;
         }
+
         /* ANIMATION */
-        
+
         @keyframes fadeUp {
             from {
                 opacity: 0;
                 transform: translateY(16px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
         /* RESPONSIVE */
-        
+
         @media (max-width: 900px) {
             .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             nav {
                 padding: 0 24px;
             }
+
             main {
                 padding: 40px 24px 60px;
             }
         }
-        
+
         @media (max-width: 580px) {
             .cards-grid {
                 grid-template-columns: 1fr;
             }
+
             .nav-links {
                 display: none;
             }
@@ -330,17 +343,17 @@
         <ul class="nav-links">
             <li>
                 <a href="giver-dashboard.html" class="active">
-                    <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;"> Dashboard
+                    <img src="icon/home.png" style="width:15px;height:15px;object-fit:contain;"> Dashboard
                 </a>
             </li>
             <li>
                 <a href="giver-manage-gifts.html">
-                    <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;"> Gifts
+                    <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;"> Gifts
                 </a>
             </li>
             <li>
                 <a href="giver-manage-categories.html">
-                    <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;"> Categories
+                    <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;"> Categories
                 </a>
             </li>
             <li>
@@ -355,17 +368,17 @@
             </li>
             <li>
                 <a href="giver-manage-admin.html">
-                    <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;"> Admin
+                    <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;"> Admin
                 </a>
             </li>
             <li>
                 <a href="giver-manage-user.html">
-                    <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;"> Users
+                    <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;"> Users
                 </a>
             </li>
             <li>
                 <a href="#" onclick="logout()">
-                    <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;"> Logout
+                    <img src="icon/enter.png" style="width:15px;height:15px;object-fit:contain;"> Logout
                 </a>
             </li>
         </ul>
@@ -387,15 +400,15 @@
                         <div class="card-desc">Gifts in database</div>
                     </div>
                     <div class="card-icon">
-                        <img src="icon/package (1).png" style="width:18px;height:18px;object-fit:contain;">
+                        <img src="icon/gift.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
                 <div class="card-number" id="countGifts">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-gifts.html" class="manage-btn">
-        Manage
-        <img src="icon/package (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
-      </a>
+                    Manage
+                    <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+                </a>
             </div>
 
             <!-- Categories -->
@@ -406,15 +419,15 @@
                         <div class="card-desc">Gift categories</div>
                     </div>
                     <div class="card-icon">
-                        <img src="icon/categories.png" style="width:18px;height:18px;object-fit:contain;">
+                        <img src="icon/categories (1).png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
                 <div class="card-number" id="countCategories">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-categories.html" class="manage-btn">
-        Manage
-        <img src="icon/categories.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
-      </a>
+                    Manage
+                    <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+                </a>
             </div>
 
             <!-- Recommendation Rules -->
@@ -431,9 +444,9 @@
                 <div class="card-number" id="countRules">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-rules.html" class="manage-btn">
-        Manage
-        <img src="icon/setting (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
-      </a>
+                    Manage
+                    <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+                </a>
             </div>
 
             <!-- Vocabulary Terms -->
@@ -450,9 +463,9 @@
                 <div class="card-number" id="countVocab">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-vocabulary.html" class="manage-btn">
-        Manage
-        <img src="icon/book.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
-      </a>
+                    Manage
+                    <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+                </a>
             </div>
 
             <!-- Total Admin -->
@@ -463,15 +476,15 @@
                         <div class="card-desc">Admin management</div>
                     </div>
                     <div class="card-icon">
-                        <img src="icon/group (1).png" style="width:18px;height:18px;object-fit:contain;">
+                        <img src="icon/group.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
                 <div class="card-number" id="countAdmin">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-admin.html" class="manage-btn">
-        Manage
-        <img src="icon/enter (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
-      </a>
+                    Manage
+                    <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+                </a>
             </div>
 
             <!-- Total Users -->
@@ -482,15 +495,15 @@
                         <div class="card-desc">Registered members</div>
                     </div>
                     <div class="card-icon">
-                        <img src="icon/group (1).png" style="width:18px;height:18px;object-fit:contain;">
+                        <img src="icon/group.png" style="width:18px;height:18px;object-fit:contain;">
                     </div>
                 </div>
                 <div class="card-number" id="countUsers">—</div>
                 <div class="card-divider"></div>
                 <a href="giver-manage-user.html" class="manage-btn">
-        Manage
-        <img src="icon/group (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
-      </a>
+                    Manage
+                    <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+                </a>
             </div>
 
         </div>
@@ -527,19 +540,19 @@
                     fetch('/api/users')
                 ]);
 
-                const gifts      = giftsRes.ok   ? await giftsRes.json()   : [];
-                const cats       = catsRes.ok    ? await catsRes.json()    : [];
-                const rules      = rulesRes.ok   ? await rulesRes.json()   : [];
-                const vocab      = vocabRes.ok   ? await vocabRes.json()   : [];
-                const admins     = adminRes.ok   ? await adminRes.json()   : [];
-                const users      = usersRes.ok   ? await usersRes.json()   : [];
+                const gifts = giftsRes.ok ? await giftsRes.json() : [];
+                const cats = catsRes.ok ? await catsRes.json() : [];
+                const rules = rulesRes.ok ? await rulesRes.json() : [];
+                const vocab = vocabRes.ok ? await vocabRes.json() : [];
+                const admins = adminRes.ok ? await adminRes.json() : [];
+                const users = usersRes.ok ? await usersRes.json() : [];
 
-                countUp(document.getElementById('countGifts'),      gifts.length,  600);
-                countUp(document.getElementById('countCategories'), cats.length,   600);
-                countUp(document.getElementById('countRules'),      rules.length,  600);
-                countUp(document.getElementById('countVocab'),      vocab.length,  600);
-                countUp(document.getElementById('countAdmin'),      admins.length, 600);
-                countUp(document.getElementById('countUsers'),      users.length,  600);
+                countUp(document.getElementById('countGifts'), gifts.length, 600);
+                countUp(document.getElementById('countCategories'), cats.length, 600);
+                countUp(document.getElementById('countRules'), rules.length, 600);
+                countUp(document.getElementById('countVocab'), vocab.length, 600);
+                countUp(document.getElementById('countAdmin'), admins.length, 600);
+                countUp(document.getElementById('countUsers'), users.length, 600);
             } catch (err) {
                 console.error('Dashboard load error:', err);
             }

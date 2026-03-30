@@ -1,984 +1,1162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giver — Manage Gifts</title>
-<link rel="icon" href="icon/surprise (1).png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ece4;
-    --card-bg: #faf8f4;
-    --border: #e2ddd5;
-    --text-primary: #1c1a17;
-    --text-secondary: #7a7268;
-    --accent: #b8965a;
-    --accent-light: #e8dcc8;
-    --accent-hover: #9a7a44;
-    --btn-bg: #ede8df;
-    --btn-hover: #e0d9cd;
-    --shadow: 0 1px 3px rgba(28,26,23,0.06), 0 4px 16px rgba(28,26,23,0.04);
-    --danger: #c0392b;
-    --danger-bg: #fdf0ee;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  /* NAV */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 200;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.18s ease;
-  }
-
-  .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
-  .nav-links a.active { color: var(--accent); font-weight: 500; }
-  .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
-
-  /* MAIN */
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 56px 48px 80px;
-  }
-
-  /* PAGE HEADER */
-  .page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 32px;
-    animation: fadeUp 0.4s ease both;
-  }
-
-  .page-header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-  }
-
-  .page-header p {
-    color: var(--text-secondary);
-    margin-top: 6px;
-    font-size: 15px;
-    font-weight: 300;
-  }
-
-  .add-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 12px 22px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
-
-  .add-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,150,90,0.3); }
-  .add-btn:active { transform: translateY(0); }
-
-  /* SEARCH */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 24px;
-    animation: fadeUp 0.4s ease 0.05s both;
-  }
-
-  .search-wrap svg {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    pointer-events: none;
-  }
-
-  .search-input {
-    width: 100%;
-    padding: 13px 16px 13px 44px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
-  }
-
-  .search-input::placeholder { color: var(--text-secondary); }
-  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,150,90,0.12); }
-
-  /* TABLE CARD */
-  .table-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    animation: fadeUp 0.4s ease 0.1s both;
-  }
-
-  .table-scroll {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .table-card-header {
-    padding: 28px 32px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .table-card-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 500;
-  }
-
-  .table-card-header p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    margin-top: 3px;
-  }
-
-  /* TABLE */
-  table {
-    width: 100%;
-    min-width: 860px;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
-
-  /* column widths */
-  thead th:nth-child(1) { width: 140px; } /* Name */
-  thead th:nth-child(2) { width: 180px; } /* Description */
-  thead th:nth-child(3) { width: 200px; } /* Options */
-  thead th:nth-child(4) { width: 120px; } /* Category */
-  thead th:nth-child(5) { width: 200px; } /* Tags */
-  thead th:nth-child(6) { width: 90px;  } /* Actions */
-
-  thead th {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    background: #f5f2ed;
-    border-bottom: 1px solid var(--border);
-  }
-
-  thead th:first-child { padding-left: 32px; }
-  thead th:last-child { padding-right: 32px; text-align: right; }
-
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s ease;
-  }
-
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #f7f4ef; }
-
-  tbody td {
-    padding: 18px 16px;
-    font-size: 14px;
-    vertical-align: middle;
-  }
-
-  tbody td:first-child { padding-left: 32px; font-weight: 500; }
-  tbody td:last-child { padding-right: 32px; }
-
-  .td-desc {
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 300;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
-  }
-
-  .options-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
-  }
-
-  .opt-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13px;
-  }
-
-  .opt-thumb {
-    width: 36px;
-    height: 36px;
-    object-fit: cover;
-    border-radius: 6px;
-    flex-shrink: 0;
-    background: var(--btn-bg);
-  }
-
-  .opt-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .opt-shop {
-    font-size: 12px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-  }
-
-  .opt-price {
-    font-weight: 500;
-    color: var(--text-primary);
-    font-size: 13px;
-  }
-
-  .opt-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 6px;
-    background: var(--accent-light);
-    color: var(--accent);
-    text-decoration: none;
-    flex-shrink: 0;
-    font-size: 13px;
-    transition: background 0.15s;
-  }
-
-  .opt-link:hover { background: var(--accent); color: #fff; }
-
-  .no-options {
-    font-size: 12px;
-    color: var(--text-secondary);
-    font-style: italic;
-  }
-
-  /* OPTIONS EDITOR */
-  .options-editor-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .btn-add-opt {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 13px;
-    background: var(--accent-light);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    color: var(--accent);
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.15s;
-  }
-
-  .btn-add-opt:hover { background: var(--accent); color: #fff; }
-
-  .option-editor-row {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-  }
-
-  .option-editor-row-hd {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .opt-row-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .btn-remove-opt {
-    width: 22px; height: 22px;
-    display: flex; align-items: center; justify-content: center;
-    border: none;
-    background: var(--danger-bg);
-    color: var(--danger);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 15px;
-    line-height: 1;
-    transition: all 0.15s;
-  }
-
-  .btn-remove-opt:hover { background: var(--danger); color: #fff; }
-
-  /* CATEGORY BADGE */
-  .badge-cat {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 12px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-
-  /* TAG CHIPS */
-  .tags-cell {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex-wrap: wrap;
-  }
-
-  .tag-chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    background: var(--accent-light);
-    border: 1px solid #ddd0b8;
-    border-radius: 20px;
-    font-size: 12px;
-    color: var(--accent-hover);
-    white-space: nowrap;
-  }
-
-  .tag-more {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 9px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-
-  /* ACTIONS */
-  .actions-cell {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
-  }
-
-  .action-btn {
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    color: var(--text-secondary);
-  }
-
-  .action-btn.edit:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
-  .action-btn.del:hover { background: var(--danger-bg); border-color: #f0c4be; color: var(--danger); }
-
-  /* EMPTY STATE */
-  .empty-state {
-    text-align: center;
-    padding: 64px 32px;
-    color: var(--text-secondary);
-  }
-
-  .empty-state svg { margin-bottom: 16px; opacity: 0.4; }
-  .empty-state p { font-size: 14px; font-weight: 300; }
-
-  /* MODAL OVERLAY */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(28,26,23,0.45);
-    backdrop-filter: blur(4px);
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.22s ease;
-    overflow-y: auto;
-  }
-
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-  .modal {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    width: 100%;
-    max-width: 520px;
-    max-height: calc(100vh - 48px);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 60px rgba(28,26,23,0.18);
-    transform: translateY(20px) scale(0.97);
-    transition: transform 0.22s ease;
-    overflow: hidden;
-  }
-
-  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 28px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .modal-header h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-  }
-
-  .modal-close {
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
-    border: none; background: var(--btn-bg);
-    border-radius: 8px; cursor: pointer; color: var(--text-secondary);
-    transition: all 0.15s ease;
-  }
-  .modal-close:hover { background: var(--btn-hover); color: var(--text-primary); }
-
-  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; flex: 1; }
-
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-  .form-label {
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--text-secondary);
-  }
-
-  .form-input, .form-select, .form-textarea {
-    width: 100%;
-    padding: 11px 14px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.18s, box-shadow 0.18s;
-  }
-
-  .form-textarea { resize: vertical; min-height: 80px; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(184,150,90,0.12);
-  }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  .modal-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 16px 28px 24px;
-  }
-
-  .btn-cancel {
-    padding: 10px 20px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    color: var(--text-primary);
-    transition: all 0.15s ease;
-  }
-  .btn-cancel:hover { background: var(--btn-hover); }
-
-  .btn-save {
-    padding: 10px 22px;
-    background: var(--accent);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-save:hover { background: var(--accent-hover); }
-
-  /* DELETE CONFIRM */
-  .modal-del-body {
-    padding: 28px 28px 8px;
-    text-align: center;
-  }
-
-  .del-icon-wrap {
-    width: 56px; height: 56px;
-    background: var(--danger-bg);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-    color: var(--danger);
-  }
-
-  .modal-del-body h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-
-  .modal-del-body p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    line-height: 1.6;
-  }
-
-  .modal-del-footer {
-    display: flex;
-    gap: 10px;
-    padding: 20px 28px 28px;
-    justify-content: center;
-  }
-
-  .btn-delete {
-    padding: 10px 22px;
-    background: var(--danger);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-delete:hover { background: #a93226; }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 400;
-    background: var(--text-primary);
-    color: #fff;
-    padding: 13px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    box-shadow: 0 8px 24px rgba(28,26,23,0.2);
-    transform: translateY(16px);
-    opacity: 0;
-    transition: all 0.25s ease;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast.success svg { color: #6fcf97; }
-  .toast.error svg { color: #eb5757; }
-
-  /* ANIMATION */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 900px) {
-    nav { padding: 0 24px; }
-    main { padding: 40px 24px 60px; }
-    .form-row { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <a class="logo" href="giver-dashboard.html">
-    <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;">
-    Giver
-  </a>
-  <ul class="nav-links">
-    <li><a href="giver-dashboard.html">
-      <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Dashboard
-    </a></li>
-    <li><a href="giver-manage-gifts.html" class="active">
-      <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Gifts
-    </a></li>
-    <li><a href="giver-manage-categories.html">
-      <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;">
-      Categories
-    </a></li>
-    <li><a href="giver-manage-rules.html">
-      <img src="icon/setting (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Rules
-    </a></li>
-    <li><a href="giver-manage-vocabulary.html">
-      <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;">
-      Vocabulary
-    </a></li>
-    <li><a href="giver-manage-admin.html">
-      <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Admin
-    </a></li>
-    <li><a href="giver-manage-user.html">
-      <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Users
-    </a></li>
-    <li><a href="#" onclick="logout()">
-      <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Logout
-    </a></li>
-  </ul>
-</nav>
-
-<main>
-  <!-- PAGE HEADER -->
-  <div class="page-header">
-    <div>
-      <h1>Manage Gifts</h1>
-      <p>Add and manage gift items</p>
-    </div>
-    <button class="add-btn" onclick="openAddModal()">
-      <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
-      Add Gift
-    </button>
-  </div>
-
-  <!-- SEARCH -->
-  <div class="search-wrap">
-    <img src="icon/package (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
-    <input type="text" class="search-input" placeholder="Search gifts..." id="searchInput" oninput="filterGifts()">
-  </div>
-
-  <!-- TABLE -->
-  <div class="table-card">
-    <div class="table-card-header">
-      <h2 id="tableTitle">All Gifts (6)</h2>
-      <p>Manage your gift catalog</p>
-    </div>
-    <div class="table-scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Options</th>
-          <th>Category</th>
-          <th>Tags</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="giftsTableBody"></tbody>
-    </table>
-    </div>
-    <div class="empty-state" id="emptyState" style="display:none;">
-      <img src="icon/package (1).png" style="width:40px;height:40px;object-fit:contain;" alt="icon">
-      <p>No gifts match your search.</p>
-    </div>
-  </div>
-</main>
-
-<!-- ADD/EDIT MODAL -->
-<div class="modal-overlay" id="giftModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="modalTitle">Add New Gift</h3>
-      <button class="modal-close" onclick="closeModal('giftModal')">
-        <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
-      </button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--text-secondary);font-weight:300;margin-top:-8px;">Add a new gift to the catalog</p>
-
-      <div class="form-row" style="margin-top:12px;">
-        <div class="form-group">
-          <label class="form-label">Gift ID</label>
-          <input type="text" class="form-input" id="giftId" placeholder="e.g. G001">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Gift Name</label>
-          <input type="text" class="form-input" id="giftName" placeholder="">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="giftDesc" placeholder=""></textarea>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Categories</label>
-          <select class="form-select" id="giftCategory">
-            <option value="">Select category</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Target Gender</label>
-          <select class="form-select" id="giftGender">
-            <option value="">Select gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="unisex">Unisex</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Tags (คั่นด้วย ,)</label>
-        <input type="text" class="form-input" id="giftTags" placeholder="e.g. tech, books, fitness">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Target Age Range (optional)</label>
-        <input type="text" class="form-input" id="giftAge" placeholder="e.g. 18-35">
-      </div>
-
-      <div>
-        <div class="options-editor-header">
-          <label class="form-label">Options</label>
-          <button type="button" class="btn-add-opt" onclick="addOption()">+ Add Option</button>
-        </div>
-        <div id="optionsEditor"></div>
-      </div>
-
-
-    </div>
-    <div class="modal-footer" style="flex-direction:row-reverse;gap:10px;">
-      <button class="btn-save" style="flex:1;padding:13px;" onclick="saveGift()">Add Gift</button>
-      <button class="btn-cancel" style="padding:13px 24px;" onclick="closeModal('giftModal')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- DELETE CONFIRM MODAL -->
-<div class="modal-overlay" id="deleteModal">
-  <div class="modal">
-    <div class="modal-del-body">
-      <div class="del-icon-wrap">
-        <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
-      </div>
-      <h3>Delete Gift</h3>
-      <p>Are you sure you want to delete <strong id="deleteGiftName"></strong>?<br>This action cannot be undone.</p>
-    </div>
-    <div class="modal-del-footer">
-      <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
-      <button class="btn-delete" onclick="confirmDelete()">Delete</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <img src="icon/delete.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
-  <span id="toastMsg"></span>
-</div>
-
-<script>
-  const API_GIFTS = '/api/gifts';
-  const API_CATS  = '/api/categories';
-  const API_VOCAB = '/api/vocabulary';
-  const API_TAGS  = '/api/tags';
-
-  let allGifts = [];
-  let allCategories = [];
-  let vocabMap = {}; // tag_id → term
-  let editingId = null;
-  let deletingId = null;
-
-  // โหลด Categories + Tag lookup (ใช้ /api/tags ก่อน, fallback /api/vocabulary)
-  async function loadCategoryOptions() {
-    try {
-      const [catRes, tagsRes, vocabRes] = await Promise.all([
-        fetch(API_CATS),
-        fetch(API_TAGS),
-        fetch(API_VOCAB)
-      ]);
-      const cats  = await catRes.json();
-      const tags  = tagsRes.ok  ? await tagsRes.json()  : [];
-      const vocab = vocabRes.ok ? await vocabRes.json() : [];
-      allCategories = cats;
-
-      // สร้าง vocabMap จาก /api/tags (tags_id → tags_name)
-      vocabMap = {};
-      tags.forEach(t => {
-        const tid = t.tags_id != null ? String(t.tags_id).trim() : '';
-        if (tid !== '') vocabMap[tid] = t.tags_name;
-      });
-
-      // Fallback: ถ้า /api/tags ว่าง ใช้ /api/vocabulary แทน (tag_id → term)
-      if (Object.keys(vocabMap).length === 0) {
-        vocab.forEach(v => {
-          const tid = v.tag_id != null ? String(v.tag_id).trim() : '';
-          if (tid !== '') vocabMap[tid] = v.term;
-        });
-        console.log('[vocabMap] using vocabulary fallback, entries:', Object.keys(vocabMap).length);
-      } else {
-        console.log('[tagMap] entries:', Object.keys(vocabMap).length);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giver — Manage Gifts</title>
+  <link rel="icon" href="icon/surprise (1).png" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ece4;
+      --card-bg: #faf8f4;
+      --border: #e2ddd5;
+      --text-primary: #1c1a17;
+      --text-secondary: #7a7268;
+      --accent: #b8965a;
+      --accent-light: #e8dcc8;
+      --accent-hover: #9a7a44;
+      --btn-bg: #ede8df;
+      --btn-hover: #e0d9cd;
+      --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
+      --danger: #c0392b;
+      --danger-bg: #fdf0ee;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
+
+    .nav-links a.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .nav-links li:last-child a:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    /* MAIN */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 300;
+    }
+
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .add-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184, 150, 90, 0.3);
+    }
+
+    .add-btn:active {
+      transform: translateY(0);
+    }
+
+    /* SEARCH */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 24px;
+      animation: fadeUp 0.4s ease 0.05s both;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
+
+    /* TABLE CARD */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: fadeUp 0.4s ease 0.1s both;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-card-header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-card-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .table-card-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-top: 3px;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    /* column widths */
+    thead th:nth-child(1) {
+      width: 140px;
+    }
+
+    /* Name */
+    thead th:nth-child(2) {
+      width: 180px;
+    }
+
+    /* Description */
+    thead th:nth-child(3) {
+      width: 200px;
+    }
+
+    /* Options */
+    thead th:nth-child(4) {
+      width: 120px;
+    }
+
+    /* Category */
+    thead th:nth-child(5) {
+      width: 200px;
+    }
+
+    /* Tags */
+    thead th:nth-child(6) {
+      width: 90px;
+    }
+
+    /* Actions */
+
+    thead th {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: #f5f2ed;
+      border-bottom: 1px solid var(--border);
+    }
+
+    thead th:first-child {
+      padding-left: 32px;
+    }
+
+    thead th:last-child {
+      padding-right: 32px;
+      text-align: right;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #f7f4ef;
+    }
+
+    tbody td {
+      padding: 18px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    tbody td:first-child {
+      padding-left: 32px;
+      font-weight: 500;
+    }
+
+    tbody td:last-child {
+      padding-right: 32px;
+    }
+
+    .td-desc {
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 300;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .opt-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .opt-thumb {
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+      background: var(--btn-bg);
+    }
+
+    .opt-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .opt-shop {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .opt-price {
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    .opt-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--accent-light);
+      color: var(--accent);
+      text-decoration: none;
+      flex-shrink: 0;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+
+    .opt-link:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .no-options {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    /* OPTIONS EDITOR */
+    .options-editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .btn-add-opt {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 13px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .btn-add-opt:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .option-editor-row {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .option-editor-row-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .opt-row-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-remove-opt {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-opt:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* CATEGORY BADGE */
+    .badge-cat {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* TAG CHIPS */
+    .tags-cell {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      background: var(--accent-light);
+      border: 1px solid #ddd0b8;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--accent-hover);
+      white-space: nowrap;
+    }
+
+    .tag-more {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* ACTIONS */
+    .actions-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .action-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: var(--text-secondary);
+    }
+
+    .action-btn.edit:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .action-btn.del:hover {
+      background: var(--danger-bg);
+      border-color: #f0c4be;
+      color: var(--danger);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state svg {
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    /* MODAL OVERLAY */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 23, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 520px;
+      max-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(28, 26, 23, 0.18);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.22s ease;
+      overflow: hidden;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--btn-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--btn-hover);
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-secondary);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 28px 24px;
+    }
+
+    .btn-cancel {
+      padding: 10px 20px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+
+    .btn-cancel:hover {
+      background: var(--btn-hover);
+    }
+
+    .btn-save {
+      padding: 10px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-save:hover {
+      background: var(--accent-hover);
+    }
+
+    /* DELETE CONFIRM */
+    .modal-del-body {
+      padding: 28px 28px 8px;
+      text-align: center;
+    }
+
+    .del-icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: var(--danger-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--danger);
+    }
+
+    .modal-del-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .modal-del-body p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .modal-del-footer {
+      display: flex;
+      gap: 10px;
+      padding: 20px 28px 28px;
+      justify-content: center;
+    }
+
+    .btn-delete {
+      padding: 10px 22px;
+      background: var(--danger);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete:hover {
+      background: #a93226;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 400;
+      background: var(--text-primary);
+      color: #fff;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.2);
+      transform: translateY(16px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success svg {
+      color: #6fcf97;
+    }
+
+    .toast.error svg {
+      color: #eb5757;
+    }
+
+    /* ANIMATION */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
       }
 
-      const sel = document.getElementById('giftCategory');
-      sel.innerHTML = '<option value="">Select category</option>' +
-        cats.map(c => `<option value="${c.category_id}">${c.category_name}</option>`).join('');
-    } catch (e) {
-      console.error('[loadCategoryOptions] error:', e);
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-  }
 
-  // แปลง tag_id → term (fallback คือ tag_id เดิมถ้าไม่พบ)
-  function getTagLabel(tagId) {
-    return vocabMap[String(tagId)] || tagId;
-  }
+    @media (max-width: 900px) {
+      nav {
+        padding: 0 24px;
+      }
 
-  function getCategoryName(id) {
-    if (!id) return '—';
-    // compare แบบ String เสมอ เพื่อรองรับกรณี number vs string mismatch
-    const cat = allCategories.find(c => String(c.category_id) === String(id));
-    if (!cat && allCategories.length > 0) {
-      // debug: แสดงว่า category_id ในฐานข้อมูลมีรูปแบบอะไร
-      console.warn(`[getCategoryName] "${id}" not found. Available IDs:`,
-        allCategories.slice(0, 5).map(c => c.category_id));
+      main {
+        padding: 40px 24px 60px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
     }
-    return cat ? cat.category_name : id;
-  }
+  </style>
+</head>
 
-  async function loadGifts() {
-    try {
-      const res = await fetch(API_GIFTS);
-      allGifts = await res.json();
-      renderTable(allGifts);
-      document.getElementById('tableTitle').textContent = `All Gifts (${allGifts.length})`;
-    } catch (err) {
-      showToast('ไม่สามารถโหลดข้อมูลได้', 'error');
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="giver-dashboard.html">
+      <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;">
+      Giver
+    </a>
+    <ul class="nav-links">
+      <li><a href="giver-dashboard.html">
+          <img src="icon/home.png" style="width:15px;height:15px;object-fit:contain;">
+          Dashboard
+        </a></li>
+      <li><a href="giver-manage-gifts.html" class="active">
+          <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;">
+          Gifts
+        </a></li>
+      <li><a href="giver-manage-categories.html">
+          <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;">
+          Categories
+        </a></li>
+      <li><a href="giver-manage-rules.html">
+          <img src="icon/setting (1).png" style="width:15px;height:15px;object-fit:contain;">
+          Rules
+        </a></li>
+      <li><a href="giver-manage-vocabulary.html">
+          <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;">
+          Vocabulary
+        </a></li>
+      <li><a href="giver-manage-admin.html">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;">
+          Admin
+        </a></li>
+      <li><a href="giver-manage-user.html">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;">
+          Users
+        </a></li>
+      <li><a href="#" onclick="logout()">
+          <img src="icon/enter.png" style="width:15px;height:15px;object-fit:contain;">
+          Logout
+        </a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div>
+        <h1>Manage Gifts</h1>
+        <p>Add and manage gift items</p>
+      </div>
+      <button class="add-btn" onclick="openAddModal()">
+        <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        Add Gift
+      </button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <input type="text" class="search-input" placeholder="Search gifts..." id="searchInput" oninput="filterGifts()">
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <h2 id="tableTitle">All Gifts (6)</h2>
+        <p>Manage your gift catalog</p>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Options</th>
+              <th>Category</th>
+              <th>Tags</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="giftsTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <img src="icon/gift.png" style="width:40px;height:40px;object-fit:contain;" alt="icon">
+        <p>No gifts match your search.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ADD/EDIT MODAL -->
+  <div class="modal-overlay" id="giftModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Gift</h3>
+        <button class="modal-close" onclick="closeModal('giftModal')">
+          <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px;color:var(--text-secondary);font-weight:300;margin-top:-8px;">Add a new gift to the
+          catalog</p>
+
+        <div class="form-row" style="margin-top:12px;">
+          <div class="form-group">
+            <label class="form-label">Gift ID</label>
+            <input type="text" class="form-input" id="giftId" placeholder="e.g. G001">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gift Name</label>
+            <input type="text" class="form-input" id="giftName" placeholder="">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="giftDesc" placeholder=""></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Categories</label>
+            <select class="form-select" id="giftCategory">
+              <option value="">Select category</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Gender</label>
+            <select class="form-select" id="giftGender">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tags (คั่นด้วย ,)</label>
+          <input type="text" class="form-input" id="giftTags" placeholder="e.g. tech, books, fitness">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Age Range (optional)</label>
+          <input type="text" class="form-input" id="giftAge" placeholder="e.g. 18-35">
+        </div>
+
+        <div>
+          <div class="options-editor-header">
+            <label class="form-label">Options</label>
+            <button type="button" class="btn-add-opt" onclick="addOption()">+ Add Option</button>
+          </div>
+          <div id="optionsEditor"></div>
+        </div>
+
+
+      </div>
+      <div class="modal-footer" style="flex-direction:row-reverse;gap:10px;">
+        <button class="btn-save" style="flex:1;padding:13px;" onclick="saveGift()">Add Gift</button>
+        <button class="btn-cancel" style="padding:13px 24px;" onclick="closeModal('giftModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap">
+          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+        </div>
+        <h3>Delete Gift</h3>
+        <p>Are you sure you want to delete <strong id="deleteGiftName"></strong>?<br>This action cannot be undone.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <img src="icon/delete.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    const API_GIFTS = '/api/gifts';
+    const API_CATS = '/api/categories';
+    const API_VOCAB = '/api/vocabulary';
+    const API_TAGS = '/api/tags';
+
+    let allGifts = [];
+    let allCategories = [];
+    let vocabMap = {}; // tag_id → term
+    let editingId = null;
+    let deletingId = null;
+
+    // โหลด Categories + Tag lookup (ใช้ /api/tags ก่อน, fallback /api/vocabulary)
+    async function loadCategoryOptions() {
+      try {
+        const [catRes, tagsRes, vocabRes] = await Promise.all([
+          fetch(API_CATS),
+          fetch(API_TAGS),
+          fetch(API_VOCAB)
+        ]);
+        const cats = await catRes.json();
+        const tags = tagsRes.ok ? await tagsRes.json() : [];
+        const vocab = vocabRes.ok ? await vocabRes.json() : [];
+        allCategories = cats;
+
+        // สร้าง vocabMap จาก /api/tags (tags_id → tags_name)
+        vocabMap = {};
+        tags.forEach(t => {
+          const tid = t.tags_id != null ? String(t.tags_id).trim() : '';
+          if (tid !== '') vocabMap[tid] = t.tags_name;
+        });
+
+        // Fallback: ถ้า /api/tags ว่าง ใช้ /api/vocabulary แทน (tag_id → term)
+        if (Object.keys(vocabMap).length === 0) {
+          vocab.forEach(v => {
+            const tid = v.tag_id != null ? String(v.tag_id).trim() : '';
+            if (tid !== '') vocabMap[tid] = v.term;
+          });
+          console.log('[vocabMap] using vocabulary fallback, entries:', Object.keys(vocabMap).length);
+        } else {
+          console.log('[tagMap] entries:', Object.keys(vocabMap).length);
+        }
+
+        const sel = document.getElementById('giftCategory');
+        sel.innerHTML = '<option value="">Select category</option>' +
+          cats.map(c => `<option value="${c.category_id}">${c.category_name}</option>`).join('');
+      } catch (e) {
+        console.error('[loadCategoryOptions] error:', e);
+      }
     }
-  }
 
-  function getFirstPrice(g) {
-    if (g.options && g.options.length > 0) return g.options[0].price || '-';
-    return '-';
-  }
-
-  function renderTable(data) {
-    const tbody = document.getElementById('giftsTableBody');
-    const empty = document.getElementById('emptyState');
-    document.getElementById('tableTitle').textContent = `All Gifts (${data.length})`;
-
-    if (!data.length) {
-      tbody.innerHTML = '';
-      empty.style.display = 'block';
-      return;
+    // แปลง tag_id → term (fallback คือ tag_id เดิมถ้าไม่พบ)
+    function getTagLabel(tagId) {
+      return vocabMap[String(tagId)] || tagId;
     }
-    empty.style.display = 'none';
-    tbody.innerHTML = data.map(g => {
-      const MAX_TAGS = 4;
-      const allTagLabels = (g.tags || []).map(t => getTagLabel(t));
-      const tags = allTagLabels.slice(0, MAX_TAGS).map(label => `<span class="tag-chip">${label}</span>`).join('');
-      const hiddenCount = allTagLabels.length - MAX_TAGS;
-      const more = hiddenCount > 0
-        ? `<span class="tag-more" title="${allTagLabels.slice(MAX_TAGS).join(', ')}">+${hiddenCount}</span>`
-        : '';
-      const opts = g.options && g.options.length > 0
-        ? g.options.map((o, i) => {
+
+    function getCategoryName(id) {
+      if (!id) return '—';
+      // compare แบบ String เสมอ เพื่อรองรับกรณี number vs string mismatch
+      const cat = allCategories.find(c => String(c.category_id) === String(id));
+      if (!cat && allCategories.length > 0) {
+        // debug: แสดงว่า category_id ในฐานข้อมูลมีรูปแบบอะไร
+        console.warn(`[getCategoryName] "${id}" not found. Available IDs:`,
+          allCategories.slice(0, 5).map(c => c.category_id));
+      }
+      return cat ? cat.category_name : id;
+    }
+
+    async function loadGifts() {
+      try {
+        const res = await fetch(API_GIFTS);
+        allGifts = await res.json();
+        renderTable(allGifts);
+        document.getElementById('tableTitle').textContent = `All Gifts (${allGifts.length})`;
+      } catch (err) {
+        showToast('ไม่สามารถโหลดข้อมูลได้', 'error');
+      }
+    }
+
+    function getFirstPrice(g) {
+      if (g.options && g.options.length > 0) return g.options[0].price || '-';
+      return '-';
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('giftsTableBody');
+      const empty = document.getElementById('emptyState');
+      document.getElementById('tableTitle').textContent = `All Gifts (${data.length})`;
+
+      if (!data.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+      tbody.innerHTML = data.map(g => {
+        const MAX_TAGS = 4;
+        const allTagLabels = (g.tags || []).map(t => getTagLabel(t));
+        const tags = allTagLabels.slice(0, MAX_TAGS).map(label => `<span class="tag-chip">${label}</span>`).join('');
+        const hiddenCount = allTagLabels.length - MAX_TAGS;
+        const more = hiddenCount > 0
+          ? `<span class="tag-more" title="${allTagLabels.slice(MAX_TAGS).join(', ')}">+${hiddenCount}</span>`
+          : '';
+        const opts = g.options && g.options.length > 0
+          ? g.options.map((o, i) => {
             const img = o.pic_link || o.image_url || 'surprise(1).png';
             const shop = o.shop_name || `Option ${i + 1}`;
             const price = o.price ? '฿' + Number(o.price).toLocaleString() : '-';
@@ -994,8 +1172,8 @@
               ${link}
             </div>`;
           }).join('')
-        : `<span class="no-options">No options</span>`;
-      return `
+          : `<span class="no-options">No options</span>`;
+        return `
         <tr>
           <td>${g.gift_name}<br><span style="font-size:11px;color:var(--text-secondary)">${g.gift_id}</span></td>
           <td class="td-desc">${g.description || ''}</td>
@@ -1007,44 +1185,44 @@
               <button class="action-btn edit" title="Edit" onclick="openEditModal('${g._id}')">
                 <img src="icon-edit.png" style="width:14px;height:14px;object-fit:contain;">
               </button>
-              <button class="action-btn del" title="Delete" onclick="openDeleteModal('${g._id}', '${g.gift_name.replace(/'/g,'\\&apos;')}')">
+              <button class="action-btn del" title="Delete" onclick="openDeleteModal('${g._id}', '${g.gift_name.replace(/'/g, '\\&apos;')}')">
                 <img src="icon-delete.png" style="width:14px;height:14px;object-fit:contain;">
               </button>
             </div>
           </td>
         </tr>
       `;
-    }).join('');
-  }
+      }).join('');
+    }
 
-  function filterGifts() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    renderTable(allGifts.filter(g =>
-      (g.gift_name || '').toLowerCase().includes(q) ||
-      (g.description || '').toLowerCase().includes(q) ||
-      (g.category_id || '').toLowerCase().includes(q) ||
-      (g.tags || []).some(t =>
-        t.toLowerCase().includes(q) ||
-        getTagLabel(t).toLowerCase().includes(q)
-      )
-    ));
-  }
+    function filterGifts() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      renderTable(allGifts.filter(g =>
+        (g.gift_name || '').toLowerCase().includes(q) ||
+        (g.description || '').toLowerCase().includes(q) ||
+        (g.category_id || '').toLowerCase().includes(q) ||
+        (g.tags || []).some(t =>
+          t.toLowerCase().includes(q) ||
+          getTagLabel(t).toLowerCase().includes(q)
+        )
+      ));
+    }
 
-  let optIdx = 0;
+    let optIdx = 0;
 
-  function renderOptionsEditor(options) {
-    document.getElementById('optionsEditor').innerHTML = '';
-    optIdx = 0;
-    if (!options || options.length === 0) { addOption(); return; }
-    options.forEach(o => addOption(o));
-  }
+    function renderOptionsEditor(options) {
+      document.getElementById('optionsEditor').innerHTML = '';
+      optIdx = 0;
+      if (!options || options.length === 0) { addOption(); return; }
+      options.forEach(o => addOption(o));
+    }
 
-  function addOption(data = {}) {
-    const i = optIdx++;
-    const container = document.getElementById('optionsEditor');
-    const row = document.createElement('div');
-    row.className = 'option-editor-row';
-    row.innerHTML = `
+    function addOption(data = {}) {
+      const i = optIdx++;
+      const container = document.getElementById('optionsEditor');
+      const row = document.createElement('div');
+      row.className = 'option-editor-row';
+      row.innerHTML = `
       <div class="option-editor-row-hd">
         <span class="opt-row-label">Option ${i + 1}</span>
         <button type="button" class="btn-remove-opt" onclick="this.closest('.option-editor-row').remove();renumberOpts()" title="Remove">&times;</button>
@@ -1053,157 +1231,158 @@
         <div class="form-group"><label class="form-label">Price (฿)</label>
           <input type="text" class="form-input opt-price" placeholder="0" value="${data.price || ''}"></div>
         <div class="form-group"><label class="form-label">Shop Name</label>
-          <input type="text" class="form-input opt-shopname" placeholder="e.g. Shopee" value="${(data.shop_name || '').replace(/"/g,'&quot;')}"></div>
+          <input type="text" class="form-input opt-shopname" placeholder="e.g. Shopee" value="${(data.shop_name || '').replace(/"/g, '&quot;')}"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Shop Link</label>
-          <input type="url" class="form-input opt-shoplink" placeholder="https://..." value="${(data.shop_link || '').replace(/"/g,'&quot;')}"></div>
+          <input type="url" class="form-input opt-shoplink" placeholder="https://..." value="${(data.shop_link || '').replace(/"/g, '&quot;')}"></div>
         <div class="form-group"><label class="form-label">Image URL</label>
-          <input type="url" class="form-input opt-imgurl" placeholder="https://..." value="${(data.pic_link || '').replace(/"/g,'&quot;')}"></div>
+          <input type="url" class="form-input opt-imgurl" placeholder="https://..." value="${(data.pic_link || '').replace(/"/g, '&quot;')}"></div>
       </div>
       <div class="form-group" style="max-width:160px;">
         <label class="form-label">Rating (0–5 ดาว)</label>
         <input type="number" class="form-input opt-rating" placeholder="e.g. 4.5" min="0" max="5" step="0.1" value="${data.rating || ''}">
       </div>`;
-    container.appendChild(row);
-  }
+      container.appendChild(row);
+    }
 
-  function renumberOpts() {
-    document.querySelectorAll('#optionsEditor .opt-row-label').forEach((el, i) => {
-      el.textContent = `Option ${i + 1}`;
+    function renumberOpts() {
+      document.querySelectorAll('#optionsEditor .opt-row-label').forEach((el, i) => {
+        el.textContent = `Option ${i + 1}`;
+      });
+    }
+
+    function openAddModal() {
+      editingId = null;
+      document.getElementById('modalTitle').textContent = 'Add New Gift';
+      ['giftId', 'giftName', 'giftDesc', 'giftTags', 'giftAge'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.getElementById('giftId').disabled = false;
+      document.getElementById('giftCategory').value = '';
+      document.getElementById('giftGender').value = '';
+      renderOptionsEditor([]);
+      document.querySelector('.btn-save').textContent = 'Add Gift';
+      openModal('giftModal');
+    }
+
+    function openEditModal(id) {
+      editingId = id;
+      const g = allGifts.find(x => x._id === id);
+      document.getElementById('modalTitle').textContent = 'Edit Gift';
+      document.getElementById('giftId').value = g.gift_id;
+      document.getElementById('giftId').disabled = true;
+      document.getElementById('giftName').value = g.gift_name;
+      document.getElementById('giftDesc').value = g.description || '';
+      document.getElementById('giftCategory').value = g.category_id;
+      document.getElementById('giftGender').value = g.target_gender_id || '';
+      document.getElementById('giftTags').value = (g.tags || [])
+        .map(t => vocabMap[String(t)] || t)  // แปลง tag_id → term, fallback คือ text เดิม
+        .join(', ');
+      document.getElementById('giftAge').value = g.target_age_id || '';
+      renderOptionsEditor(g.options || []);
+      document.querySelector('.btn-save').textContent = 'Save Gift';
+      openModal('giftModal');
+    }
+
+    async function saveGift() {
+      const gift_id = document.getElementById('giftId').value.trim();
+      const gift_name = document.getElementById('giftName').value.trim();
+      const description = document.getElementById('giftDesc').value.trim();
+      const category_id = document.getElementById('giftCategory').value;
+      const target_gender_id = document.getElementById('giftGender').value;
+      const target_age_id = document.getElementById('giftAge').value.trim();
+      // แปลง term → tag_id ถ้าหาเจอใน vocabMap, ไม่งั้นเก็บเป็น text
+      const termToTagId = {};
+      Object.entries(vocabMap).forEach(([tagId, term]) => { termToTagId[term.toLowerCase()] = tagId; });
+      const tags = document.getElementById('giftTags').value
+        .split(',')
+        .map(t => t.trim())
+        .filter(Boolean)
+        .map(t => termToTagId[t.toLowerCase()] || t); // tag_id ถ้าเจอ, ไม่งั้น text
+
+      if (!gift_name || !category_id || !target_gender_id)
+        return showToast('กรุณากรอก Gift Name, Category และ Target Gender', 'error');
+
+      const options = [...document.querySelectorAll('#optionsEditor .option-editor-row')].map(row => ({
+        price: row.querySelector('.opt-price').value.trim(),
+        shop_name: row.querySelector('.opt-shopname').value.trim(),
+        shop_link: row.querySelector('.opt-shoplink').value.trim(),
+        pic_link: row.querySelector('.opt-imgurl').value.trim(),
+        rating: parseFloat(row.querySelector('.opt-rating')?.value) || 0
+      })).filter(o => o.price || o.shop_name || o.shop_link || o.pic_link);
+
+      const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options };
+
+      try {
+        if (editingId) {
+          const res = await fetch(`${API_GIFTS}/${editingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          if (!res.ok) { const d = await res.json(); return showToast(d.message, 'error'); }
+          showToast('อัปเดต Gift สำเร็จ');
+        } else {
+          if (!gift_id) return showToast('กรุณากรอก Gift ID', 'error');
+          const res = await fetch(API_GIFTS, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gift_id, ...body })
+          });
+          if (!res.ok) { const d = await res.json(); return showToast(d.message, 'error'); }
+          showToast('เพิ่ม Gift สำเร็จ');
+        }
+        closeModal('giftModal');
+        loadGifts();
+      } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
+    }
+
+    function openDeleteModal(id, name) {
+      deletingId = id;
+      document.getElementById('deleteGiftName').textContent = `"${name}"`;
+      openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+      try {
+        await fetch(`${API_GIFTS}/${deletingId}`, { method: 'DELETE' });
+        closeModal('deleteModal');
+        showToast('ลบ Gift สำเร็จ');
+        loadGifts();
+      } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+      el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
     });
-  }
-
-  function openAddModal() {
-    editingId = null;
-    document.getElementById('modalTitle').textContent = 'Add New Gift';
-    ['giftId','giftName','giftDesc','giftTags','giftAge'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
     });
-    document.getElementById('giftId').disabled = false;
-    document.getElementById('giftCategory').value = '';
-    document.getElementById('giftGender').value = '';
-    renderOptionsEditor([]);
-    document.querySelector('.btn-save').textContent = 'Add Gift';
-    openModal('giftModal');
-  }
 
-  function openEditModal(id) {
-    editingId = id;
-    const g = allGifts.find(x => x._id === id);
-    document.getElementById('modalTitle').textContent = 'Edit Gift';
-    document.getElementById('giftId').value       = g.gift_id;
-    document.getElementById('giftId').disabled    = true;
-    document.getElementById('giftName').value     = g.gift_name;
-    document.getElementById('giftDesc').value     = g.description || '';
-    document.getElementById('giftCategory').value = g.category_id;
-    document.getElementById('giftGender').value   = g.target_gender_id || '';
-    document.getElementById('giftTags').value = (g.tags || [])
-      .map(t => vocabMap[String(t)] || t)  // แปลง tag_id → term, fallback คือ text เดิม
-      .join(', ');
-    document.getElementById('giftAge').value      = g.target_age_id || '';
-    renderOptionsEditor(g.options || []);
-    document.querySelector('.btn-save').textContent = 'Save Gift';
-    openModal('giftModal');
-  }
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.className = 'toast show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
 
-  async function saveGift() {
-    const gift_id          = document.getElementById('giftId').value.trim();
-    const gift_name        = document.getElementById('giftName').value.trim();
-    const description      = document.getElementById('giftDesc').value.trim();
-    const category_id      = document.getElementById('giftCategory').value;
-    const target_gender_id = document.getElementById('giftGender').value;
-    const target_age_id    = document.getElementById('giftAge').value.trim();
-    // แปลง term → tag_id ถ้าหาเจอใน vocabMap, ไม่งั้นเก็บเป็น text
-    const termToTagId = {};
-    Object.entries(vocabMap).forEach(([tagId, term]) => { termToTagId[term.toLowerCase()] = tagId; });
-    const tags = document.getElementById('giftTags').value
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean)
-      .map(t => termToTagId[t.toLowerCase()] || t); // tag_id ถ้าเจอ, ไม่งั้น text
+    function logout() {
+      sessionStorage.removeItem('giver_user');
+      window.location.href = 'login_register_page.html';
+    }
 
-    if (!gift_name || !category_id || !target_gender_id)
-      return showToast('กรุณากรอก Gift Name, Category และ Target Gender', 'error');
-
-    const options = [...document.querySelectorAll('#optionsEditor .option-editor-row')].map(row => ({
-      price:     row.querySelector('.opt-price').value.trim(),
-      shop_name: row.querySelector('.opt-shopname').value.trim(),
-      shop_link: row.querySelector('.opt-shoplink').value.trim(),
-      pic_link:  row.querySelector('.opt-imgurl').value.trim(),
-      rating:    parseFloat(row.querySelector('.opt-rating')?.value) || 0
-    })).filter(o => o.price || o.shop_name || o.shop_link || o.pic_link);
-
-    const body = { gift_name, description, category_id, target_gender_id, target_age_id, tags, options };
-
-    try {
-      if (editingId) {
-        const res = await fetch(`${API_GIFTS}/${editingId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-        if (!res.ok) { const d = await res.json(); return showToast(d.message, 'error'); }
-        showToast('อัปเดต Gift สำเร็จ');
-      } else {
-        if (!gift_id) return showToast('กรุณากรอก Gift ID', 'error');
-        const res = await fetch(API_GIFTS, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ gift_id, ...body })
-        });
-        if (!res.ok) { const d = await res.json(); return showToast(d.message, 'error'); }
-        showToast('เพิ่ม Gift สำเร็จ');
-      }
-      closeModal('giftModal');
-      loadGifts();
-    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
-  }
-
-  function openDeleteModal(id, name) {
-    deletingId = id;
-    document.getElementById('deleteGiftName').textContent = `"${name}"`;
-    openModal('deleteModal');
-  }
-
-  async function confirmDelete() {
-    try {
-      await fetch(`${API_GIFTS}/${deletingId}`, { method: 'DELETE' });
-      closeModal('deleteModal');
-      showToast('ลบ Gift สำเร็จ');
-      loadGifts();
-    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
-  }
-
-  function openModal(id)  { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
-  });
-
-  let toastTimer;
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    toast.className = 'toast show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
-
-  function logout() {
-    sessionStorage.removeItem('giver_user');
-    window.location.href = 'login_register_page.html';
-  }
-
-  // โหลด vocab+categories ก่อน แล้วค่อย render ตาราง
-  // เพื่อให้ vocabMap พร้อมก่อนที่ getTagLabel() จะถูกเรียก
-  loadCategoryOptions().then(() => loadGifts());
-</script>
+    // โหลด vocab+categories ก่อน แล้วค่อย render ตาราง
+    // เพื่อให้ vocabMap พร้อมก่อนที่ getTagLabel() จะถูกเรียก
+    loadCategoryOptions().then(() => loadGifts());
+  </script>
 
 </body>
+
 </html>
