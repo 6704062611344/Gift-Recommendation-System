@@ -2,6 +2,8 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const axios = require('axios');
 const xlsx = require('xlsx');
+const fs = require('fs');
+const path = require('path');
 
 // Models
 const Category = require('./models/Category');
@@ -18,10 +20,27 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error('>> ถ้าเจอคำว่า ECONNREFUSED ให้แน่ใจว่า IP ของเครื่องนี้ถูกอนุญาต (Whitelist) ใน MongoDB Atlas แล้ว');
 });
 
-// URL ของ Google Sheet (Export เป็น Excel) - ไม่ต้องรู้ GID ย่อยแล้ว เพราะดึงมาทั้งแผ่น 100%
+// URL ของ Google Sheet (Export เป็น Excel)
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/12mX4qnmaAxm5W3HHjYsBw3_Fr3ZI4t7fgqMgG1IngBU/export?format=xlsx';
 
+// ชื่อไฟล์ local (วางไว้ในโฟลเดอร์เดียวกัน)
+const LOCAL_FILE = path.join(__dirname, 'data.xlsx');
+
 async function fetchAndParseExcel(url) {
+  // ✅ ถ้ามีไฟล์ local ให้อ่านจาก local แทน (เร็วกว่ามาก)
+  if (fs.existsSync(LOCAL_FILE)) {
+    console.log(`📂 พบไฟล์ local: data.xlsx — อ่านจากไฟล์ local แทน (ไม่ต้อง download)`);
+    try {
+      const workbook = xlsx.readFile(LOCAL_FILE);
+      return workbook;
+    } catch (err) {
+      console.error('❌ อ่านไฟล์ local ไม่ได้:', err.message);
+      return null;
+    }
+  }
+
+  // ถ้าไม่มีไฟล์ local ค่อย download จาก Google Sheets
+  console.log('🌐 ไม่พบไฟล์ local — กำลัง download จาก Google Sheets...');
   try {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     const buffer = Buffer.from(response.data);
