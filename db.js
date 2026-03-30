@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-require('dotenv').config(); // สำคัญมาก: ตัวนี้จะไปดึง Link จากไฟล์ .env มาให้
 
 const connectDB = async () => {
     // เพิ่มบรรทัดนี้เพื่อเช็คว่าเห็นค่าไหม
