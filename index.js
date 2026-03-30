@@ -11,6 +11,8 @@ const Category   = require('./models/Category');
 const Gift       = require('./models/Gift');
 const Vocabulary = require('./models/Vocabulary');
 const Rule       = require('./models/Rule');
+const Recipient  = require('./models/Recipient');
+const Favorite   = require('./models/Favorite');
 
 const app = express();
 
@@ -337,7 +339,78 @@ app.delete('/api/vocabulary/:id', async (req, res) => {
 });
 
 // ============================================================================
-// 7.  RULES
+// 8.  RECIPIENTS
+// ============================================================================
+
+app.get('/api/recipients', async (req, res) => {
+    try {
+        const { userId } = req.query;
+        if (!userId) return res.status(400).json({ message: 'userId is required' });
+        res.json(await Recipient.find({ userId }).sort({ createdAt: -1 }));
+    } catch (err) { res.status(500).json({ message: 'Error fetching recipients' }); }
+});
+
+app.post('/api/recipients', async (req, res) => {
+    try {
+        const { userId, name, age, gender, relation, interests, budget } = req.body;
+        if (!userId || !name || !age || !gender || !relation)
+            return res.status(400).json({ message: 'userId, name, age, gender, relation จำเป็น' });
+        const rec = await new Recipient({ userId, name, age, gender, relation, interests: interests || [], budget: budget || '' }).save();
+        res.status(201).json(rec);
+    } catch (err) { res.status(400).json({ message: 'Error saving recipient: ' + err.message }); }
+});
+
+app.put('/api/recipients/:id', async (req, res) => {
+    try {
+        const { name, age, gender, relation, interests, budget } = req.body;
+        const updated = await Recipient.findByIdAndUpdate(
+            req.params.id,
+            { $set: { name, age, gender, relation, interests, budget } },
+            { new: true }
+        );
+        if (!updated) return res.status(404).json({ message: 'ไม่พบ Recipient' });
+        res.json(updated);
+    } catch (err) { res.status(500).json({ message: 'เกิดข้อผิดพลาด' }); }
+});
+
+app.delete('/api/recipients/:id', async (req, res) => {
+    try {
+        const deleted = await Recipient.findByIdAndDelete(req.params.id);
+        if (!deleted) return res.status(404).json({ message: 'ไม่พบ Recipient' });
+        res.json({ message: 'ลบ Recipient สำเร็จ' });
+    } catch (err) { res.status(500).json({ message: 'Error deleting recipient' }); }
+});
+
+// ============================================================================
+// 9.  FAVORITES
+// ============================================================================
+
+app.get('/api/favorites', async (req, res) => {
+    try {
+        const { userId } = req.query;
+        if (!userId) return res.status(400).json({ message: 'userId is required' });
+        const fav = await Favorite.findOne({ userId });
+        res.json(fav ? fav.giftIds : []);
+    } catch (err) { res.status(500).json({ message: 'Error fetching favorites' }); }
+});
+
+app.post('/api/favorites/toggle', async (req, res) => {
+    try {
+        const { userId, giftId } = req.body;
+        if (!userId || !giftId) return res.status(400).json({ message: 'userId และ giftId จำเป็น' });
+        let fav = await Favorite.findOne({ userId });
+        if (!fav) fav = new Favorite({ userId, giftIds: [] });
+        const idx = fav.giftIds.indexOf(giftId);
+        let action;
+        if (idx === -1) { fav.giftIds.push(giftId); action = 'added'; }
+        else            { fav.giftIds.splice(idx, 1); action = 'removed'; }
+        await fav.save();
+        res.json({ action, giftIds: fav.giftIds });
+    } catch (err) { res.status(500).json({ message: 'เกิดข้อผิดพลาด' }); }
+});
+
+// ============================================================================
+// 10.  RULES
 // ============================================================================
 
 app.get('/api/rules', async (req, res) => {

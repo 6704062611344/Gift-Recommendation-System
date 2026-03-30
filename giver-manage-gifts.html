@@ -342,6 +342,7 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.22s ease;
+    overflow-y: auto;
   }
 
   .modal-overlay.open { opacity: 1; pointer-events: all; }
@@ -352,9 +353,13 @@
     border-radius: 18px;
     width: 100%;
     max-width: 520px;
+    max-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 20px 60px rgba(28,26,23,0.18);
     transform: translateY(20px) scale(0.97);
     transition: transform 0.22s ease;
+    overflow: hidden;
   }
 
   .modal-overlay.open .modal { transform: translateY(0) scale(1); }
@@ -382,7 +387,7 @@
   }
   .modal-close:hover { background: var(--btn-hover); color: var(--text-primary); }
 
-  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; }
+  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; flex: 1; }
 
   .form-group { display: flex; flex-direction: column; gap: 6px; }
 

@@ -1,713 +1,863 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giver — Recipients</title>
-<meta name="description" content="Manage your gift recipients and get personalized recommendations.">
-<link rel="icon" href="surprise(1).png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ece4;
-    --card-bg: #faf8f4;
-    --border: #e2ddd5;
-    --text-primary: #1c1a17;
-    --text-secondary: #7a7268;
-    --accent: #b8965a;
-    --accent-light: #e8dcc8;
-    --accent-hover: #9a7a44;
-    --btn-bg: #ede8df;
-    --btn-hover: #e0d9cd;
-    --shadow: 0 1px 3px rgba(28,26,23,0.06), 0 4px 16px rgba(28,26,23,0.04);
-    --shadow-hover: 0 4px 12px rgba(28,26,23,0.1), 0 16px 40px rgba(28,26,23,0.08);
-    --danger: #c0392b;
-    --danger-bg: #fdf0ee;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giver — Recipients</title>
+  <meta name="description" content="Manage your gift recipients and get personalized recommendations.">
+  <link rel="icon" href="surprise(1).png" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ece4;
+      --card-bg: #faf8f4;
+      --border: #e2ddd5;
+      --text-primary: #1c1a17;
+      --text-secondary: #7a7268;
+      --accent: #b8965a;
+      --accent-light: #e8dcc8;
+      --accent-hover: #9a7a44;
+      --btn-bg: #ede8df;
+      --btn-hover: #e0d9cd;
+      --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
+      --shadow-hover: 0 4px 12px rgba(28, 26, 23, 0.1), 0 16px 40px rgba(28, 26, 23, 0.08);
+      --danger: #c0392b;
+      --danger-bg: #fdf0ee;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+    }
 
-  /* ── NAV ── */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    backdrop-filter: blur(8px);
-  }
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      backdrop-filter: blur(8px);
+    }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    list-style: none;
-  }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
 
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.18s ease;
-  }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
 
-  .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
-  .nav-links a.active { color: var(--accent); font-weight: 500; }
-  .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
 
-  /* ── MAIN ── */
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 56px 48px 80px;
-  }
+    .nav-links a.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
 
-  /* ── PAGE HEADER ── */
-  .page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 36px;
-    animation: fadeUp 0.4s ease both;
-  }
+    .nav-links li:last-child a:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
 
-  .page-header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-  }
+    /* ── MAIN ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
 
-  .page-header p {
-    color: var(--text-secondary);
-    margin-top: 4px;
-    font-size: 14px;
-    font-weight: 300;
-  }
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      animation: fadeUp 0.4s ease both;
+    }
 
-  .add-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 12px 22px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
 
-  .add-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(184,150,90,0.3);
-  }
+    .page-header p {
+      color: var(--text-secondary);
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 300;
+    }
 
-  /* ── RECIPIENTS GRID ── */
-  .recipients-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-    animation: fadeUp 0.4s ease 0.1s both;
-  }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
 
-  /* ── RECIPIENT CARD ── */
-  .rec-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 22px 22px 18px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-  }
+    .add-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184, 150, 90, 0.3);
+    }
 
-  .rec-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-    border-color: var(--accent-light);
-  }
+    /* ── RECIPIENTS GRID ── */
+    .recipients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      animation: fadeUp 0.4s ease 0.1s both;
+    }
 
-  .rec-card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
+    /* ── RECIPIENT CARD ── */
+    .rec-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
 
-  .rec-name {
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--text-primary);
-    line-height: 1.2;
-  }
+    .rec-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: var(--accent-light);
+    }
 
-  .rec-relation {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    margin-top: 2px;
-  }
+    .rec-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
 
-  .rec-actions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-  }
+    .rec-name {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
 
-  .action-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    color: var(--text-secondary);
-  }
+    .rec-relation {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-top: 2px;
+    }
 
-  .action-btn.edit:hover { background: var(--accent-light); color: var(--accent); }
-  .action-btn.del:hover  { background: var(--danger-bg); color: var(--danger); }
+    .rec-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
 
-  /* ── CARD DETAILS ── */
-  .rec-details {
-    display: flex;
-    gap: 20px;
-    font-size: 14px;
-  }
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: var(--text-secondary);
+    }
 
-  .rec-detail-item { display: flex; align-items: center; gap: 6px; }
-  .rec-detail-label { color: var(--text-secondary); font-weight: 300; }
-  .rec-detail-value { font-weight: 500; color: var(--text-primary); }
+    .action-btn.edit:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
 
-  /* ── INTERESTS ── */
-  .rec-interests-wrap { display: flex; flex-direction: column; gap: 6px; }
-  .rec-interests-label { font-size: 13px; color: var(--text-secondary); font-weight: 300; }
+    .action-btn.del:hover {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
 
-  .interests-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
+    /* ── CARD DETAILS ── */
+    .rec-details {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
 
-  .interest-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--text-primary);
-  }
+    .rec-detail-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-  /* ── GET RECOMMENDATION BUTTON ── */
-  .rec-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 12px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    text-decoration: none;
-  }
+    .rec-detail-label {
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
 
-  .rec-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(184,150,90,0.28);
-  }
+    .rec-detail-value {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
 
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 80px 32px;
-    color: var(--text-secondary);
-  }
+    /* ── INTERESTS ── */
+    .rec-interests-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-  .empty-state svg { margin-bottom: 16px; opacity: 0.35; }
-  .empty-state h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-  }
-  .empty-state p { font-size: 14px; font-weight: 300; margin-bottom: 24px; }
+    .rec-interests-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
 
-  .empty-add-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 12px 22px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.18s ease;
-  }
+    .interests-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
 
-  .empty-add-btn:hover { background: var(--accent-hover); }
+    .interest-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
 
-  /* ── MODAL OVERLAY ── */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(28,26,23,0.45);
-    backdrop-filter: blur(4px);
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.22s ease;
-    overflow-y: auto;
-  }
+    /* ── GET RECOMMENDATION BUTTON ── */
+    .rec-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-decoration: none;
+    }
 
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .rec-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184, 150, 90, 0.28);
+    }
 
-  .modal {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    width: 100%;
-    max-width: 480px;
-    box-shadow: 0 24px 64px rgba(28,26,23,0.2);
-    transform: translateY(24px) scale(0.97);
-    transition: transform 0.22s ease;
-    overflow: hidden;
-  }
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 32px;
+      color: var(--text-secondary);
+    }
 
-  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .empty-state svg {
+      margin-bottom: 16px;
+      opacity: 0.35;
+    }
 
-  /* Modal header */
-  .modal-header {
-    padding: 32px 32px 0;
-  }
+    .empty-state h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
 
-  .modal-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 500;
-    color: var(--text-primary);
-    line-height: 1.15;
-  }
+    .empty-state p {
+      font-size: 14px;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
 
-  .modal-header p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    margin-top: 4px;
-  }
+    .empty-add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
 
-  /* Modal body */
-  .modal-body {
-    padding: 24px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+    .empty-add-btn:hover {
+      background: var(--accent-hover);
+    }
 
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 23, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+      overflow-y: auto;
+    }
 
-  .form-label {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-  .form-input, .form-select {
-    width: 100%;
-    padding: 13px 16px;
-    background: var(--card-bg);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.18s, box-shadow 0.18s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
+    .modal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 24px 64px rgba(28, 26, 23, 0.2);
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.22s ease;
+      overflow: hidden;
+    }
 
-  .form-input::placeholder { color: var(--text-secondary); font-weight: 300; }
-  .form-input:focus, .form-select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(184,150,90,0.12);
-  }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
 
-  /* Budget prefix */
-  .input-prefix-wrap {
-    position: relative;
-  }
+    /* Modal header */
+    .modal-header {
+      padding: 32px 32px 0;
+    }
 
-  .input-prefix {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 15px;
-    color: var(--text-secondary);
-    pointer-events: none;
-  }
+    .modal-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.15;
+    }
 
-  .input-prefix-wrap .form-input { padding-left: 28px; }
+    .modal-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-top: 4px;
+    }
 
-  /* Modal footer */
-  .modal-footer {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-    padding: 0 32px 32px;
-  }
+    /* Modal body */
+    .modal-body {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-  .btn-save {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    padding: 14px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.18s ease;
-  }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-  .btn-save:hover { background: var(--accent-hover); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
 
-  .btn-cancel {
-    padding: 14px 22px;
-    background: transparent;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-  }
+    .form-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
 
-  .btn-cancel:hover { background: var(--btn-hover); }
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
 
-  /* ── DELETE MODAL ── */
-  .modal-del-body {
-    padding: 32px 32px 8px;
-    text-align: center;
-  }
+    .form-input::placeholder {
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
 
-  .del-icon-wrap {
-    width: 56px; height: 56px;
-    background: var(--danger-bg);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-    color: var(--danger);
-  }
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
 
-  .modal-del-body h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
+    /* Budget prefix */
+    .input-prefix-wrap {
+      position: relative;
+    }
 
-  .modal-del-body p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    line-height: 1.6;
-  }
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
 
-  .modal-del-footer {
-    display: flex;
-    gap: 10px;
-    padding: 20px 32px 32px;
-    justify-content: center;
-  }
+    .input-prefix-wrap .form-input {
+      padding-left: 28px;
+    }
 
-  .btn-delete {
-    padding: 11px 24px;
-    background: var(--danger);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-delete:hover { background: #a93226; }
+    /* Modal footer */
+    .modal-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 0 32px 32px;
+    }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 400;
-    background: var(--text-primary);
-    color: #fff;
-    padding: 13px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    box-shadow: 0 8px 24px rgba(28,26,23,0.2);
-    transform: translateY(16px);
-    opacity: 0;
-    transition: all 0.25s ease;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+    .btn-save {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 14px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .btn-save:hover {
+      background: var(--accent-hover);
+    }
 
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    main { padding: 40px 20px 60px; }
-    .form-row { grid-template-columns: 1fr; }
-    .modal-header, .modal-body { padding-left: 20px; padding-right: 20px; }
-    .modal-footer { padding: 0 20px 24px; }
-  }
-</style>
+    .btn-cancel {
+      padding: 14px 22px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-cancel:hover {
+      background: var(--btn-hover);
+    }
+
+    /* ── DELETE MODAL ── */
+    .modal-del-body {
+      padding: 32px 32px 8px;
+      text-align: center;
+    }
+
+    .del-icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: var(--danger-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--danger);
+    }
+
+    .modal-del-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .modal-del-body p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .modal-del-footer {
+      display: flex;
+      gap: 10px;
+      padding: 20px 32px 32px;
+      justify-content: center;
+    }
+
+    .btn-delete {
+      padding: 11px 24px;
+      background: var(--danger);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete:hover {
+      background: #a93226;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 400;
+      background: var(--text-primary);
+      color: #fff;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.2);
+      transform: translateY(16px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      main {
+        padding: 40px 20px 60px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-header,
+      .modal-body {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .modal-footer {
+        padding: 0 20px 24px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="logo" href="user-home.html">
-    <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver">
-    Giver
-  </a>
-  <ul class="nav-links">
-    <li><a href="user-home.html">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-        <path d="M9 21V12h6v9"/>
-      </svg>
-      Home
-    </a></li>
-    <li><a href="user-recipients.html" class="active">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      Recipients
-    </a></li>
-    <li><a href="user-favorites.html">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-      </svg>
-      Favorites
-    </a></li>
-    <li><a href="#" onclick="logout()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        <polyline points="16 17 21 12 16 7"/>
-        <line x1="21" y1="12" x2="9" y2="12"/>
-      </svg>
-      Logout
-    </a></li>
-  </ul>
-</nav>
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="user-home.html">
+      <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver">
+      Giver
+    </a>
+    <ul class="nav-links">
+      <li><a href="user-home.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+            <path d="M9 21V12h6v9" />
+          </svg>
+          Home
+        </a></li>
+      <li><a href="user-recipients.html" class="active">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          Recipients
+        </a></li>
+      <li><a href="user-favorites.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+          Favorites
+        </a></li>
+      <li><a href="#" onclick="logout()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Logout
+        </a></li>
+    </ul>
+  </nav>
 
-<main>
-  <!-- HEADER -->
-  <div class="page-header">
-    <div>
-      <h1>Recipient Management</h1>
-      <p>Add/Edit Recipient</p>
-    </div>
-    <button class="add-btn" onclick="openAddModal()">
-      + Add Recipient
-    </button>
-  </div>
-
-  <!-- GRID -->
-  <div class="recipients-grid" id="recipientsGrid"></div>
-</main>
-
-<!-- ADD / EDIT MODAL -->
-<div class="modal-overlay" id="recModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 id="modalTitle">Add New Recipient</h2>
-      <p id="modalSubtitle">Add information about the gift recipient</p>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label" for="recName">Name</label>
-        <input type="text" class="form-input" id="recName" placeholder="">
+  <main>
+    <!-- HEADER -->
+    <div class="page-header">
+      <div>
+        <h1>Recipient Management</h1>
+        <p>Add/Edit Recipient</p>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="recAge">Age</label>
-          <input type="number" class="form-input" id="recAge" placeholder="" min="1" max="120">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="recGender">Gender</label>
-          <select class="form-select form-input" id="recGender">
-            <option value="" disabled selected></option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="recRelation">Relationship</label>
-        <input type="text" class="form-input" id="recRelation" placeholder="e.g., Friends, Family">
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="recInterests">Interests</label>
-        <input type="text" class="form-input" id="recInterests" placeholder="e.g., tech, books, fitness">
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="recBudget">Budget (optional)</label>
-        <div class="input-prefix-wrap">
-          <span class="input-prefix">฿</span>
-          <input type="number" class="form-input" id="recBudget" placeholder="" min="0">
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-save" onclick="saveRecipient()">
+      <button class="add-btn" onclick="openAddModal()">
         + Add Recipient
       </button>
-      <button class="btn-cancel" onclick="closeModal('recModal')">Cancel</button>
     </div>
-  </div>
-</div>
 
-<!-- DELETE MODAL -->
-<div class="modal-overlay" id="deleteModal">
-  <div class="modal">
-    <div class="modal-del-body">
-      <div class="del-icon-wrap">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-          <path d="M9 6V4h6v2"/>
-        </svg>
+    <!-- GRID -->
+    <div class="recipients-grid" id="recipientsGrid"></div>
+  </main>
+
+  <!-- ADD / EDIT MODAL -->
+  <div class="modal-overlay" id="recModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add New Recipient</h2>
+        <p id="modalSubtitle">Add information about the gift recipient</p>
       </div>
-      <h3>Delete Recipient</h3>
-      <p>Are you sure you want to delete <strong id="deleteRecName"></strong>?<br>This action cannot be undone.</p>
-    </div>
-    <div class="modal-del-footer">
-      <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
-      <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="recName">Name</label>
+          <input type="text" class="form-input" id="recName" placeholder="">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="recAge">Age</label>
+            <input type="number" class="form-input" id="recAge" placeholder="" min="1" max="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="recGender">Gender</label>
+            <select class="form-select form-input" id="recGender">
+              <option value="" disabled selected></option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="recRelation">Relationship</label>
+          <input type="text" class="form-input" id="recRelation" placeholder="e.g., Friends, Family">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="recInterests">Interests</label>
+          <input type="text" class="form-input" id="recInterests" placeholder="e.g., tech, books, fitness">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="recBudget">Budget (optional)</label>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">฿</span>
+            <input type="number" class="form-input" id="recBudget" placeholder="" min="0">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-save" onclick="saveRecipient()">
+          + Add Recipient
+        </button>
+        <button class="btn-cancel" onclick="closeModal('recModal')">Cancel</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <polyline points="20 6 9 17 4 12"/>
-  </svg>
-  <span id="toastMsg"></span>
-</div>
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4h6v2" />
+          </svg>
+        </div>
+        <h3>Delete Recipient</h3>
+        <p>Are you sure you want to delete <strong id="deleteRecName"></strong>?<br>This action cannot be undone.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
 
-<script>
-  /* ─── AUTH CHECK ─── */
-  const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
-  if (!user || !user.username) window.location.href = 'login_register_page.html';
-  if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+    <span id="toastMsg"></span>
+  </div>
 
-  /* ─── DATA (keyed per user) ─── */
-  const STORAGE_KEY = 'giver_recipients_' + (user.username || 'guest');
+  <script>
+    /* ─── AUTH CHECK ─── */
+    const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
+    if (!user || !user.id) window.location.href = 'login_register_page.html';
+    if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
 
-  let recipients = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  let editingId  = null;
-  let deletingId = null;
-  let nextId     = recipients.length ? Math.max(...recipients.map(r => r.id)) + 1 : 1;
+    const API_REC = '/api/recipients';
+    const API_VOC = '/api/vocabulary';
+    const userId = user.id;
 
-  function saveToStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(recipients));
-  }
+    let recipients = [];
+    let editingId = null;
+    let deletingId = null;
+    let knownTerms = [];
 
-  /* ─── RENDER ─── */
-  function renderGrid() {
-    const grid = document.getElementById('recipientsGrid');
+    /* ─── LOAD VOCAB (for autocorrect) ─── */
+    async function loadVocab() {
+      try {
+        const res = await fetch(API_VOC);
+        const vocab = res.ok ? await res.json() : [];
+        const vocabTerms = [];
+        vocab.forEach(v => {
+          if (v.term) vocabTerms.push(v.term.toLowerCase());
+          (v.synonyms || []).forEach(s => vocabTerms.push(s.toLowerCase()));
+        });
+        knownTerms = [...new Set([
+          'tech', 'technology', 'electronics', 'gadget', 'device',
+          'fitness', 'workout', 'exercise', 'gym', 'yoga', 'sport', 'health',
+          'home', 'decor', 'decoration', 'interior', 'homedecor',
+          'beauty', 'skincare', 'makeup', 'cosmetic', 'fashion',
+          'books', 'book', 'reading', 'literature',
+          'music', 'travel', 'cooking', 'kitchen', 'coffee', 'garden', 'nature',
+          'gaming', 'art', 'photography', 'outdoor', 'pets',
+          ...vocabTerms
+        ])];
+      } catch (e) { knownTerms = []; }
+    }
 
-    if (recipients.length === 0) {
-      grid.innerHTML = `
+    /* ─── LOAD RECIPIENTS FROM API ─── */
+    async function loadRecipients() {
+      try {
+        const res = await fetch(`${API_REC}?userId=${userId}`);
+        recipients = res.ok ? await res.json() : [];
+      } catch (e) {
+        recipients = [];
+      }
+      renderGrid();
+    }
+
+    /* ─── RENDER ─── */
+    function renderGrid() {
+      const grid = document.getElementById('recipientsGrid');
+      if (recipients.length === 0) {
+        grid.innerHTML = `
         <div class="empty-state">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -718,10 +868,9 @@
           <p>Add your first recipient to get personalized gift recommendations.</p>
           <button class="empty-add-btn" onclick="openAddModal()">+ Add Recipient</button>
         </div>`;
-      return;
-    }
-
-    grid.innerHTML = recipients.map(r => `
+        return;
+      }
+      grid.innerHTML = recipients.map(r => `
       <div class="rec-card">
         <div class="rec-card-top">
           <div>
@@ -729,18 +878,17 @@
             <div class="rec-relation">${escHtml(r.relation)}</div>
           </div>
           <div class="rec-actions">
-            <button class="action-btn edit" title="Edit" onclick="openEditModal(${r.id})">
+            <button class="action-btn edit" title="Edit" onclick="openEditModal('${r._id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
               </svg>
             </button>
-            <button class="action-btn del" title="Delete" onclick="openDeleteModal(${r.id})">
+            <button class="action-btn del" title="Delete" onclick="openDeleteModal('${r._id}', '${escHtml(r.name)}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <polyline points="3 6 5 6 21 6"/>
                 <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6M14 11v6"/>
-                <path d="M9 6V4h6v2"/>
+                <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
               </svg>
             </button>
           </div>
@@ -749,7 +897,7 @@
         <div class="rec-details">
           <div class="rec-detail-item">
             <span class="rec-detail-label">Age:</span>
-            <span class="rec-detail-value">${escHtml(String(r.age))}</span>
+            <span class="rec-detail-value">${r.age}</span>
           </div>
           <div class="rec-detail-item">
             <span class="rec-detail-label">Gender:</span>
@@ -757,7 +905,7 @@
           </div>
         </div>
 
-        ${r.interests.length > 0 ? `
+        ${(r.interests || []).length > 0 ? `
         <div class="rec-interests-wrap">
           <div class="rec-interests-label">Interests:</div>
           <div class="interests-tags">
@@ -765,7 +913,7 @@
           </div>
         </div>` : ''}
 
-        <button class="rec-btn" onclick="getRecommendation(${r.id})">
+        <button class="rec-btn" onclick="getRecommendation('${r._id}')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
           </svg>
@@ -773,192 +921,156 @@
         </button>
       </div>
     `).join('');
-  }
-
-  /* ─── ADD MODAL ─── */
-  function openAddModal() {
-    editingId = null;
-    document.getElementById('modalTitle').textContent = 'Add New Recipient';
-    document.getElementById('modalSubtitle').textContent = 'Add information about the gift recipient';
-    document.querySelector('#recModal .btn-save').textContent = '+ Add Recipient';
-    clearForm();
-    openModal('recModal');
-    setTimeout(() => document.getElementById('recName').focus(), 220);
-  }
-
-  /* ─── EDIT MODAL ─── */
-  function openEditModal(id) {
-    editingId = id;
-    const r = recipients.find(x => x.id === id);
-    document.getElementById('modalTitle').textContent = 'Edit Recipient';
-    document.getElementById('modalSubtitle').textContent = 'Update information about the gift recipient';
-    document.querySelector('#recModal .btn-save').textContent = 'Save Changes';
-
-    document.getElementById('recName').value     = r.name;
-    document.getElementById('recAge').value      = r.age;
-    document.getElementById('recGender').value   = r.gender;
-    document.getElementById('recRelation').value = r.relation;
-    document.getElementById('recInterests').value = r.interests.join(', ');
-    document.getElementById('recBudget').value   = r.budget || '';
-
-    openModal('recModal');
-  }
-
-  /* ─── SAVE ─── */
-  function saveRecipient() {
-    const name     = document.getElementById('recName').value.trim();
-    const age      = parseInt(document.getElementById('recAge').value, 10);
-    const gender   = document.getElementById('recGender').value;
-    const relation = document.getElementById('recRelation').value.trim();
-    const interestRaw = document.getElementById('recInterests').value.trim();
-    const budget   = document.getElementById('recBudget').value.trim();
-
-    if (!name)     { showToast('Please enter a name.'); return; }
-    if (!age || age < 1) { showToast('Please enter a valid age.'); return; }
-    if (!gender)   { showToast('Please select a gender.'); return; }
-    if (!relation) { showToast('Please enter a relationship.'); return; }
-
-    const interests = interestRaw ? interestRaw.split(',').map(s => correctInterest(s.trim())).filter(Boolean) : [];
-
-    // Show toast if any interest was auto-corrected
-    const rawList = interestRaw ? interestRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
-    const corrected = interests.filter((v, i) => rawList[i] && v !== rawList[i]);
-    if (corrected.length > 0) {
-      showToast('✏️ Auto-corrected: ' + corrected.join(', '));
     }
 
-    if (editingId) {
-      const idx = recipients.findIndex(x => x.id === editingId);
-      recipients[idx] = { id: editingId, name, age, gender, relation, interests, budget };
-      showToast('Recipient updated.');
-    } else {
-      recipients.push({ id: nextId++, name, age, gender, relation, interests, budget });
-      showToast('Recipient added.');
+    /* ─── ADD MODAL ─── */
+    function openAddModal() {
+      editingId = null;
+      document.getElementById('modalTitle').textContent = 'Add New Recipient';
+      document.getElementById('modalSubtitle').textContent = 'Add information about the gift recipient';
+      document.querySelector('#recModal .btn-save').textContent = '+ Add Recipient';
+      clearForm();
+      openModal('recModal');
+      setTimeout(() => document.getElementById('recName').focus(), 220);
     }
 
-    saveToStorage();
-    closeModal('recModal');
-    renderGrid();
-  }
-
-  /* ─── DELETE ─── */
-  function openDeleteModal(id) {
-    deletingId = id;
-    const r = recipients.find(x => x.id === id);
-    document.getElementById('deleteRecName').textContent = '"' + r.name + '"';
-    openModal('deleteModal');
-  }
-
-  function confirmDelete() {
-    recipients = recipients.filter(x => x.id !== deletingId);
-    saveToStorage();
-    closeModal('deleteModal');
-    renderGrid();
-    showToast('Recipient deleted.');
-  }
-
-  /* ─── GET RECOMMENDATION ─── */
-  function getRecommendation(id) {
-    const r = recipients.find(x => x.id === id);
-    // Store selected recipient and navigate to recommendation page
-    sessionStorage.setItem('giver_selected_recipient', JSON.stringify(r));
-    window.location.href = 'user-recommendation.html?id=' + id;
-  }
-
-  /* ─── AUTO-CORRECT INTERESTS ─── */
-  function levenshtein(a, b) {
-    const m = a.length, n = b.length;
-    const dp = Array.from({length: m+1}, (_, i) => Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0));
-    for (let i = 1; i <= m; i++)
-      for (let j = 1; j <= n; j++)
-        dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
-    return dp[m][n];
-  }
-
-  function getKnownInterests() {
-    const known = new Set([
-      'tech','technology','electronics','gadget','device',
-      'fitness','workout','exercise','gym','yoga','sport','health',
-      'home','decor','decoration','interior','homedecor',
-      'beauty','skincare','makeup','cosmetic','fashion',
-      'books','book','reading','literature',
-      'music','travel','cooking','kitchen','coffee','garden','nature',
-      'gaming','art','photography','outdoor','pets'
-    ]);
-    // Add terms from admin vocabulary
-    try {
-      const vocab = JSON.parse(localStorage.getItem('giver_vocabulary') || '[]');
-      vocab.forEach(v => {
-        if (v.term) known.add(v.term.toLowerCase());
-        if (v.synonyms) v.synonyms.forEach(s => known.add(s.toLowerCase()));
-      });
-    } catch(e) {}
-    // Add tags from gifts
-    try {
-      const gifts = JSON.parse(localStorage.getItem('giver_gifts') || '[]');
-      gifts.forEach(g => (g.tags || []).forEach(t => known.add(t.toLowerCase())));
-    } catch(e) {}
-    return [...known];
-  }
-
-  function correctInterest(word) {
-    if (!word) return word;
-    const lower = word.toLowerCase();
-    const known = getKnownInterests();
-    // Exact match — no correction needed
-    if (known.includes(lower)) return lower;
-    // Find closest match within edit distance 2
-    let best = null, bestDist = Infinity;
-    for (const term of known) {
-      const dist = levenshtein(lower, term);
-      if (dist < bestDist) { bestDist = dist; best = term; }
+    /* ─── EDIT MODAL ─── */
+    function openEditModal(id) {
+      editingId = id;
+      const r = recipients.find(x => x._id === id);
+      document.getElementById('modalTitle').textContent = 'Edit Recipient';
+      document.getElementById('modalSubtitle').textContent = 'Update information about the gift recipient';
+      document.querySelector('#recModal .btn-save').textContent = 'Save Changes';
+      document.getElementById('recName').value = r.name;
+      document.getElementById('recAge').value = r.age;
+      document.getElementById('recGender').value = r.gender;
+      document.getElementById('recRelation').value = r.relation;
+      document.getElementById('recInterests').value = (r.interests || []).join(', ');
+      document.getElementById('recBudget').value = r.budget || '';
+      openModal('recModal');
     }
-    // Only auto-correct if distance ≤ 2 (small typo)
-    return (bestDist <= 2 && best) ? best : lower;
-  }
 
-  /* ─── HELPERS ─── */
-  function clearForm() {
-    ['recName','recAge','recRelation','recInterests','recBudget'].forEach(id => {
-      document.getElementById(id).value = '';
+    /* ─── SAVE ─── */
+    async function saveRecipient() {
+      const name = document.getElementById('recName').value.trim();
+      const age = parseInt(document.getElementById('recAge').value, 10);
+      const gender = document.getElementById('recGender').value;
+      const relation = document.getElementById('recRelation').value.trim();
+      const interestRaw = document.getElementById('recInterests').value.trim();
+      const budget = document.getElementById('recBudget').value.trim();
+
+      if (!name) { showToast('Please enter a name.'); return; }
+      if (!age || age < 1) { showToast('Please enter a valid age.'); return; }
+      if (!gender) { showToast('Please select a gender.'); return; }
+      if (!relation) { showToast('Please enter a relationship.'); return; }
+
+      const interests = interestRaw
+        ? interestRaw.split(',').map(s => correctInterest(s.trim())).filter(Boolean)
+        : [];
+
+      const body = { userId, name, age, gender, relation, interests, budget };
+
+      try {
+        let res;
+        if (editingId) {
+          res = await fetch(`${API_REC}/${editingId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        } else {
+          res = await fetch(API_REC, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        }
+        if (!res.ok) { const d = await res.json(); showToast(d.message || 'Error saving.'); return; }
+        showToast(editingId ? 'Recipient updated.' : 'Recipient added.');
+        closeModal('recModal');
+        await loadRecipients();
+      } catch (e) {
+        showToast('Cannot connect to server.');
+      }
+    }
+
+    /* ─── DELETE ─── */
+    function openDeleteModal(id, name) {
+      deletingId = id;
+      document.getElementById('deleteRecName').textContent = '"' + name + '"';
+      openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+      try {
+        const res = await fetch(`${API_REC}/${deletingId}`, { method: 'DELETE' });
+        if (!res.ok) { showToast('Error deleting.'); return; }
+        showToast('Recipient deleted.');
+        closeModal('deleteModal');
+        await loadRecipients();
+      } catch (e) {
+        showToast('Cannot connect to server.');
+      }
+    }
+
+    /* ─── GET RECOMMENDATION ─── */
+    function getRecommendation(id) {
+      const r = recipients.find(x => x._id === id);
+      sessionStorage.setItem('giver_selected_recipient', JSON.stringify(r));
+      window.location.href = 'user-recommendation.html?id=' + id;
+    }
+
+    /* ─── AUTOCORRECT ─── */
+    function levenshtein(a, b) {
+      const m = a.length, n = b.length;
+      const dp = Array.from({ length: m + 1 }, (_, i) => Array.from({ length: n + 1 }, (_, j) => i === 0 ? j : j === 0 ? i : 0));
+      for (let i = 1; i <= m; i++)
+        for (let j = 1; j <= n; j++)
+          dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      return dp[m][n];
+    }
+
+    function correctInterest(word) {
+      if (!word) return word;
+      const lower = word.toLowerCase();
+      if (knownTerms.includes(lower)) return lower;
+      let best = null, bestDist = Infinity;
+      for (const term of knownTerms) {
+        const dist = levenshtein(lower, term);
+        if (dist < bestDist) { bestDist = dist; best = term; }
+      }
+      return (bestDist <= 2 && best) ? best : lower;
+    }
+
+    /* ─── HELPERS ─── */
+    function clearForm() {
+      ['recName', 'recAge', 'recRelation', 'recInterests', 'recBudget'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('recGender').value = '';
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(el =>
+      el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); })
+    );
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
     });
-    document.getElementById('recGender').value = '';
-  }
 
-  function openModal(id)  { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.className = 'toast show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
 
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-  });
+    function escHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape')
-      document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
-  });
+    function logout() {
+      sessionStorage.removeItem('giver_user');
+      window.location.href = 'login_register_page.html';
+    }
 
-  let toastTimer;
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    toast.className = 'toast show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
-
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function logout() {
-    sessionStorage.removeItem('giver_user');
-    window.location.href = 'login_register_page.html';
-  }
-
-  /* ─── INIT ─── */
-  renderGrid();
-</script>
+    /* ─── INIT ─── */
+    loadVocab().then(() => loadRecipients());
+  </script>
 </body>
+
 </html>

@@ -463,52 +463,52 @@
   </div>
   <script>
     const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
-    if (!user || !user.username) window.location.href = 'login_register_page.html';
+    if (!user || !user.id) window.location.href = 'login_register_page.html';
     if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
 
-    const FAV_KEY = 'giver_favorites_' + (user.username || 'guest');
-    let favorites = JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
-
-    /* ─── LOAD GIFTS FROM ADMIN DATA (with fallback) ─── */
-    const GIFTS_KEY = 'giver_gifts';
-    const DEFAULT_GIFTS = [
-      { id: 1, name: 'Wireless Headphones',  desc: 'Premium noise-cancelling wireless headphones', price: 2990, category: 'electronics', tags: ['music', 'tech', 'lifestyle'],       rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lp8lsxyghpn7bf', gender: 'unisex', age: '18-40', store: '' },
-      { id: 2, name: 'Handmade Candle Set',   desc: 'Artisan scented candles in elegant packaging',  price: 890,  category: 'home-decor',   tags: ['home', 'relaxation', 'gift'],      rating: 4.9, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r991-lrwkr4vqq08mb3', gender: 'unisex', age: '18-60', store: '' },
-      { id: 3, name: 'Coffee Maker',          desc: 'Automatic coffee maker with grinder',           price: 4500, category: 'kitchen',       tags: ['coffee', 'kitchen', 'morning'],    rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lzge93xvzl9k1d', gender: 'unisex', age: '20-50', store: '' },
-      { id: 4, name: 'Yoga Mat Set',          desc: 'Premium yoga mat with carrying strap',          price: 1290, category: 'fitness',       tags: ['fitness', 'yoga', 'wellness'],     rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lx6r2s5m6nl040', gender: 'female', age: '18-45', store: '' },
-      { id: 5, name: 'Leather Wallet',        desc: 'Slim genuine leather bifold wallet',            price: 1590, category: 'fashion',       tags: ['leather', 'fashion', 'accessories'],rating: 4.6, image: 'https://down-th.img.susercontent.com/file/th-11134207-7qukw-lhivt3rrfpxkbb', gender: 'male',   age: '20-50', store: '' },
-      { id: 6, name: 'Herb Garden Kit',       desc: 'Indoor growing kit with seeds and pots',        price: 750,  category: 'home-decor',   tags: ['garden', 'home', 'nature'],        rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lylxol4efpvo75', gender: 'unisex', age: '18-60', store: '' },
-    ];
-    function loadAllGifts() {
-      try {
-        const raw = localStorage.getItem(GIFTS_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed && parsed.length > 0) return parsed;
-        }
-      } catch(e) {}
-      // Seed defaults so admin page & user pages stay in sync
-      localStorage.setItem(GIFTS_KEY, JSON.stringify(DEFAULT_GIFTS));
-      return [...DEFAULT_GIFTS];
-    }
-    const ALL_GIFTS = loadAllGifts();
-
-
+    const userId = user.id;
+    let ALL_GIFTS = [];
+    let favorites = [];
     let activeFilter = 'all';
 
-    function isFav(id) { return favorites.includes(id); }
+    async function init() {
+      try {
+        const [giftsRes, favsRes] = await Promise.all([
+          fetch('/api/gifts'),
+          fetch(`/api/favorites?userId=${userId}`)
+        ]);
+        ALL_GIFTS = giftsRes.ok ? await giftsRes.json() : [];
+        favorites = favsRes.ok ? await favsRes.json() : [];
+      } catch (e) { ALL_GIFTS = []; favorites = []; }
+      buildFilterBar();
+      applyFilters();
+    }
 
-    function toggleFav(id, btn) {
-      if (isFav(id)) {
-        favorites = favorites.filter(f => f !== id);
-        btn.classList.remove('active');
-        showToast('Removed from favorites.');
-      } else {
-        favorites.push(id);
-        btn.classList.add('active');
-        showToast('Added to favorites! ♥');
-      }
-      localStorage.setItem(FAV_KEY, JSON.stringify(favorites));
+    function buildFilterBar() {
+      const cats = [...new Set(ALL_GIFTS.map(g => g.category_id || g.category).filter(Boolean))];
+      const bar = document.getElementById('filterBar');
+      bar.innerHTML = `<button class="filter-btn active" data-cat="all" onclick="setFilter('all',this)">All</button>` +
+        cats.map(c => `<button class="filter-btn" data-cat="${c}" onclick="setFilter('${c}',this)">${c}</button>`).join('');
+    }
+
+    function isFav(id) { return favorites.includes(String(id)); }
+
+    async function toggleFav(id, btn) {
+      try {
+        const res = await fetch('/api/favorites/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, giftId: String(id) })
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        favorites = data.giftIds;
+        const active = favorites.includes(String(id));
+        btn.classList.toggle('active', active);
+        btn.querySelector('svg').setAttribute('fill', active ? '#e74c3c' : 'none');
+        btn.querySelector('svg').setAttribute('stroke', active ? '#e74c3c' : '#7a7268');
+        showToast(active ? 'Added to favorites! ♥' : 'Removed from favorites.');
+      } catch (e) { showToast('Error updating favorites.'); }
     }
 
     function setFilter(cat, btn) {
@@ -519,13 +519,25 @@
     }
 
     function applyFilters() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
+      const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
       const filtered = ALL_GIFTS.filter(g => {
-        const matchCat = activeFilter === 'all' || g.category === activeFilter;
-        const matchQ = !q || g.name.toLowerCase().includes(q) || g.category.toLowerCase().includes(q);
+        const cat = g.category_id || g.category || '';
+        const name = g.gift_name || g.name || '';
+        const matchCat = activeFilter === 'all' || cat === activeFilter;
+        const matchQ = !q || name.toLowerCase().includes(q) || cat.toLowerCase().includes(q);
         return matchCat && matchQ;
       });
       renderGrid(filtered);
+    }
+
+    function getFirstImg(g) {
+      if (g.options && g.options.length > 0) return g.options[0].image_url || 'surprise(1).png';
+      return g.image || 'surprise(1).png';
+    }
+
+    function getFirstPrice(g) {
+      if (g.options && g.options.length > 0) return g.options[0].price || 0;
+      return g.price || 0;
     }
 
     function renderGrid(gifts) {
@@ -535,45 +547,41 @@
         return;
       }
       grid.innerHTML = gifts.map(g => {
-        const imgSrc = g.image || g.img || 'surprise(1).png';
-        const rating = g.rating || 4.5;
+        const id = g._id || g.id;
+        const name = g.gift_name || g.name || '';
+        const cat = g.category_id || g.category || '';
+        const imgSrc = getFirstImg(g);
+        const price = getFirstPrice(g);
+        const fav = isFav(id);
         return `
-      <div class="gift-card">
-        <div class="gift-img-wrap">
-          <img src="${imgSrc}" alt="${escHtml(g.name)}"
-               onerror="this.src='surprise(1).png';this.style.objectFit='contain';this.style.padding='24px';">
-          <span class="gift-category-badge">${escHtml(g.category)}</span>
-          <button class="fav-btn ${isFav(g.id) ? 'active' : ''}"
-                  id="fav-${g.id}" title="Favorite"
-                  onclick="toggleFav(${g.id}, this)">
-            <svg width="16" height="16" viewBox="0 0 24 24"
-                 fill="${isFav(g.id) ? '#e74c3c' : 'none'}"
-                 stroke="${isFav(g.id) ? '#e74c3c' : '#7a7268'}" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
-        <div class="gift-info">
-          <div class="gift-name">${escHtml(g.name)}</div>
-          <div class="gift-bottom">
-            <span class="gift-price">฿${Number(g.price).toLocaleString()}</span>
-            <span class="gift-rating">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="1">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        <div class="gift-card">
+          <div class="gift-img-wrap">
+            <img src="${imgSrc}" alt="${escHtml(name)}"
+                 onerror="this.src='surprise(1).png';this.style.objectFit='contain';this.style.padding='24px';">
+            <span class="gift-category-badge">${escHtml(cat)}</span>
+            <button class="fav-btn ${fav ? 'active' : ''}" id="fav-${id}" title="Favorite"
+                    onclick="toggleFav('${id}', this)">
+              <svg width="16" height="16" viewBox="0 0 24 24"
+                   fill="${fav ? '#e74c3c' : 'none'}"
+                   stroke="${fav ? '#e74c3c' : '#7a7268'}" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
               </svg>
-              ${rating}
-            </span>
-            <button class="view-btn" onclick="viewGift(${g.id})">View details</button>
+            </button>
           </div>
-        </div>
-      </div>
-    `}).join('');
-    }
-
-    function viewGift(id) {
-      const g = ALL_GIFTS.find(x => x.id === id);
-      sessionStorage.setItem('giver_selected_gift', JSON.stringify(g));
-      showToast('Opening gift details...');
+          <div class="gift-info">
+            <div class="gift-name">${escHtml(name)}</div>
+            <div class="gift-bottom">
+              <span class="gift-price">฿${Number(price).toLocaleString()}</span>
+              <span class="gift-rating">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="1">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                ${g.rating || '—'}
+              </span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     let toastTimer;
@@ -585,11 +593,10 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
-    function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-
+    function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function logout() { sessionStorage.removeItem('giver_user'); window.location.href = 'login_register_page.html'; }
 
-    applyFilters();
+    init();
   </script>
 </body>
 

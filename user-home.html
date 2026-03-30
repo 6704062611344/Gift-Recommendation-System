@@ -1,538 +1,561 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giver — Home</title>
-<meta name="description" content="Find the perfect gift with personalized recommendations based on recipient preferences, interests, and occasions.">
-<link rel="icon" href="surprise(1).png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ece4;
-    --card-bg: #faf8f4;
-    --border: #e2ddd5;
-    --text-primary: #1c1a17;
-    --text-secondary: #7a7268;
-    --accent: #b8965a;
-    --accent-light: #e8dcc8;
-    --accent-hover: #9a7a44;
-    --btn-bg: #ede8df;
-    --btn-hover: #e0d9cd;
-    --shadow: 0 1px 3px rgba(28,26,23,0.06), 0 4px 16px rgba(28,26,23,0.04);
-    --shadow-hover: 0 4px 12px rgba(28,26,23,0.1), 0 16px 40px rgba(28,26,23,0.08);
-    --danger: #c0392b;
-    --danger-bg: #fdf0ee;
-    --highlight: #C65D51;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giver — Home</title>
+  <meta name="description"
+    content="Find the perfect gift with personalized recommendations based on recipient preferences, interests, and occasions.">
+  <link rel="icon" href="surprise(1).png" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ece4;
+      --card-bg: #faf8f4;
+      --border: #e2ddd5;
+      --text-primary: #1c1a17;
+      --text-secondary: #7a7268;
+      --accent: #b8965a;
+      --accent-light: #e8dcc8;
+      --accent-hover: #9a7a44;
+      --btn-bg: #ede8df;
+      --btn-hover: #e0d9cd;
+      --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
+      --shadow-hover: 0 4px 12px rgba(28, 26, 23, 0.1), 0 16px 40px rgba(28, 26, 23, 0.08);
+      --danger: #c0392b;
+      --danger-bg: #fdf0ee;
+      --highlight: #C65D51;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+    }
 
-  /* ── NAV ── */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    backdrop-filter: blur(8px);
-  }
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      backdrop-filter: blur(8px);
+    }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    list-style: none;
-  }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
 
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.18s ease;
-  }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
 
-  .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
-  .nav-links a.active { color: var(--accent); font-weight: 500; }
-  .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
 
-  /* ── MAIN ── */
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 72px 48px 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 52px;
-  }
+    .nav-links a.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
 
-  /* ── HERO SECTION ── */
-  .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0;
-    animation: fadeUp 0.5s ease both;
-    width: 100%;
-  }
+    .nav-links li:last-child a:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
 
-  /* Gift icon circle */
-  .hero-icon {
-    width: 80px;
-    height: 80px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 28px;
-    box-shadow: 0 8px 24px rgba(184,150,90,0.3);
-    animation: fadeUp 0.5s ease 0.05s both;
-  }
+    /* ── MAIN ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 48px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 52px;
+    }
 
-  .hero-icon img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-  }
+    /* ── HERO SECTION ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      animation: fadeUp 0.5s ease both;
+      width: 100%;
+    }
 
-  .hero h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.2rem, 4vw, 3rem);
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.15;
-    margin-bottom: 16px;
-    letter-spacing: -0.01em;
-  }
+    /* Gift icon circle */
+    .hero-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 24px rgba(184, 150, 90, 0.3);
+      animation: fadeUp 0.5s ease 0.05s both;
+    }
 
-  .hero h1 .highlight {
-    color: var(--highlight);
-    font-style: italic;
-  }
+    .hero-icon img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
 
-  .hero p {
-    font-size: 15px;
-    font-weight: 300;
-    color: var(--text-secondary);
-    max-width: 440px;
-    line-height: 1.7;
-    margin-bottom: 36px;
-  }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
 
-  .hero-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 14px 28px;
-    background: var(--accent);
-    border: none;
-    border-radius: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 16px rgba(184,150,90,0.28);
-  }
+    .hero h1 .highlight {
+      color: var(--highlight);
+      font-style: italic;
+    }
 
-  .hero-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(184,150,90,0.36);
-  }
+    .hero p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
 
-  .hero-btn img {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-  }
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 14px 28px;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(184, 150, 90, 0.28);
+    }
 
-  /* ── STATS CARDS ── */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
-    animation: fadeUp 0.5s ease 0.15s both;
-  }
+    .hero-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(184, 150, 90, 0.36);
+    }
 
-  .stat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 28px 24px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-  }
+    .hero-btn img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
 
-  .stat-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-    border-color: var(--accent-light);
-  }
+    /* ── STATS CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      animation: fadeUp 0.5s ease 0.15s both;
+    }
 
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    }
 
-  .card-label {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
+    .stat-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: var(--accent-light);
+    }
 
-  .card-desc {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    margin-top: 2px;
-  }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
 
-  .card-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--accent-light);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
+    .card-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
 
-  .card-icon img {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
-  }
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-top: 2px;
+    }
 
-  .card-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 52px;
-    font-weight: 300;
-    color: var(--text-primary);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
-  }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-  .card-divider {
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 16px;
-  }
+    .card-icon img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
 
-  .card-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    padding: 11px 16px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-primary);
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.18s ease;
-  }
+    .card-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 300;
+      color: var(--text-primary);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
 
-  .card-btn:hover {
-    background: var(--btn-hover);
-    border-color: var(--accent-light);
-    color: var(--accent);
-  }
+    .card-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 16px;
+    }
 
-  .card-btn svg { flex-shrink: 0; }
+    .card-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 11px 16px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-primary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .card-btn:hover {
+      background: var(--btn-hover);
+      border-color: var(--accent-light);
+      color: var(--accent);
+    }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 860px) {
-    nav { padding: 0 24px; }
-    main { padding: 48px 24px 60px; }
-    .cards-grid { grid-template-columns: 1fr; }
-  }
+    .card-btn svg {
+      flex-shrink: 0;
+    }
 
-  @media (max-width: 560px) {
-    .nav-links { gap: 0; }
-    .nav-links a { padding: 7px 10px; font-size: 13px; }
-  }
-</style>
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      nav {
+        padding: 0 24px;
+      }
+
+      main {
+        padding: 48px 24px 60px;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav-links {
+        gap: 0;
+      }
+
+      .nav-links a {
+        padding: 7px 10px;
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="logo" href="user-home.html">
-    <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver logo">
-    Giver
-  </a>
-  <ul class="nav-links">
-    <li><a href="user-home.html" class="active">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-        <path d="M9 21V12h6v9"/>
-      </svg>
-      Home
-    </a></li>
-    <li><a href="user-recipients.html">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      Recipients
-    </a></li>
-    <li><a href="user-favorites.html">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-      </svg>
-      Favorites
-    </a></li>
-    <li><a href="#" onclick="logout()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        <polyline points="16 17 21 12 16 7"/>
-        <line x1="21" y1="12" x2="9" y2="12"/>
-      </svg>
-      Logout
-    </a></li>
-  </ul>
-</nav>
-
-<main>
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-icon">
-      <img src="surprise(1).png" alt="Gift">
-    </div>
-    <h1>Find the <span class="highlight">Perfect Gift</span></h1>
-    <p>Discover personalized gift recommendations based on recipient preferences, interests, and occasions.</p>
-    <a href="user-recipients.html" class="hero-btn" id="addRecipientBtn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <line x1="19" y1="8" x2="19" y2="14"/>
-        <line x1="22" y1="11" x2="16" y2="11"/>
-      </svg>
-      Add Your First Recipient
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="user-home.html">
+      <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver logo">
+      Giver
     </a>
-  </section>
+    <ul class="nav-links">
+      <li><a href="user-home.html" class="active">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+            <path d="M9 21V12h6v9" />
+          </svg>
+          Home
+        </a></li>
+      <li><a href="user-recipients.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          Recipients
+        </a></li>
+      <li><a href="user-favorites.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+          Favorites
+        </a></li>
+      <li><a href="#" onclick="logout()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Logout
+        </a></li>
+    </ul>
+  </nav>
 
-  <!-- STAT CARDS -->
-  <div class="cards-grid">
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-icon">
+        <img src="surprise(1).png" alt="Gift">
+      </div>
+      <h1>Find the <span class="highlight">Perfect Gift</span></h1>
+      <p>Discover personalized gift recommendations based on recipient preferences, interests, and occasions.</p>
+      <a href="user-recipients.html" class="hero-btn" id="addRecipientBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <line x1="19" y1="8" x2="19" y2="14" />
+          <line x1="22" y1="11" x2="16" y2="11" />
+        </svg>
+        Add Your First Recipient
+      </a>
+    </section>
 
-    <!-- Recipients -->
-    <div class="stat-card">
-      <div class="card-top">
-        <div>
-          <div class="card-label">Recipients</div>
-          <div class="card-desc">Manage gift recipients</div>
+    <!-- STAT CARDS -->
+    <div class="cards-grid">
+
+      <!-- Recipients -->
+      <div class="stat-card">
+        <div class="card-top">
+          <div>
+            <div class="card-label">Recipients</div>
+            <div class="card-desc">Manage gift recipients</div>
+          </div>
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
         </div>
-        <div class="card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8">
+        <div class="card-number" id="recipientCount">0</div>
+        <div class="card-divider"></div>
+        <a href="user-recipients.html" class="card-btn">
+          View All
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Gifts -->
+      <div class="stat-card">
+        <div class="card-top">
+          <div>
+            <div class="card-label">Gifts</div>
+            <div class="card-desc">Available gift options</div>
+          </div>
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8">
+              <rect x="3" y="8" width="18" height="13" rx="1" />
+              <path d="M12 8v13" />
+              <path d="M3 12h18" />
+              <path d="M8 8C8 6 10 4 12 4s4 2 0 4" />
+              <path d="M16 8C16 6 14 4 12 4" />
+            </svg>
+          </div>
+        </div>
+        <div class="card-number" id="giftCount">6</div>
+        <div class="card-divider"></div>
+        <a href="user-gifts.html" class="card-btn">
+          Browse
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Favorites -->
+      <div class="stat-card">
+        <div class="card-top">
+          <div>
+            <div class="card-label">Favorites</div>
+            <div class="card-desc">Your saved gifts</div>
+          </div>
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+        </div>
+        <div class="card-number" id="favCount">0</div>
+        <div class="card-divider"></div>
+        <a href="user-favorites.html" class="card-btn">
+          View All
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    /* ─── AUTH CHECK ─── */
+    const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
+    if (!user || !user.id) window.location.href = 'login_register_page.html';
+    if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
+
+    const userId = user.id;
+
+    /* ─── COUNT UP ANIMATION ─── */
+    function countUp(el, target, duration) {
+      if (!el || target === 0) { if (el) el.textContent = 0; return; }
+      let start = 0;
+      const step = target / (duration / 16);
+      const tick = () => {
+        start = Math.min(start + step, target);
+        el.textContent = Math.round(start);
+        if (start < target) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    /* ─── LOAD COUNTS FROM API ─── */
+    async function loadCounts() {
+      try {
+        const [giftsRes, recsRes, favsRes] = await Promise.all([
+          fetch('/api/gifts'),
+          fetch(`/api/recipients?userId=${userId}`),
+          fetch(`/api/favorites?userId=${userId}`)
+        ]);
+        const gifts = giftsRes.ok ? await giftsRes.json() : [];
+        const recipients = recsRes.ok ? await recsRes.json() : [];
+        const favIds = favsRes.ok ? await favsRes.json() : [];
+
+        countUp(document.getElementById('recipientCount'), recipients.length, 600);
+        countUp(document.getElementById('giftCount'), gifts.length, 600);
+        countUp(document.getElementById('favCount'), favIds.length, 600);
+
+        // Update hero button text if recipients exist
+        const heroBtn = document.getElementById('addRecipientBtn');
+        if (recipients.length > 0) {
+          heroBtn.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
-        </div>
-      </div>
-      <div class="card-number" id="recipientCount">0</div>
-      <div class="card-divider"></div>
-      <a href="user-recipients.html" class="card-btn">
-        View All
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-    <!-- Gifts -->
-    <div class="stat-card">
-      <div class="card-top">
-        <div>
-          <div class="card-label">Gifts</div>
-          <div class="card-desc">Available gift options</div>
-        </div>
-        <div class="card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8">
-            <rect x="3" y="8" width="18" height="13" rx="1"/>
-            <path d="M12 8v13"/>
-            <path d="M3 12h18"/>
-            <path d="M8 8C8 6 10 4 12 4s4 2 0 4"/>
-            <path d="M16 8C16 6 14 4 12 4"/>
-          </svg>
-        </div>
-      </div>
-      <div class="card-number" id="giftCount">6</div>
-      <div class="card-divider"></div>
-      <a href="user-gifts.html" class="card-btn">
-        Browse
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-    <!-- Favorites -->
-    <div class="stat-card">
-      <div class="card-top">
-        <div>
-          <div class="card-label">Favorites</div>
-          <div class="card-desc">Your saved gifts</div>
-        </div>
-        <div class="card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
-        </div>
-      </div>
-      <div class="card-number" id="favCount">0</div>
-      <div class="card-divider"></div>
-      <a href="user-favorites.html" class="card-btn">
-        View All
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-  </div>
-</main>
-
-<script>
-  /* ─── AUTH CHECK ─── */
-  const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
-  if (!user || !user.username) window.location.href = 'login_register_page.html';
-  if (user.role === 'admin') window.location.href = 'giver-dashboard.html';
-
-  /* ─── DYNAMIC COUNTS ─── */
-  const GIFTS_KEY = 'giver_gifts';
-  const DEFAULT_GIFTS = [
-    { id: 1, name: 'Wireless Headphones',  desc: 'Premium noise-cancelling wireless headphones', price: 2990, category: 'electronics', tags: ['music', 'tech', 'lifestyle'],        rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lp8lsxyghpn7bf', gender: 'unisex', age: '18-40', store: '' },
-    { id: 2, name: 'Handmade Candle Set',   desc: 'Artisan scented candles in elegant packaging',  price: 890,  category: 'home-decor',   tags: ['home', 'relaxation', 'gift'],       rating: 4.9, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r991-lrwkr4vqq08mb3', gender: 'unisex', age: '18-60', store: '' },
-    { id: 3, name: 'Coffee Maker',          desc: 'Automatic coffee maker with grinder',           price: 4500, category: 'kitchen',       tags: ['coffee', 'kitchen', 'morning'],     rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lzge93xvzl9k1d', gender: 'unisex', age: '20-50', store: '' },
-    { id: 4, name: 'Yoga Mat Set',          desc: 'Premium yoga mat with carrying strap',          price: 1290, category: 'fitness',       tags: ['fitness', 'yoga', 'wellness'],      rating: 4.7, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98v-lx6r2s5m6nl040', gender: 'female', age: '18-45', store: '' },
-    { id: 5, name: 'Leather Wallet',        desc: 'Slim genuine leather bifold wallet',            price: 1590, category: 'fashion',       tags: ['leather', 'fashion', 'accessories'],rating: 4.6, image: 'https://down-th.img.susercontent.com/file/th-11134207-7qukw-lhivt3rrfpxkbb', gender: 'male',   age: '20-50', store: '' },
-    { id: 6, name: 'Herb Garden Kit',       desc: 'Indoor growing kit with seeds and pots',        price: 750,  category: 'home-decor',   tags: ['garden', 'home', 'nature'],         rating: 4.8, image: 'https://down-th.img.susercontent.com/file/th-11134207-7r98x-lylxol4efpvo75', gender: 'unisex', age: '18-60', store: '' },
-  ];
-  function loadAllGifts() {
-    try {
-      const raw = localStorage.getItem(GIFTS_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        // Schema check: valid data must have 'image' field (new format)
-        if (parsed && parsed.length > 0 && parsed[0].image !== undefined) return parsed;
+          View Recipients`;
+        }
+      } catch (e) {
+        console.error('Error loading counts', e);
       }
-    } catch(e) {}
-    // Stale/empty → reseed with defaults
-    localStorage.setItem(GIFTS_KEY, JSON.stringify(DEFAULT_GIFTS));
-    return [...DEFAULT_GIFTS];
-  }
-  const GIFT_TOTAL = loadAllGifts().length;
-
-  const recKey  = 'giver_recipients_' + user.username;
-  const favKey  = 'giver_favorites_'  + user.username;
-
-  const allGiftsList = loadAllGifts();
-  const allGiftIds   = new Set(allGiftsList.map(g => g.id));
-
-  const recipients = JSON.parse(localStorage.getItem(recKey) || '[]');
-  const rawFavs    = JSON.parse(localStorage.getItem(favKey) || '[]');
-  // Only count favorites that still exist in the gift catalogue
-  const favs       = rawFavs.filter(id => allGiftIds.has(id));
-  // Auto-cleanup: remove stale IDs from localStorage
-  if (favs.length !== rawFavs.length) {
-    localStorage.setItem(favKey, JSON.stringify(favs));
-  }
-
-  // Animate count up
-  function countUp(el, target, duration) {
-    let start = 0;
-    const step = target / (duration / 16);
-    const tick = () => {
-      start = Math.min(start + step, target);
-      el.textContent = Math.round(start);
-      if (start < target) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    countUp(document.getElementById('recipientCount'), recipients.length, 600);
-    countUp(document.getElementById('giftCount'),      GIFT_TOTAL,        600);
-    countUp(document.getElementById('favCount'),       favs.length,       600);
-
-    // Update hero button text
-    const heroBtn = document.getElementById('addRecipientBtn');
-    if (recipients.length > 0) {
-      heroBtn.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        View Recipients`;
     }
-  });
 
-  function logout() {
-    sessionStorage.removeItem('giver_user');
-    window.location.href = 'login_register_page.html';
-  }
-</script>
-</body>
-</html>
+    window.addEventListener('DOMContentLoaded', loadCounts);
 
+    function logout() {
+      sessionStorage.removeItem('giver_user');
+      window.location.href = 'login_register_page.html';
+    }
+  </script>
