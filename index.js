@@ -174,7 +174,99 @@ app.delete('/api/users/:id', async (req, res) => {
 });
 
 // ============================================================================
-// 3.  CATEGORIES  —  CRUD
+// 3.  ADMIN MANAGEMENT
+// ============================================================================
+
+// GET /api/admin/list  — ดึงรายชื่อ admin ทั้งหมด
+app.get('/api/admin/list', async (req, res) => {
+    try {
+        const admins = await User.find({ role: 'admin' })
+            .select('-password')
+            .sort({ createdAt: 1 });
+        res.json(admins);
+    } catch (err) {
+        res.status(500).json({ message: 'ไม่สามารถดึงข้อมูล Admin ได้' });
+    }
+});
+
+// GET /api/admin/requests  — ดึงรายชื่อ user ที่ขอเป็น admin (adminRequest: true)
+app.get('/api/admin/requests', async (req, res) => {
+    try {
+        const requests = await User.find({ role: 'user', adminRequest: true })
+            .select('-password')
+            .sort({ createdAt: -1 });
+        res.json(requests);
+    } catch (err) {
+        res.status(500).json({ message: 'ไม่สามารถดึงข้อมูล Requests ได้' });
+    }
+});
+
+// PUT /api/admin/promote/:id  — อนุมัติให้ user เป็น admin
+app.put('/api/admin/promote/:id', async (req, res) => {
+    try {
+        const updated = await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: { role: 'admin', adminRequest: false } },
+            { new: true }
+        ).select('-password');
+        if (!updated) return res.status(404).json({ message: 'ไม่พบ User' });
+        res.json({ message: 'อนุมัติ Admin สำเร็จ', user: updated });
+    } catch (err) {
+        res.status(500).json({ message: 'เกิดข้อผิดพลาด' });
+    }
+});
+
+// PUT /api/admin/demote/:id  — ลด admin กลับเป็น user (remove admin)
+app.put('/api/admin/demote/:id', async (req, res) => {
+    try {
+        const updated = await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: { role: 'user', adminRequest: false } },
+            { new: true }
+        ).select('-password');
+        if (!updated) return res.status(404).json({ message: 'ไม่พบ User' });
+        res.json({ message: 'ถอด Admin สำเร็จ', user: updated });
+    } catch (err) {
+        res.status(500).json({ message: 'เกิดข้อผิดพลาด' });
+    }
+});
+
+// PUT /api/admin/reject/:id  — ปฏิเสธ request (ล้าง adminRequest flag)
+app.put('/api/admin/reject/:id', async (req, res) => {
+    try {
+        const updated = await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: { adminRequest: false } },
+            { new: true }
+        ).select('-password');
+        if (!updated) return res.status(404).json({ message: 'ไม่พบ User' });
+        res.json({ message: 'ปฏิเสธ Request สำเร็จ', user: updated });
+    } catch (err) {
+        res.status(500).json({ message: 'เกิดข้อผิดพลาด' });
+    }
+});
+
+// POST /api/admin/request  — user ส่งคำขอเป็น admin (ใช้ user id จาก body)
+app.post('/api/admin/request', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!userId) return res.status(400).json({ message: 'userId is required' });
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'ไม่พบ User' });
+        if (user.role === 'admin') return res.status(400).json({ message: 'คุณเป็น Admin อยู่แล้ว' });
+        if (user.adminRequest) return res.status(400).json({ message: 'คุณส่งคำขอไปแล้ว' });
+
+        user.adminRequest = true;
+        await user.save();
+        res.json({ message: 'ส่งคำขอเป็น Admin สำเร็จ' });
+    } catch (err) {
+        res.status(500).json({ message: 'เกิดข้อผิดพลาด' });
+    }
+});
+
+// ============================================================================
+// 4.  CATEGORIES  —  CRUD
 // ============================================================================
 
 const categorySchema = new mongoose.Schema({
