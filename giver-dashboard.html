@@ -359,6 +359,11 @@
                 </a>
             </li>
             <li>
+                <a href="giver-manage-user.html">
+                    <img src="icon-admin.png" style="width:15px;height:15px;object-fit:contain;"> Users
+                </a>
+            </li>
+            <li>
                 <a href="#" onclick="logout()">
                     <img src="icon-logout.png" style="width:15px;height:15px;object-fit:contain;"> Logout
                 </a>
@@ -479,6 +484,27 @@
       </a>
             </div>
 
+            <!-- Total Users -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-label">Total Users</div>
+                        <div class="card-desc">Registered members</div>
+                    </div>
+                    <div class="card-icon">
+                        <img src="icon-admin.png" style="width:18px;height:18px;object-fit:contain;">
+                    </div>
+                </div>
+                <div class="card-number" id="countUsers">—</div>
+                <div class="card-divider"></div>
+                <a href="giver-manage-user.html" class="manage-btn">
+        Manage
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+            </div>
+
         </div>
     </main>
 
@@ -504,12 +530,13 @@
         /* ─── LOAD COUNTS FROM API ─── */
         async function loadDashboard() {
             try {
-                const [giftsRes, catsRes, rulesRes, vocabRes, adminRes] = await Promise.all([
+                const [giftsRes, catsRes, rulesRes, vocabRes, adminRes, usersRes] = await Promise.all([
                     fetch('/api/gifts'),
                     fetch('/api/categories'),
                     fetch('/api/rules'),
                     fetch('/api/vocabulary'),
-                    fetch('/api/admin/list')
+                    fetch('/api/admin/list'),
+                    fetch('/api/users')
                 ]);
 
                 const gifts      = giftsRes.ok   ? await giftsRes.json()   : [];
@@ -517,12 +544,14 @@
                 const rules      = rulesRes.ok   ? await rulesRes.json()   : [];
                 const vocab      = vocabRes.ok   ? await vocabRes.json()   : [];
                 const admins     = adminRes.ok   ? await adminRes.json()   : [];
+                const users      = usersRes.ok   ? await usersRes.json()   : [];
 
                 countUp(document.getElementById('countGifts'),      gifts.length,  600);
                 countUp(document.getElementById('countCategories'), cats.length,   600);
                 countUp(document.getElementById('countRules'),      rules.length,  600);
                 countUp(document.getElementById('countVocab'),      vocab.length,  600);
                 countUp(document.getElementById('countAdmin'),      admins.length, 600);
+                countUp(document.getElementById('countUsers'),      users.length,  600);
             } catch (err) {
                 console.error('Dashboard load error:', err);
             }
