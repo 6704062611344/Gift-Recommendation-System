@@ -5,7 +5,7 @@
  * Connects to the Express/MongoDB backend at /api/auth/*
  */
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = 'https://your-app.onrender.com';
 
 // ─── Tab Switcher ──────────────────────────────────────────────────────────────
 function switchTab(tab) {
@@ -85,7 +85,7 @@ function setLoading(btnId, isLoading, defaultText) {
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 async function handleLogin() {
     clearError('login-error');
-    const email    = document.getElementById('login-email').value.trim().toLowerCase();
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
     const password = document.getElementById('login-password').value;
 
     // Client-side validation
@@ -116,9 +116,9 @@ async function handleLogin() {
 
         // Store session
         sessionStorage.setItem('giver_user', JSON.stringify({
-            name:     data.user.name,
-            email:    data.user.email,
-            role:     data.user.role,
+            name: data.user.name,
+            email: data.user.email,
+            role: data.user.role,
             username: data.user.username
         }));
 
@@ -144,11 +144,11 @@ async function handleLogin() {
 async function handleRegister() {
     clearError('register-error');
 
-    const name     = document.getElementById('reg-name').value.trim();
+    const name = document.getElementById('reg-name').value.trim();
     const username = document.getElementById('reg-username').value.trim();
-    const email    = document.getElementById('reg-email').value.trim().toLowerCase();
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
     const password = document.getElementById('reg-password').value;
-    const confirm  = document.getElementById('reg-confirm').value;
+    const confirm = document.getElementById('reg-confirm').value;
 
     // Client-side validation
     if (!name || !username || !email || !password || !confirm) {
