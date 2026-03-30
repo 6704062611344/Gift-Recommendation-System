@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/12mX4qnmaAxm5W3HHjYsBw3_Fr3ZI4t7fgqMgG1IngBU/export?format=xlsx';
 
 // ชื่อไฟล์ local (วางไว้ในโฟลเดอร์เดียวกัน)
-const LOCAL_FILE = path.join(__dirname, 'data.xlsx');
+const LOCAL_FILE = path.join(__dirname, 'Giver_Gift.xlsx');
 
 async function fetchAndParseExcel(url) {
   // ✅ ถ้ามีไฟล์ local ให้อ่านจาก local แทน (เร็วกว่ามาก)
@@ -86,9 +86,9 @@ async function importCategories(workbook) {
     category_description: (item.category_description || item['รายละเอียด'] || '').toString().trim()
   })).filter(item => item.category_id !== '');
 
-  if(formattedData.length > 0) {
-      await Category.insertMany(formattedData);
-      console.log(`✅ นำเข้า Categories สำเร็จ: ${formattedData.length} รายการ`);
+  if (formattedData.length > 0) {
+    await Category.insertMany(formattedData);
+    console.log(`✅ นำเข้า Categories สำเร็จ: ${formattedData.length} รายการ`);
   }
 }
 
@@ -107,9 +107,9 @@ async function importVocabulary(workbook) {
     tag_type: (item.tag_type || item['ประเภท'] || 'general').toString().trim()
   })).filter(item => item.term !== '' && item.category_id !== '');
 
-  if(formattedData.length > 0) {
-      await Vocabulary.insertMany(formattedData);
-      console.log(`✅ นำเข้า Vocabulary สำเร็จ: ${formattedData.length} รายการ`);
+  if (formattedData.length > 0) {
+    await Vocabulary.insertMany(formattedData);
+    console.log(`✅ นำเข้า Vocabulary สำเร็จ: ${formattedData.length} รายการ`);
   }
 }
 
@@ -128,9 +128,9 @@ async function importRules(workbook) {
     target_category_id: (item.target_category_id || item['รหัสหมวดหมู่เป้าหมาย'] || item['รหัสหมวดหมู่'] || '').toString().trim()
   })).filter(item => item.name !== '' && item.target_category_id !== '');
 
-  if(formattedData.length > 0) {
-      await Rule.insertMany(formattedData);
-      console.log(`✅ นำเข้า Rules สำเร็จ: ${formattedData.length} รายการ`);
+  if (formattedData.length > 0) {
+    await Rule.insertMany(formattedData);
+    console.log(`✅ นำเข้า Rules สำเร็จ: ${formattedData.length} รายการ`);
   }
 }
 
@@ -156,9 +156,9 @@ async function importGifts(workbook) {
     tags: (item.tags || item['แท็ก'] || '').toString().split(',').map(s => s.trim()).filter(s => s !== '')
   })).filter(item => item.gift_id !== '' && item.gift_name !== '');
 
-  if(formattedData.length > 0) {
-      await Gift.insertMany(formattedData);
-      console.log(`✅ นำเข้า Gifts สำเร็จ: ${formattedData.length} รายการ`);
+  if (formattedData.length > 0) {
+    await Gift.insertMany(formattedData);
+    console.log(`✅ นำเข้า Gifts สำเร็จ: ${formattedData.length} รายการ`);
   }
 }
 
@@ -167,11 +167,11 @@ async function runImport() {
   console.log('⏳ กำลังดาวน์โหลดและอ่านไฟล์จาก Google Sheets (ทุกหน้าอัตโนมัติ)...');
   try {
     const workbook = await fetchAndParseExcel(SHEET_URL);
-    if(!workbook) {
-        console.error('❌ ไม่สามารถอ่านข้อมูลชีตได้ ข้อมูลอาจเป็นส่วนตัวเกินไป (ยังไม่ได้แชร์) หรือลิงก์ผิด');
-        process.exit(1);
+    if (!workbook) {
+      console.error('❌ ไม่สามารถอ่านข้อมูลชีตได้ ข้อมูลอาจเป็นส่วนตัวเกินไป (ยังไม่ได้แชร์) หรือลิงก์ผิด');
+      process.exit(1);
     }
-    
+
     console.log('⏳ เริ่มทำการล้างข้อมูลเก่าและนำเข้าข้อมูลใหม่ใส่ MongoDB...');
     await importCategories(workbook);
     await importVocabulary(workbook);
