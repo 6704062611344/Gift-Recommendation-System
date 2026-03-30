@@ -855,22 +855,38 @@
 <script>
   const API_GIFTS = '/api/gifts';
   const API_CATS  = '/api/categories';
+  const API_VOCAB = '/api/vocabulary';
 
   let allGifts = [];
   let allCategories = [];
+  let vocabMap = {}; // tag_id → term
   let editingId = null;
   let deletingId = null;
 
-  // โหลด Categories เข้า select
+  // โหลด Categories เข้า select และโหลด Vocabulary สำหรับ tag lookup
   async function loadCategoryOptions() {
     try {
-      const res = await fetch(API_CATS);
-      const cats = await res.json();
+      const [catRes, vocabRes] = await Promise.all([
+        fetch(API_CATS),
+        fetch(API_VOCAB)
+      ]);
+      const cats = await catRes.json();
+      const vocab = vocabRes.ok ? await vocabRes.json() : [];
       allCategories = cats;
+
+      // สร้าง map: tag_id → term
+      vocabMap = {};
+      vocab.forEach(v => { if (v.tag_id) vocabMap[String(v.tag_id)] = v.term; });
+
       const sel = document.getElementById('giftCategory');
       sel.innerHTML = '<option value="">Select category</option>' +
         cats.map(c => `<option value="${c.category_id}">${c.category_id} — ${c.category_name}</option>`).join('');
     } catch (e) {}
+  }
+
+  // แปลง tag_id → term (fallback คือ tag_id เดิมถ้าไม่พบ)
+  function getTagLabel(tagId) {
+    return vocabMap[String(tagId)] || tagId;
   }
 
   function getCategoryName(id) {
@@ -906,7 +922,7 @@
     }
     empty.style.display = 'none';
     tbody.innerHTML = data.map(g => {
-      const tags = (g.tags || []).slice(0, 2).map(t => `<span class="tag-chip">${t}</span>`).join('');
+      const tags = (g.tags || []).slice(0, 2).map(t => `<span class="tag-chip">${getTagLabel(t)}</span>`).join('');
       const more = (g.tags || []).length > 2 ? `<span class="tag-more">+${g.tags.length - 2}</span>` : '';
       const opts = g.options && g.options.length > 0
         ? g.options.map((o, i) => {
@@ -954,7 +970,10 @@
       (g.gift_name || '').toLowerCase().includes(q) ||
       (g.description || '').toLowerCase().includes(q) ||
       (g.category_id || '').toLowerCase().includes(q) ||
-      (g.tags || []).some(t => t.toLowerCase().includes(q))
+      (g.tags || []).some(t =>
+        t.toLowerCase().includes(q) ||
+        getTagLabel(t).toLowerCase().includes(q)
+      )
     ));
   }
 
