@@ -11,13 +11,12 @@ const Rule = require('./models/Rule');
 const Gift = require('./models/Gift');
 
 // เชื่อมต่อ MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('✅ Connected to MongoDB')).catch(err => {
-  console.error('❌ MongoDB connection error:', err.message);
-  process.exit(1);
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => {
+    console.error('❌ MongoDB connection error:', err.message);
+    process.exit(1);
+  });
 
 // ชื่อไฟล์ local
 const LOCAL_FILE = path.join(__dirname, 'Giver_Gift.xlsx');
@@ -64,6 +63,7 @@ function detectSheets(workbook) {
     const hasGiftId = headers.some(h => h.includes('gift_id') || h.includes('รหัสของขวัญ'));
     const hasGiftName = headers.some(h => h.includes('gift_name') || h.includes('ชื่อของขวัญ'));
     const hasPrice = headers.some(h => h.includes('price') || h.includes('ราคา'));
+    const hasCategory = headers.some(h => h === 'category' || h.includes('category_id') || h.includes('รหัสหมวดหมู่'));
 
     if (!detected.categories && hasCategoryId && hasCategoryName) {
       detected.categories = sheetName;
@@ -71,7 +71,7 @@ function detectSheets(workbook) {
     } else if (!detected.vocabulary && hasTerm && hasCategoryId) {
       detected.vocabulary = sheetName;
       console.log(`    ✅ ระบุ: Vocabulary`);
-    } else if (!detected.rules && (hasPriority || hasCondition) && hasCategoryId) {
+    } else if (!detected.rules && (hasPriority || hasCondition) && hasCategory) {
       detected.rules = sheetName;
       console.log(`    ✅ ระบุ: Rules`);
     } else if (!detected.gifts && (hasGiftId || (hasGiftName && hasPrice))) {
