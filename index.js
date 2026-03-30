@@ -13,6 +13,7 @@ const Vocabulary = require('./models/Vocabulary');
 const Rule       = require('./models/Rule');
 const Recipient  = require('./models/Recipient');
 const Favorite   = require('./models/Favorite');
+const Tag        = require('./models/Tag');
 
 const app = express();
 
@@ -410,7 +411,16 @@ app.post('/api/favorites/toggle', async (req, res) => {
 });
 
 // ============================================================================
-// 10.  RULES
+// 10.  TAGS
+// ============================================================================
+
+app.get('/api/tags', async (req, res) => {
+    try { res.json(await Tag.find().sort({ tags_id: 1 })); }
+    catch (err) { res.status(500).json({ message: 'Error fetching tags' }); }
+});
+
+// ============================================================================
+// 11.  RULES
 // ============================================================================
 
 app.get('/api/rules', async (req, res) => {

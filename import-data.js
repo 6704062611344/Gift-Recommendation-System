@@ -5,10 +5,11 @@ const fs = require('fs');
 const path = require('path');
 
 // Models
-const Category = require('./models/Category');
+const Category   = require('./models/Category');
 const Vocabulary = require('./models/Vocabulary');
-const Rule = require('./models/Rule');
-const Gift = require('./models/Gift');
+const Rule       = require('./models/Rule');
+const Gift       = require('./models/Gift');
+const Tag        = require('./models/Tag');
 
 // เชื่อมต่อ MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -205,8 +206,38 @@ async function importVocabulary(workbook, sheetName) {
 }
 
 // ---------------------------------------------------
-// นำเข้า Rules
+// นำเข้า Tags (tags_detail sheet)
 // ---------------------------------------------------
+async function importTags(workbook, sheetName) {
+  if (!sheetName) { console.log('⚠️  ไม่พบ Sheet สำหรับ Tags'); return; }
+  const ws   = workbook.Sheets[sheetName];
+  const rows = xlsx.utils.sheet_to_json(ws, { header: 1, defval: '' });
+  if (!rows || rows.length < 2) { console.log('⚠️  ไม่มีข้อมูล Tags'); return; }
+
+  const headers   = rows[0].map(h => h.toString().toLowerCase().trim());
+  const idIdx     = headers.findIndex(h => h === 'tags_id'   || h === 'tag_id');
+  const nameIdx   = headers.findIndex(h => h === 'tags_name' || h === 'tag_name' || h === 'tag_detail');
+  const typeIdx   = headers.findIndex(h => h === 'tag_type'  || h === 'type');
+  console.log(`  📋 tags_detail headers: [${headers.join(', ')}]`);
+
+  await Tag.deleteMany({});
+  const formatted = rows.slice(1).map(row => ({
+    tags_id:   idIdx   >= 0 ? String(row[idIdx]).trim()   : '',
+    tags_name: nameIdx >= 0 ? String(row[nameIdx]).trim() : '',
+    tag_type:  typeIdx >= 0 ? String(row[typeIdx]).trim() : 'general'
+  })).filter(d => d.tags_id !== '' && d.tags_name !== '');
+
+  if (formatted.length > 0) {
+    await Tag.insertMany(formatted);
+    console.log(`✅ นำเข้า Tags สำเร็จ: ${formatted.length} รายการ`);
+  } else {
+    console.log('⚠️  ไม่มีข้อมูล Tags');
+  }
+}
+
+// ---------------------------------------------------
+// นำเข้า Rules
+// ----------------------------------------------------
 async function importRules(workbook, sheetName) {
   if (!sheetName) { console.log('⚠️  ไม่พบ Sheet สำหรับ Rules'); return; }
   const data = readSheet(workbook, sheetName);
@@ -355,6 +386,9 @@ async function runImport() {
     await importCategories(workbook, detected.categories);
     await importVocabulary(workbook, detected.vocabulary);
     await importRules(workbook, detected.rules);
+    // import tags_detail
+    const tagsSheet = workbook.SheetNames.find(s => s.toLowerCase().includes('tags_detail') || s.toLowerCase() === 'tags');
+    await importTags(workbook, tagsSheet);
     await importGifts(workbook, detected);
 
     console.log('\n🎉 เสร็จสิ้นกระบวนการนำเข้าข้อมูล!');

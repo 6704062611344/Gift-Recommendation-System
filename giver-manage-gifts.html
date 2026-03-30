@@ -865,22 +865,28 @@
   // โหลด Categories เข้า select และโหลด Vocabulary สำหรับ tag lookup
   async function loadCategoryOptions() {
     try {
-      const [catRes, vocabRes] = await Promise.all([
+      const [catRes, tagsRes] = await Promise.all([
         fetch(API_CATS),
-        fetch(API_VOCAB)
+        fetch(API_TAGS)
       ]);
       const cats = await catRes.json();
-      const vocab = vocabRes.ok ? await vocabRes.json() : [];
+      const tags = tagsRes.ok ? await tagsRes.json() : [];
       allCategories = cats;
 
-      // สร้าง map: tag_id → term
+      // สร้าง map: tags_id → tags_name จาก tags_detail
       vocabMap = {};
-      vocab.forEach(v => { if (v.tag_id) vocabMap[String(v.tag_id)] = v.term; });
+      tags.forEach(t => {
+        const tid = t.tags_id != null ? String(t.tags_id).trim() : '';
+        if (tid !== '') vocabMap[tid] = t.tags_name;
+      });
+      console.log(`[tagMap] entries: ${Object.keys(vocabMap).length}`, vocabMap);
 
       const sel = document.getElementById('giftCategory');
       sel.innerHTML = '<option value="">Select category</option>' +
         cats.map(c => `<option value="${c.category_id}">${c.category_id} — ${c.category_name}</option>`).join('');
-    } catch (e) {}
+    } catch (e) {
+      console.error('[loadCategoryOptions] error:', e);
+    }
   }
 
   // แปลง tag_id → term (fallback คือ tag_id เดิมถ้าไม่พบ)
