@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Gift Recommendation Demo</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Prompt:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary-glow: #60a5fa;
+            --secondary-glow: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Ambient Glow Background Element */
+        .ambient-glow {
+            position: fixed;
+            top: -20vh;
+            left: -20vw;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        .ambient-glow.right {
+            top: auto;
+            bottom: -20vh;
+            left: auto;
+            right: -20vw;
+            background: radial-gradient(circle, rgba(192, 132, 252, 0.15) 0%, transparent 60%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Search Box */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 80%;
+            max-width: 600px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: calc(10% + 10px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        @media (max-width: 768px) {
+            .search-btn {
+                right: calc(10% - 10px);
+                padding: 10px 15px;
+            }
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
+        }
+
+        /* Logic Visualization Panel */
+        .logic-panel {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px dashed var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            display: none;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .logic-step {
+            margin-bottom: 8px;
+        }
+
+        .logic-highlight {
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        /* Grid Results */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .gift-grid.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Card Design */
+        .gift-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .gift-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .gift-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .gift-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gift-title {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .gift-price {
+            color: #34d399;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 0 0 15px 0;
+        }
+
+        .gift-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+
+        .gift-card:hover .view-btn {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Modal Details */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: row;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                flex-direction: column;
+            }
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-img {
+            width: 50%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .modal-img {
+                width: 100%;
+                height: 300px;
+            }
+        }
+
+        .modal-details {
+            padding: 40px;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .modal-details {
+                width: 100%;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 50, 50, 0.8);
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background: rgba(96, 165, 250, 0.2);
+            color: #93c5fd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .shop-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .shop-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--glass-border);
+            border-top: 4px solid var(--primary-glow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow right"></div>
+
+    <div class="container">
+        <header>
+            <h1>AI Gift Recommender</h1>
+            <p class="subtitle">ระบบวิเคราะห์และแนะนำของขวัญอัจฉริยะ (แยกจากระบบเดิม 100%)</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-box"
+                placeholder="บอกเราว่าคุณกำลังหาของขวัญให้คนแบบไหน... (เช่น เล่นเกม, เทค, ผ่อนคลาย)"
+                onkeypress="handleEnter(event)">
+            <button class="search-btn" onclick="fetchRecommendations()">ค้นหาของขวัญ ✨</button>
+        </div>
+
+        <div class="loader" id="loader"></div>
+
+        <!-- System Logic Panel -->
+        <div class="logic-panel" id="logicPanel">
+            <!-- Dynamically populated -->
+        </div>
+
+        <div class="gift-grid" id="giftsContainer">
+            <!-- Results injected here -->
+        </div>
+    </div>
+
+    <!-- Modal for View Details -->
+    <div class="modal" id="giftModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <img class="modal-img" id="modalImg" src="" alt="Gift Image">
+            <div class="modal-details">
+                <div id="modalTagsContainer"></div>
+                <h2 id="modalTitle" style="margin-top: 5px;"></h2>
+                <h3 id="modalPrice" style="color: #34d399; font-size: 1.5rem; margin: 10px 0;"></h3>
+                <p id="modalDesc" style="color: var(--text-muted); line-height: 1.6;"></p>
+                <div style="margin-top: 20px; font-size: 0.9rem; color: #cbd5e1;">
+                    <strong>ร้านค้า:</strong> <span id="modalShop"></span>
+                </div>
+                <a href="#" id="modalLink" class="shop-btn" target="_blank">ไปที่หน้าร้านค้า 🛒</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleEnter(e) {
+            if (e.key === 'Enter') fetchRecommendations();
+        }
+
+        async function fetchRecommendations() {
+            const query = document.getElementById('searchInput').value;
+            if (!query.trim()) return;
+
+            const loader = document.getElementById('loader');
+            const logicPanel = document.getElementById('logicPanel');
+            const giftsContainer = document.getElementById('giftsContainer');
+
+            loader.style.display = 'block';
+            logicPanel.style.display = 'none';
+            giftsContainer.classList.remove('show');
+            giftsContainer.innerHTML = '';
+
+            try {
+                const res = await fetch('/api/demo/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+
+                const data = await res.json();
+
+                loader.style.display = 'none';
+
+                if (data.success) {
+                    // Update Logic Panel
+                    logicPanel.style.display = 'block';
+                    if (data.analysis.matchedRuleName === 'None') {
+                        logicPanel.innerHTML = `<div class="logic-step">😔 ไม่พบคำค้นหาหรือกฎที่ตรงกับข้อมูลในระบบ ลองพิมพ์ว่า "เล่นเกม", "ปวดหลัง", หรือ "แฟชั่น" ดูสิครับ</div>`;
+                        return; // stop execution
+                    }
+
+                    logicPanel.innerHTML = `
+                        <div class="logic-step">🧠 <b>Vocabulary:</b> ตรวจพบคำว่า '<span class="logic-highlight">${data.analysis.extractedKeywords.join(', ')}</span>' ในประโยคของคุณ</div>
+                        <div class="logic-step">🎯 <b>Rule Matched:</b> กฎที่เข้าข่ายคือ <span class="logic-highlight">${data.analysis.matchedRuleName}</span> (Term: ${data.analysis.matchedTerms.join(', ')})</div>
+                        <div class="logic-step">📂 <b>Category:</b> ดึงข้อมูลหมวดหมู่ <span class="logic-highlight">${data.category.category_name}</span></div>
+                        <div class="logic-step">🎁 <b>Gifts:</b> พบของขวัญที่เข้าเกณฑ์จำนวน <span class="logic-highlight">${data.gifts.length}</span> ชิ้น</div>
+                    `;
+
+                    // Render Gifts
+                    data.gifts.forEach(gift => {
+                        const card = document.createElement('div');
+                        card.className = 'gift-card';
+                        card.onclick = () => viewDetails(gift.gift_id);
+                        card.innerHTML = `
+                            <img src="${gift.pic_link}" class="gift-img" alt="${gift.gift_name}">
+                            <div class="gift-content">
+                                <h3 class="gift-title">${gift.gift_name}</h3>
+                                <div class="gift-price">${gift.price}</div>
+                                <div class="gift-desc">${gift.description}</div>
+                                <div class="view-btn">View Details ✨</div>
+                            </div>
+                        `;
+                        giftsContainer.appendChild(card);
+                    });
+
+                    setTimeout(() => giftsContainer.classList.add('show'), 100);
+                }
+
+            } catch (err) {
+                console.error(err);
+                loader.style.display = 'none';
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+            }
+        }
+
+        async function viewDetails(giftId) {
+            try {
+                // Technically we could pass the object, but we fetch from API to demonstrate "view details" logic
+                const res = await fetch(`/api/demo/gift/${giftId}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    const gift = data.gift;
+                    document.getElementById('modalImg').src = gift.pic_link;
+                    document.getElementById('modalTitle').textContent = gift.gift_name;
+                    document.getElementById('modalPrice').textContent = gift.price;
+                    document.getElementById('modalDesc').textContent = gift.description;
+                    document.getElementById('modalShop').textContent = gift.shop_name;
+                    document.getElementById('modalLink').href = gift.shop_link;
+
+                    // Render tags
+                    const tagsBox = document.getElementById('modalTagsContainer');
+                    tagsBox.innerHTML = '';
+                    if (gift.category_id) {
+                        tagsBox.innerHTML += `<span class="tag-pill">Ref Category: ${gift.category_id}</span>`;
+                    }
+                    if (gift.target_gender_id) {
+                        const genders = { '1': 'Male', '2': 'Female', '3': 'Unisex' };
+                        tagsBox.innerHTML += `<span class="tag-pill">Gender: ${genders[gift.target_gender_id] || 'All'}</span>`;
+                    }
+
+                    const modal = document.getElementById('giftModal');
+                    modal.classList.add('active');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('giftModal').classList.remove('active');
+        }
+
+        // Close modal if click outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('giftModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+
+</html>
