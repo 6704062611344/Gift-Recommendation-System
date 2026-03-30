@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Giver — Login & Register</title>
     <link rel="icon" href="icon/surprise (1).png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
     <style>
         *,
         *::before,
@@ -15,8 +17,8 @@
             margin: 0;
             padding: 0;
         }
-        
-         :root {
+
+        :root {
             --col-salmon: #C65D51;
             --col-rose: #D4867A;
             --col-white: #FFFFFF;
@@ -35,11 +37,11 @@
             --accent: var(--col-salmon);
             --gold: var(--col-beige1);
         }
-        
+
         html {
             scroll-behavior: smooth;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
@@ -48,8 +50,9 @@
             display: flex;
             flex-direction: column;
         }
+
         /* ─── NAVBAR ─── */
-        
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -61,7 +64,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .nav-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.45rem;
@@ -72,7 +75,7 @@
             gap: 8px;
             text-decoration: none;
         }
-        
+
         .nav-logo-icon {
             width: 28px;
             height: 28px;
@@ -83,8 +86,9 @@
             justify-content: center;
             font-size: .85rem;
         }
+
         /* ─── MAIN CONTAINER ─── */
-        
+
         main {
             flex: 1;
             display: flex;
@@ -93,7 +97,7 @@
             padding: 60px 20px;
             background: var(--bg);
         }
-        
+
         .auth-card {
             background: var(--col-white);
             border: 1px solid rgba(69, 54, 49, .1);
@@ -104,13 +108,14 @@
             box-shadow: 0 4px 32px rgba(69, 54, 49, .07);
             animation: fadeUp .6s ease both;
         }
+
         /* ─── CARD HEADER ─── */
-        
+
         .card-header {
             text-align: center;
             margin-bottom: 36px;
         }
-        
+
         .brand-icon {
             width: 52px;
             height: 52px;
@@ -122,7 +127,7 @@
             margin: 0 auto 14px;
             font-size: 1.4rem;
         }
-        
+
         .card-header h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.6rem;
@@ -130,7 +135,7 @@
             color: var(--text-dark);
             margin-bottom: 4px;
         }
-        
+
         .card-header .subtitle {
             font-size: .72rem;
             letter-spacing: .1em;
@@ -138,21 +143,22 @@
             color: var(--accent);
             font-weight: 500;
         }
-        
+
         .card-header .tagline {
             font-size: .8rem;
             color: var(--text);
             margin-top: 6px;
             font-weight: 300;
         }
+
         /* ─── TABS ─── */
-        
+
         .tabs {
             display: flex;
             border-bottom: 1.5px solid rgba(69, 54, 49, .12);
             margin-bottom: 32px;
         }
-        
+
         .tab-btn {
             flex: 1;
             background: none;
@@ -167,7 +173,7 @@
             letter-spacing: .04em;
             transition: color .2s;
         }
-        
+
         .tab-btn::after {
             content: '';
             position: absolute;
@@ -179,30 +185,32 @@
             transform: scaleX(0);
             transition: transform .25s ease;
         }
-        
+
         .tab-btn.active {
             color: var(--text-dark);
         }
-        
+
         .tab-btn.active::after {
             transform: scaleX(1);
         }
+
         /* ─── FORM PANELS ─── */
-        
+
         .panel {
             display: none;
         }
-        
+
         .panel.active {
             display: block;
             animation: fadeUp .35s ease both;
         }
+
         /* ─── FORM ELEMENTS ─── */
-        
+
         .form-group {
             margin-bottom: 18px;
         }
-        
+
         .form-group label {
             display: block;
             font-size: .74rem;
@@ -211,7 +219,7 @@
             margin-bottom: 7px;
             letter-spacing: .03em;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 10px 14px;
@@ -224,19 +232,20 @@
             transition: border-color .2s, box-shadow .2s;
             outline: none;
         }
-        
+
         .form-group input::placeholder {
             color: rgba(107, 93, 82, .38);
             font-weight: 300;
         }
-        
+
         .form-group input:focus {
             border-color: var(--col-brown2);
             box-shadow: 0 0 0 3px rgba(107, 93, 82, .08);
             background: #fff;
         }
+
         /* ─── HELPER ROW ─── */
-        
+
         .form-helper {
             display: flex;
             justify-content: space-between;
@@ -244,7 +253,7 @@
             margin-top: -8px;
             margin-bottom: 18px;
         }
-        
+
         .form-helper label {
             display: flex;
             align-items: center;
@@ -254,14 +263,14 @@
             cursor: pointer;
             font-weight: 300;
         }
-        
+
         .form-helper label input[type="checkbox"] {
             width: 13px;
             height: 13px;
             accent-color: var(--text-dark);
             cursor: pointer;
         }
-        
+
         .forgot-link {
             font-size: .75rem;
             color: var(--col-brown2);
@@ -273,12 +282,13 @@
             border: none;
             font-family: 'Inter', sans-serif;
         }
-        
+
         .forgot-link:hover {
             color: var(--accent);
         }
+
         /* ─── SUBMIT BUTTON ─── */
-        
+
         .btn-submit {
             width: 100%;
             padding: 12px;
@@ -294,17 +304,18 @@
             transition: background .2s, transform .15s;
             margin-top: 8px;
         }
-        
+
         .btn-submit:hover {
             background: var(--col-brown2);
             transform: translateY(-1px);
         }
-        
+
         .btn-submit:active {
             transform: translateY(0);
         }
+
         /* ─── DIVIDER ─── */
-        
+
         .divider {
             display: flex;
             align-items: center;
@@ -315,7 +326,7 @@
             letter-spacing: .08em;
             text-transform: uppercase;
         }
-        
+
         .divider::before,
         .divider::after {
             content: '';
@@ -323,8 +334,9 @@
             height: 1px;
             background: rgba(69, 54, 49, .1);
         }
+
         /* ─── SWITCH LINK ─── */
-        
+
         .switch-hint {
             text-align: center;
             margin-top: 22px;
@@ -332,7 +344,7 @@
             color: var(--text);
             font-weight: 300;
         }
-        
+
         .switch-hint button {
             background: none;
             border: none;
@@ -344,12 +356,13 @@
             text-decoration: underline;
             text-underline-offset: 2px;
         }
-        
+
         .switch-hint button:hover {
             color: var(--accent);
         }
+
         /* ─── FOOTER ─── */
-        
+
         footer {
             background: var(--col-cream);
             border-top: 1px solid rgba(69, 54, 49, .1);
@@ -361,7 +374,7 @@
             color: var(--col-brown2);
             font-family: 'Inter', sans-serif;
         }
-        
+
         .footer-logo {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.05rem;
@@ -371,7 +384,7 @@
             align-items: center;
             gap: 6px;
         }
-        
+
         .footer-logo-icon {
             width: 18px;
             height: 18px;
@@ -382,35 +395,51 @@
             justify-content: center;
             font-size: .6rem;
         }
+
         /* ─── ANIMATION ─── */
-        
+
         @keyframes fadeUp {
             from {
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
         /* ─── PASSWORD STRENGTH ─── */
         .strength-bar-wrap {
             display: flex;
             gap: 4px;
             margin-top: 8px;
         }
+
         .strength-bar-wrap .bar {
             flex: 1;
             height: 3px;
             border-radius: 999px;
-            background: rgba(69,54,49,.12);
+            background: rgba(69, 54, 49, .12);
             transition: background .25s ease;
         }
-        .strength-bar-wrap .bar.weak   { background: #e74c3c; }
-        .strength-bar-wrap .bar.fair   { background: #e67e22; }
-        .strength-bar-wrap .bar.good   { background: #f1c40f; }
-        .strength-bar-wrap .bar.strong { background: #27ae60; }
+
+        .strength-bar-wrap .bar.weak {
+            background: #e74c3c;
+        }
+
+        .strength-bar-wrap .bar.fair {
+            background: #e67e22;
+        }
+
+        .strength-bar-wrap .bar.good {
+            background: #f1c40f;
+        }
+
+        .strength-bar-wrap .bar.strong {
+            background: #27ae60;
+        }
 
         .strength-label {
             font-size: .7rem;
@@ -428,27 +457,46 @@
             flex-direction: column;
             gap: 3px;
         }
+
         .pw-reqs li {
             font-size: .72rem;
-            color: rgba(107,93,82,.5);
+            color: rgba(107, 93, 82, .5);
             display: flex;
             align-items: center;
             gap: 5px;
             transition: color .2s;
         }
-        .pw-reqs li.met { color: #27ae60; }
+
+        .pw-reqs li.met {
+            color: #27ae60;
+        }
+
         .pw-reqs li::before {
             content: '○';
             font-size: .65rem;
             flex-shrink: 0;
         }
-        .pw-reqs li.met::before { content: '●'; }
+
+        .pw-reqs li.met::before {
+            content: '●';
+        }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 520px) {
-            nav { padding: 16px 20px; }
-            .auth-card { padding: 36px 28px 32px; }
-            footer { padding: 16px 20px; flex-direction: column; gap: 8px; text-align: center; }
+            nav {
+                padding: 16px 20px;
+            }
+
+            .auth-card {
+                padding: 36px 28px 32px;
+            }
+
+            footer {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -458,7 +506,7 @@
     <!-- NAVBAR -->
     <nav>
         <a href="main_page.html" class="nav-logo">
-            <img src="icon/surprise (1).png" style="width:22px;height:22px;object-fit:contain;"> Giver
+            <img src="icon\surprise (1).png" style="width:22px;height:22px;object-fit:contain;"> Giver
         </a>
         <div style="font-size:.72rem;color:var(--col-brown2);letter-spacing:.06em;text-transform:uppercase;">
             Gift Recommendation System
@@ -471,7 +519,8 @@
 
             <!-- Card Header -->
             <div class="card-header">
-                <div class="brand-icon"><img src="icon/surprise (1).png" style="width:28px;height:28px;object-fit:contain;"></div>
+                <div class="brand-icon"><img src="icon\surprise (1).png"
+                        style="width:28px;height:28px;object-fit:contain;"></div>
                 <h1>Giver</h1>
                 <div class="subtitle">Gift Recommendation System</div>
                 <div class="tagline">Find the perfect gift for everyone you care about.</div>
@@ -502,8 +551,8 @@
 
                 <div class="form-helper">
                     <label>
-            <input type="checkbox" /> Remember me
-          </label>
+                        <input type="checkbox" /> Remember me
+                    </label>
                     <button class="forgot-link">Forgot password?</button>
                 </div>
 
@@ -532,7 +581,8 @@
 
                 <div class="form-group">
                     <label for="reg-password">Password</label>
-                    <input type="password" id="reg-password" placeholder="Create a password" oninput="checkPasswordStrength(this.value)" />
+                    <input type="password" id="reg-password" placeholder="Create a password"
+                        oninput="checkPasswordStrength(this.value)" />
                     <!-- Strength bar -->
                     <div class="strength-bar-wrap">
                         <span class="bar" id="pw-bar-1"></span>
@@ -569,7 +619,8 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-logo">
-            <div class="footer-logo-icon"><img src="icon/surprise (1).png" style="width:12px;height:12px;object-fit:contain;"></div>
+            <div class="footer-logo-icon"><img src="icon\surprise (1).png"
+                    style="width:12px;height:12px;object-fit:contain;"></div>
             Giver
         </div>
         <span>© 2026 Giver — Gift Recommendation System</span>
