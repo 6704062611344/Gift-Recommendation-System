@@ -1,10 +1,10 @@
+require('dotenv').config(); // 1. โหลดค่าจาก .env ก่อนเพื่อน
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bcrypt = require('bcryptjs'); // เพิ่มการเข้ารหัสรหัสผ่าน
-const jwt = require('jsonwebtoken'); // สำหรับระบบ Login ที่ปลอดภัย
-const connectDB = require('./db');
-require('dotenv').config();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const connectDB = require('./db'); // 2. ค่อยโหลดตัวเชื่อม DB
 
 const app = express();
 
