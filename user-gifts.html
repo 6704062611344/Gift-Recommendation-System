@@ -260,11 +260,11 @@
       <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver"> Giver
     </a>
     <ul class="nav-links">
-      <li><a href="user-home.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg> Home</a></li>
-      <li><a href="user-recipients.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Recipients</a></li>
-      <li><a href="user-gifts.html" class="active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M19 12v9H5v-9"/><path d="M12 8V3m0 0L9 6m3-3 3 3"/></svg> Gifts</a></li>
-      <li><a href="user-favorites.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Favorites</a></li>
-      <li><a href="#" onclick="logout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</a></li>
+      <li><a href="user-home.html"><img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Home</a></li>
+      <li><a href="user-recipients.html"><img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Recipients</a></li>
+      <li><a href="user-gifts.html" class="active"><img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Gifts</a></li>
+      <li><a href="user-favorites.html"><img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Favorites</a></li>
+      <li><a href="#" onclick="logout()"><img src="icon/star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon"> Logout</a></li>
     </ul>
   </nav>
 
@@ -276,9 +276,7 @@
       </div>
     </div>
     <div class="search-wrap">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
+      <img src="icon/package (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
       <input type="text" class="search-input" id="searchInput" placeholder="Search gifts..." oninput="applyFilters()">
     </div>
     <div class="filter-bar" id="filterBar">
@@ -305,9 +303,7 @@
   </div>
 
   <div class="toast" id="toast">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <polyline points="20 6 9 17 4 12"/>
-    </svg>
+    <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
     <span id="toastMsg"></span>
   </div>
 
@@ -423,11 +419,7 @@
             <span class="gift-category-badge">${escHtml(getCategoryName(cat))}</span>
             <button class="fav-btn ${fav ? 'active' : ''}" id="fav-${id}" title="Favorite"
                     onclick="toggleFav('${id}', this)">
-              <svg width="16" height="16" viewBox="0 0 24 24"
-                   fill="${fav ? '#e74c3c' : 'none'}"
-                   stroke="${fav ? '#e74c3c' : '#7a7268'}" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
+              <img src="icon/star (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
             </button>
           </div>
           <div class="gift-info">
