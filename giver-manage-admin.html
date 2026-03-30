@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giver — Manage Admin</title>
-  <link rel="icon" href="icon\\surprise (1).png" type="image/png">
+  <link rel="icon" href="icon/surprise (1).png" type="image/png">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
     rel="stylesheet">
@@ -605,40 +605,40 @@
   <!-- NAV -->
   <nav>
     <a class="logo" href="giver-dashboard.html">
-      <img src="icon\surprise (1).png" style="width:32px;height:32px;object-fit:contain;">
+      <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;">
       Giver
     </a>
     <ul class="nav-links">
       <li><a href="giver-dashboard.html">
-          <img src="icon\home (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;">
           Dashboard
         </a></li>
       <li><a href="giver-manage-gifts.html">
-          <img src="icon\package (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;">
           Gifts
         </a></li>
       <li><a href="giver-manage-categories.html">
-          <img src="icon\categories.png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;">
           Categories
         </a></li>
       <li><a href="giver-manage-rules.html">
-          <img src="icon\setting (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/setting (1).png" style="width:15px;height:15px;object-fit:contain;">
           Rules
         </a></li>
       <li><a href="giver-manage-vocabulary.html">
-          <img src="icon\book.png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;">
           Vocabulary
         </a></li>
       <li><a href="giver-manage-admin.html" class="active">
-          <img src="icon\group (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
           Admin
         </a></li>
       <li><a href="giver-manage-user.html">
-          <img src="icon\group (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
           Users
         </a></li>
       <li><a href="#" onclick="logout()">
-          <img src="icon\enter (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;">
           Logout
         </a></li>
     </ul>
@@ -653,7 +653,7 @@
 
     <!-- SEARCH -->
     <div class="search-wrap">
-      <img src="icon\enter (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+      <img src="icon/enter (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
       <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="applySearch()">
     </div>
 
@@ -675,7 +675,7 @@
         <tbody id="adminTableBody"></tbody>
       </table>
       <div class="empty-state" id="adminEmpty" style="display:none;">
-        <img src="icon\enter (1).png" style="width:36px;height:36px;object-fit:contain;" alt="icon">
+        <img src="icon/enter (1).png" style="width:36px;height:36px;object-fit:contain;" alt="icon">
         <p>No admins found.</p>
       </div>
     </div>
@@ -698,7 +698,7 @@
         <tbody id="reqTableBody"></tbody>
       </table>
       <div class="empty-state" id="reqEmpty" style="display:none;">
-        <img src="icon\surprise (1).png" style="width:36px;height:36px;object-fit:contain;" alt="icon">
+        <img src="icon/surprise (1).png" style="width:36px;height:36px;object-fit:contain;" alt="icon">
         <p>No pending requests.</p>
       </div>
     </div>
@@ -709,7 +709,7 @@
     <div class="modal">
       <div class="modal-del-body">
         <div class="del-icon-wrap danger">
-          <img src="icon\surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
         </div>
         <h3>Remove Admin</h3>
         <p>Are you sure you want to remove <strong id="deleteAdminName"></strong>?<br>They will lose admin access.</p>
@@ -726,7 +726,7 @@
     <div class="modal">
       <div class="modal-del-body">
         <div class="del-icon-wrap danger">
-          <img src="icon\surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
         </div>
         <h3>Reject Request</h3>
         <p>Are you sure you want to reject <strong id="rejectReqName"></strong>?<br>This will deny their admin access.
@@ -744,7 +744,7 @@
     <div class="modal">
       <div class="modal-del-body">
         <div class="del-icon-wrap success">
-          <img src="icon\surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
         </div>
         <h3>Approve Request</h3>
         <p>Grant admin access to <strong id="approveReqName"></strong>?<br>They will be able to manage the system.</p>
@@ -758,7 +758,7 @@
 
   <!-- TOAST -->
   <div class="toast" id="toast">
-    <img src="icon\surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
     <span id="toastMsg"></span>
   </div>
 
@@ -838,7 +838,7 @@
         <td>
           <div class="actions-cell">
             <button class="action-btn del" title="Remove admin" onclick="openDeleteAdminModal('${a._id}', '${escHtml(a.name)}')">
-              <img src="icon\enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+              <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
             </button>
           </div>
         </td>
@@ -875,11 +875,11 @@
         <td>
           <div class="actions-cell">
             <button class="action-btn-text approve" onclick="openApproveModal('${r._id}', '${escHtml(r.name)}')">
-              <img src="icon\surprise (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+              <img src="icon/surprise (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
               <span>Approve</span>
             </button>
             <button class="action-btn-text reject" onclick="openRejectModal('${r._id}', '${escHtml(r.name)}')">
-              <img src="icon\surprise (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
+              <img src="icon/surprise (1).png" style="width:13px;height:13px;object-fit:contain;" alt="icon">
               <span>Reject</span>
             </button>
           </div>

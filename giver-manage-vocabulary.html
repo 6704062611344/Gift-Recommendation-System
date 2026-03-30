@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giver — Manage Vocabulary</title>
   <meta name="description" content="Define terms and synonyms for better gift recommendation matching.">
-  <link rel="icon" href="icon\\surprise (1).png" type="image/png">
+  <link rel="icon" href="icon/surprise (1).png" type="image/png">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
     rel="stylesheet">
@@ -734,40 +734,40 @@
   <!-- NAV -->
   <nav>
     <a class="logo" href="giver-dashboard.html">
-      <img src="icon\surprise (1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver logo">
+      <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver logo">
       Giver
     </a>
     <ul class="nav-links">
       <li><a href="giver-dashboard.html">
-          <img src="icon\home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Dashboard
         </a></li>
       <li><a href="giver-manage-gifts.html">
-          <img src="icon\package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Gifts
         </a></li>
       <li><a href="giver-manage-categories.html">
-          <img src="icon\categories.png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Categories
         </a></li>
       <li><a href="giver-manage-rules.html">
-          <img src="icon\setting (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/setting (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Rules
         </a></li>
       <li><a href="giver-manage-vocabulary.html" class="active">
-          <img src="icon\book.png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Vocabulary
         </a></li>
       <li><a href="giver-manage-admin.html">
-          <img src="icon\group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Admin
         </a></li>
       <li><a href="giver-manage-user.html">
-          <img src="icon\group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Users
         </a></li>
       <li><a href="#" onclick="logout()">
-          <img src="icon\enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Logout
         </a></li>
     </ul>
@@ -781,14 +781,14 @@
         <p>Define terms and synonyms for better matching</p>
       </div>
       <button class="add-btn" id="addTermBtn" onclick="openAddModal()">
-        <img src="icon\surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        <img src="icon/surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
         + Add Term
       </button>
     </div>
 
     <!-- SEARCH -->
     <div class="search-wrap">
-      <img src="icon\surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+      <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
       <input type="text" class="search-input" id="searchInput" placeholder="Search" oninput="filterVocab()">
     </div>
 
@@ -818,7 +818,7 @@
       <div class="modal-header">
         <h3 id="modalTitle">Add Term</h3>
         <button class="modal-close" onclick="closeModal('termModal')">
-          <img src="icon\surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+          <img src="icon/surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
         </button>
       </div>
       <div class="modal-body">
@@ -851,7 +851,7 @@
     <div class="modal">
       <div class="modal-del-body">
         <div class="del-icon-wrap">
-          <img src="icon\surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
         </div>
         <h3>Delete Term</h3>
         <p>Are you sure you want to delete <strong id="deleteTermName"></strong>?<br>This action cannot be undone.</p>
@@ -865,7 +865,7 @@
 
   <!-- TOAST -->
   <div class="toast" id="toast">
-    <img src="icon\surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
     <span id="toastMsg"></span>
   </div>
 
@@ -908,7 +908,7 @@
         tbody.innerHTML = `
         <tr class="empty-row">
           <td colspan="4">
-            <img src="icon\surprise (1).png" style="width:40px;height:40px;object-fit:contain;" alt="icon">
+            <img src="icon/surprise (1).png" style="width:40px;height:40px;object-fit:contain;" alt="icon">
             <p>No vocabulary terms found.</p>
           </td>
         </tr>`;
@@ -1033,7 +1033,7 @@
         const pill = document.createElement('span');
         pill.className = 'tag-pill';
         pill.innerHTML = `${escHtml(syn)}<button type="button" onclick="removeSynonym(${i})" aria-label="Remove ${escHtml(syn)}">
-        <img src="icon\surprise (1).png" style="width:10px;height:10px;object-fit:contain;" alt="icon">
+        <img src="icon/surprise (1).png" style="width:10px;height:10px;object-fit:contain;" alt="icon">
       </button>`;
         wrap.insertBefore(pill, input);
       });

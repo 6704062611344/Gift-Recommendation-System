@@ -7,7 +7,7 @@
   <title>Giver — Home</title>
   <meta name="description"
     content="Find the perfect gift with personalized recommendations based on recipient preferences, interests, and occasions.">
-  <link rel="icon" href="icon\\surprise (1).png" type="image/png">
+  <link rel="icon" href="icon/surprise (1).png" type="image/png">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet">
@@ -361,24 +361,24 @@
   <!-- NAV -->
   <nav>
     <a class="logo" href="user-home.html">
-      <img src="icon\surprise (1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver logo">
+      <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;" alt="Giver logo">
       Giver
     </a>
     <ul class="nav-links">
       <li><a href="user-home.html" class="active">
-          <img src="icon\home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Home">
+          <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Home">
           Home
         </a></li>
       <li><a href="user-recipients.html">
-          <img src="icon\group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Recipients">
+          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Recipients">
           Recipients
         </a></li>
       <li><a href="user-favorites.html">
-          <img src="icon\star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Favorites">
+          <img src="icon/star (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Favorites">
           Favorites
         </a></li>
       <li><a href="#" onclick="logout()">
-          <img src="icon\enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Logout">
+          <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="Logout">
           Logout
         </a></li>
     </ul>
@@ -388,12 +388,12 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-icon">
-        <img src="icon\surprise (1).png" alt="Gift">
+        <img src="icon/surprise (1).png" alt="Gift">
       </div>
       <h1>Find the <span class="highlight">Perfect Gift</span></h1>
       <p>Discover personalized gift recommendations based on recipient preferences, interests, and occasions.</p>
       <a href="user-recipients.html" class="hero-btn" id="addRecipientBtn">
-        <img src="icon\group (1).png" style="width:18px;height:18px;object-fit:contain; filter: brightness(0) invert(1);" alt="Recipients">
+        <img src="icon/group (1).png" style="width:18px;height:18px;object-fit:contain; filter: brightness(0) invert(1);" alt="Recipients">
         Add Your First Recipient
       </a>
     </section>
@@ -409,14 +409,14 @@
             <div class="card-desc">Manage gift recipients</div>
           </div>
           <div class="card-icon">
-            <img src="icon\group (1).png" style="width:18px;height:18px;object-fit:contain;" alt="Recipients">
+            <img src="icon/group (1).png" style="width:18px;height:18px;object-fit:contain;" alt="Recipients">
           </div>
         </div>
         <div class="card-number" id="recipientCount">0</div>
         <div class="card-divider"></div>
         <a href="user-recipients.html" class="card-btn">
           View All
-          <img src="icon\right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="Arrow">
+          <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="Arrow">
         </a>
       </div>
 
@@ -428,14 +428,14 @@
             <div class="card-desc">Available gift options</div>
           </div>
           <div class="card-icon">
-            <img src="icon\package (1).png" style="width:18px;height:18px;object-fit:contain;" alt="Gifts">
+            <img src="icon/package (1).png" style="width:18px;height:18px;object-fit:contain;" alt="Gifts">
           </div>
         </div>
         <div class="card-number" id="giftCount">6</div>
         <div class="card-divider"></div>
         <a href="user-gifts.html" class="card-btn">
           Browse
-          <img src="icon\right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="Arrow">
+          <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="Arrow">
         </a>
       </div>
 
@@ -447,14 +447,14 @@
             <div class="card-desc">Your saved gifts</div>
           </div>
           <div class="card-icon">
-            <img src="icon\star (1).png" style="width:18px;height:18px;object-fit:contain;" alt="Favorites">
+            <img src="icon/star (1).png" style="width:18px;height:18px;object-fit:contain;" alt="Favorites">
           </div>
         </div>
         <div class="card-number" id="favCount">0</div>
         <div class="card-divider"></div>
         <a href="user-favorites.html" class="card-btn">
           View All
-          <img src="icon\right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="Arrow">
+          <img src="icon/right-arrow.png" style="width:13px;height:13px;object-fit:contain;" alt="Arrow">
         </a>
       </div>
 
@@ -502,7 +502,7 @@
         const heroBtn = document.getElementById('addRecipientBtn');
         if (recipients.length > 0) {
           heroBtn.innerHTML = `
-          <img src="icon\group (1).png" style="width:18px;height:18px;object-fit:contain; filter: brightness(0) invert(1);" alt="Recipients">
+          <img src="icon/group (1).png" style="width:18px;height:18px;object-fit:contain; filter: brightness(0) invert(1);" alt="Recipients">
           View Recipients`;
         }
       } catch (e) {
