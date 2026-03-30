@@ -24,13 +24,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ─── Quick Fill Demo Credentials ──────────────────────────────────────────────
-function quickFill(email, password) {
-    document.getElementById('login-email').value = email;
-    document.getElementById('login-password').value = password;
-    document.getElementById('login-email').focus();
-}
-
 // ─── Error Helpers ────────────────────────────────────────────────────────────
 function showError(elementId, msg) {
     let el = document.getElementById(elementId);
