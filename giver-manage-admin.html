@@ -1,724 +1,854 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giver — Manage Admin</title>
-<link rel="icon" href="surprise(1).png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ece4;
-    --card-bg: #faf8f4;
-    --border: #e2ddd5;
-    --text-primary: #1c1a17;
-    --text-secondary: #7a7268;
-    --accent: #b8965a;
-    --accent-light: #e8dcc8;
-    --accent-hover: #9a7a44;
-    --btn-bg: #ede8df;
-    --btn-hover: #e0d9cd;
-    --shadow: 0 1px 3px rgba(28,26,23,0.06), 0 4px 16px rgba(28,26,23,0.04);
-    --danger: #c0392b;
-    --danger-bg: #fdf0ee;
-    --success: #27ae60;
-    --success-bg: #eafaf1;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giver — Manage Admin</title>
+  <link rel="icon" href="surprise(1).png" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ece4;
+      --card-bg: #faf8f4;
+      --border: #e2ddd5;
+      --text-primary: #1c1a17;
+      --text-secondary: #7a7268;
+      --accent: #b8965a;
+      --accent-light: #e8dcc8;
+      --accent-hover: #9a7a44;
+      --btn-bg: #ede8df;
+      --btn-hover: #e0d9cd;
+      --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
+      --danger: #c0392b;
+      --danger-bg: #fdf0ee;
+      --success: #27ae60;
+      --success-bg: #eafaf1;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+    }
 
-  /* NAV */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 200;
-  }
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    list-style: none;
-  }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
 
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.18s ease;
-  }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
 
-  .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
-  .nav-links a.active { color: var(--accent); font-weight: 500; }
-  .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
 
-  /* MAIN */
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 56px 48px 80px;
-  }
+    .nav-links a.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
 
-  /* PAGE HEADER */
-  .page-header {
-    margin-bottom: 32px;
-    animation: fadeUp 0.4s ease both;
-  }
+    .nav-links li:last-child a:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
 
-  .page-header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-  }
+    /* MAIN */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
 
-  .page-header p {
-    color: var(--text-secondary);
-    margin-top: 6px;
-    font-size: 15px;
-    font-weight: 300;
-  }
+    /* PAGE HEADER */
+    .page-header {
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s ease both;
+    }
 
-  /* SEARCH */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 28px;
-    animation: fadeUp 0.4s ease 0.05s both;
-  }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
 
-  .search-wrap svg {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    pointer-events: none;
-  }
+    .page-header p {
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 300;
+    }
 
-  .search-input {
-    width: 100%;
-    padding: 13px 16px 13px 44px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
-  }
+    /* SEARCH */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 28px;
+      animation: fadeUp 0.4s ease 0.05s both;
+    }
 
-  .search-input::placeholder { color: var(--text-secondary); }
-  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,150,90,0.12); }
+    .search-wrap svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
 
-  /* TABLE CARD */
-  .table-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    margin-bottom: 28px;
-    animation: fadeUp 0.4s ease 0.1s both;
-  }
+    .search-input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
 
-  .table-card:nth-child(2) { animation-delay: 0.15s; }
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
 
-  .table-card-header {
-    padding: 24px 32px 18px;
-    border-bottom: 1px solid var(--border);
-  }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
 
-  .table-card-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 500;
-  }
+    /* TABLE CARD */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 28px;
+      animation: fadeUp 0.4s ease 0.1s both;
+    }
 
-  .table-card-header p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    margin-top: 3px;
-  }
+    .table-card:nth-child(2) {
+      animation-delay: 0.15s;
+    }
 
-  /* TABLE */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+    .table-card-header {
+      padding: 24px 32px 18px;
+      border-bottom: 1px solid var(--border);
+    }
 
-  thead th {
-    padding: 12px 16px;
-    text-align: left;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    background: #f5f2ed;
-    border-bottom: 1px solid var(--border);
-  }
+    .table-card-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 500;
+    }
 
-  thead th:first-child { padding-left: 32px; }
-  thead th:last-child { padding-right: 32px; text-align: right; }
+    .table-card-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-top: 3px;
+    }
 
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s ease;
-  }
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #f7f4ef; }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: #f5f2ed;
+      border-bottom: 1px solid var(--border);
+    }
 
-  tbody td {
-    padding: 16px 16px;
-    font-size: 14px;
-    vertical-align: middle;
-  }
+    thead th:first-child {
+      padding-left: 32px;
+    }
 
-  tbody td:first-child { padding-left: 32px; }
-  tbody td:last-child { padding-right: 32px; }
+    thead th:last-child {
+      padding-right: 32px;
+      text-align: right;
+    }
 
-  /* PRIORITY BADGE */
-  .priority-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background: var(--accent-light);
-    border: 1px solid #ddd0b8;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--accent-hover);
-  }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
 
-  /* STATUS BADGE */
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 400;
-  }
+    tbody tr:last-child {
+      border-bottom: none;
+    }
 
-  .status-badge.pending {
-    background: #fff8ec;
-    border: 1px solid #f0d98a;
-    color: #a07c10;
-  }
+    tbody tr:hover {
+      background: #f7f4ef;
+    }
 
-  .status-badge.active {
-    background: var(--success-bg);
-    border: 1px solid #a8e6c1;
-    color: var(--success);
-  }
+    tbody td {
+      padding: 16px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
 
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-  }
+    tbody td:first-child {
+      padding-left: 32px;
+    }
 
-  /* ACTIONS CELL */
-  .actions-cell {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
-  }
+    tbody td:last-child {
+      padding-right: 32px;
+    }
 
-  .action-btn {
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    color: var(--text-secondary);
-  }
+    /* PRIORITY BADGE */
+    .priority-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--accent-light);
+      border: 1px solid #ddd0b8;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent-hover);
+    }
 
-  .action-btn.approve:hover { background: var(--success-bg); border-color: #a8e6c1; color: var(--success); }
-  .action-btn.reject:hover  { background: var(--danger-bg);  border-color: #f0c4be; color: var(--danger);  }
-  .action-btn.del:hover     { background: var(--danger-bg);  border-color: #f0c4be; color: var(--danger);  }
+    /* STATUS BADGE */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 400;
+    }
 
-  /* INLINE APPROVE/REJECT BUTTONS */
-  .action-btn-text {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.15s ease;
-    font-family: 'DM Sans', sans-serif;
-  }
+    .status-badge.pending {
+      background: #fff8ec;
+      border: 1px solid #f0d98a;
+      color: #a07c10;
+    }
 
-  .action-btn-text.approve {
-    background: var(--success-bg);
-    border-color: #a8e6c1;
-    color: var(--success);
-  }
-  .action-btn-text.approve:hover { background: #d0f3e2; }
+    .status-badge.active {
+      background: var(--success-bg);
+      border: 1px solid #a8e6c1;
+      color: var(--success);
+    }
 
-  .action-btn-text.reject {
-    background: var(--danger-bg);
-    border-color: #f0c4be;
-    color: var(--danger);
-  }
-  .action-btn-text.reject:hover { background: #fae2de; }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
 
-  /* EMPTY STATE */
-  .empty-state {
-    text-align: center;
-    padding: 56px 32px;
-    color: var(--text-secondary);
-  }
+    /* ACTIONS CELL */
+    .actions-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
 
-  .empty-state svg { margin-bottom: 16px; opacity: 0.35; }
-  .empty-state p { font-size: 14px; font-weight: 300; }
+    .action-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: var(--text-secondary);
+    }
 
-  /* MODAL OVERLAY */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(28,26,23,0.45);
-    backdrop-filter: blur(4px);
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.22s ease;
-  }
+    .action-btn.approve:hover {
+      background: var(--success-bg);
+      border-color: #a8e6c1;
+      color: var(--success);
+    }
 
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .action-btn.reject:hover {
+      background: var(--danger-bg);
+      border-color: #f0c4be;
+      color: var(--danger);
+    }
 
-  .modal {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    width: 100%;
-    max-width: 440px;
-    box-shadow: 0 20px 60px rgba(28,26,23,0.18);
-    transform: translateY(20px) scale(0.97);
-    transition: transform 0.22s ease;
-  }
+    .action-btn.del:hover {
+      background: var(--danger-bg);
+      border-color: #f0c4be;
+      color: var(--danger);
+    }
 
-  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    /* INLINE APPROVE/REJECT BUTTONS */
+    .action-btn-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
 
-  .modal-del-body {
-    padding: 32px 28px 12px;
-    text-align: center;
-  }
+    .action-btn-text.approve {
+      background: var(--success-bg);
+      border-color: #a8e6c1;
+      color: var(--success);
+    }
 
-  .del-icon-wrap {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-  }
+    .action-btn-text.approve:hover {
+      background: #d0f3e2;
+    }
 
-  .del-icon-wrap.danger { background: var(--danger-bg); color: var(--danger); }
-  .del-icon-wrap.success { background: var(--success-bg); color: var(--success); }
+    .action-btn-text.reject {
+      background: var(--danger-bg);
+      border-color: #f0c4be;
+      color: var(--danger);
+    }
 
-  .modal-del-body h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
+    .action-btn-text.reject:hover {
+      background: #fae2de;
+    }
 
-  .modal-del-body p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    line-height: 1.6;
-  }
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 56px 32px;
+      color: var(--text-secondary);
+    }
 
-  .modal-del-footer {
-    display: flex;
-    gap: 10px;
-    padding: 20px 28px 28px;
-    justify-content: center;
-  }
+    .empty-state svg {
+      margin-bottom: 16px;
+      opacity: 0.35;
+    }
 
-  .btn-cancel {
-    padding: 10px 22px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    color: var(--text-primary);
-    transition: all 0.15s ease;
-  }
-  .btn-cancel:hover { background: var(--btn-hover); }
+    .empty-state p {
+      font-size: 14px;
+      font-weight: 300;
+    }
 
-  .btn-delete {
-    padding: 10px 22px;
-    background: var(--danger);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-delete:hover { background: #a93226; }
+    /* MODAL OVERLAY */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 23, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
 
-  .btn-approve {
-    padding: 10px 22px;
-    background: var(--success);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-approve:hover { background: #219150; }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 400;
-    background: var(--text-primary);
-    color: #fff;
-    padding: 13px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    box-shadow: 0 8px 24px rgba(28,26,23,0.2);
-    transform: translateY(16px);
-    opacity: 0;
-    transition: all 0.25s ease;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast.success svg { color: #6fcf97; }
-  .toast.error svg { color: #eb5757; }
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 60px rgba(28, 26, 23, 0.18);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.22s ease;
+    }
 
-  /* ANIMATION */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
 
-  @media (max-width: 900px) {
-    nav { padding: 0 24px; }
-    main { padding: 40px 24px 60px; }
-    .action-btn-text span { display: none; }
-    .action-btn-text { padding: 6px 10px; }
-  }
+    .modal-del-body {
+      padding: 32px 28px 12px;
+      text-align: center;
+    }
 
-  @media (max-width: 600px) {
-    .nav-links { display: none; }
-  }
-</style>
+    .del-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .del-icon-wrap.danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .del-icon-wrap.success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .modal-del-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .modal-del-body p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .modal-del-footer {
+      display: flex;
+      gap: 10px;
+      padding: 20px 28px 28px;
+      justify-content: center;
+    }
+
+    .btn-cancel {
+      padding: 10px 22px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+
+    .btn-cancel:hover {
+      background: var(--btn-hover);
+    }
+
+    .btn-delete {
+      padding: 10px 22px;
+      background: var(--danger);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete:hover {
+      background: #a93226;
+    }
+
+    .btn-approve {
+      padding: 10px 22px;
+      background: var(--success);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-approve:hover {
+      background: #219150;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 400;
+      background: var(--text-primary);
+      color: #fff;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.2);
+      transform: translateY(16px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success svg {
+      color: #6fcf97;
+    }
+
+    .toast.error svg {
+      color: #eb5757;
+    }
+
+    /* ANIMATION */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 0 24px;
+      }
+
+      main {
+        padding: 40px 24px 60px;
+      }
+
+      .action-btn-text span {
+        display: none;
+      }
+
+      .action-btn-text {
+        padding: 6px 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="logo" href="giver-dashboard.html">
-    <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;">
-    Giver
-  </a>
-  <ul class="nav-links">
-    <li><a href="giver-dashboard.html">
-      <img src="icon-dashboard.png" style="width:15px;height:15px;object-fit:contain;">
-      Dashboard
-    </a></li>
-    <li><a href="giver-manage-gifts.html">
-      <img src="icon-gifts.png" style="width:15px;height:15px;object-fit:contain;">
-      Gifts
-    </a></li>
-    <li><a href="giver-manage-categories.html">
-      <img src="icon-categories.png" style="width:15px;height:15px;object-fit:contain;">
-      Categories
-    </a></li>
-    <li><a href="giver-manage-rules.html">
-      <img src="icon-rules.png" style="width:15px;height:15px;object-fit:contain;">
-      Rules
-    </a></li>
-    <li><a href="giver-manage-vocabulary.html">
-      <img src="icon-vocabulary.png" style="width:15px;height:15px;object-fit:contain;">
-      Vocabulary
-    </a></li>
-    <li><a href="giver-manage-admin.html" class="active">
-      <img src="icon-admin.png" style="width:15px;height:15px;object-fit:contain;">
-      Admin
-    </a></li>
-    <li><a href="#" onclick="logout()">
-      <img src="icon-logout.png" style="width:15px;height:15px;object-fit:contain;">
-      Logout
-    </a></li>
-  </ul>
-</nav>
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="giver-dashboard.html">
+      <img src="surprise(1).png" style="width:32px;height:32px;object-fit:contain;">
+      Giver
+    </a>
+    <ul class="nav-links">
+      <li><a href="giver-dashboard.html">
+          <img src="icon-dashboard.png" style="width:15px;height:15px;object-fit:contain;">
+          Dashboard
+        </a></li>
+      <li><a href="giver-manage-gifts.html">
+          <img src="icon-gifts.png" style="width:15px;height:15px;object-fit:contain;">
+          Gifts
+        </a></li>
+      <li><a href="giver-manage-categories.html">
+          <img src="icon-categories.png" style="width:15px;height:15px;object-fit:contain;">
+          Categories
+        </a></li>
+      <li><a href="giver-manage-rules.html">
+          <img src="icon-rules.png" style="width:15px;height:15px;object-fit:contain;">
+          Rules
+        </a></li>
+      <li><a href="giver-manage-vocabulary.html">
+          <img src="icon-vocabulary.png" style="width:15px;height:15px;object-fit:contain;">
+          Vocabulary
+        </a></li>
+      <li><a href="giver-manage-admin.html" class="active">
+          <img src="icon-admin.png" style="width:15px;height:15px;object-fit:contain;">
+          Admin
+        </a></li>
+      <li><a href="#" onclick="logout()">
+          <img src="icon-logout.png" style="width:15px;height:15px;object-fit:contain;">
+          Logout
+        </a></li>
+    </ul>
+  </nav>
 
-<main>
-  <!-- PAGE HEADER -->
-  <div class="page-header">
-    <h1>Manage Admin</h1>
-    <p>Confirm Requests Admin Register</p>
+  <main>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1>Manage Admin</h1>
+      <p>Confirm Requests Admin Register</p>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="applySearch()">
+    </div>
+
+    <!-- ACTIVE ADMINS TABLE -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <h2 id="adminTableTitle">All Admin (0)</h2>
+        <p>Active Admin</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+      <div class="empty-state" id="adminEmpty" style="display:none;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" />
+        </svg>
+        <p>No admins found.</p>
+      </div>
+    </div>
+
+    <!-- REQUESTS TABLE -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <h2 id="reqTableTitle">All Requests (0)</h2>
+        <p>Requests Lists</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reqTableBody"></tbody>
+      </table>
+      <div class="empty-state" id="reqEmpty" style="display:none;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <path d="M9 12h6M12 9v6" />
+        </svg>
+        <p>No pending requests.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- DELETE ADMIN MODAL -->
+  <div class="modal-overlay" id="deleteAdminModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap danger">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </div>
+        <h3>Remove Admin</h3>
+        <p>Are you sure you want to remove <strong id="deleteAdminName"></strong>?<br>They will lose admin access.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteAdminModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmDeleteAdmin()">Remove</button>
+      </div>
+    </div>
   </div>
 
-  <!-- SEARCH -->
-  <div class="search-wrap">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  <!-- REJECT REQUEST MODAL -->
+  <div class="modal-overlay" id="rejectModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap danger">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="9" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+        </div>
+        <h3>Reject Request</h3>
+        <p>Are you sure you want to reject <strong id="rejectReqName"></strong>?<br>This will deny their admin access.
+        </p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('rejectModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmReject()">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROVE REQUEST MODAL -->
+  <div class="modal-overlay" id="approveModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap success">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="9" />
+            <polyline points="8 12 11 15 16 9" />
+          </svg>
+        </div>
+        <h3>Approve Request</h3>
+        <p>Grant admin access to <strong id="approveReqName"></strong>?<br>They will be able to manage the system.</p>
+      </div>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('approveModal')">Cancel</button>
+        <button class="btn-approve" onclick="confirmApprove()">Approve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12" />
     </svg>
-    <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="applySearch()">
+    <span id="toastMsg"></span>
   </div>
 
-  <!-- ACTIVE ADMINS TABLE -->
-  <div class="table-card">
-    <div class="table-card-header">
-      <h2 id="adminTableTitle">All Admin (0)</h2>
-      <p>Active Admin</p>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Priority</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="adminTableBody"></tbody>
-    </table>
-    <div class="empty-state" id="adminEmpty" style="display:none;">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/>
-      </svg>
-      <p>No admins found.</p>
-    </div>
-  </div>
+  <script>
+    /* ─── CONFIG ─── */
+    const API_BASE = 'https://gift-recommendation-system-dqbx.onrender.com';
 
-  <!-- REQUESTS TABLE -->
-  <div class="table-card">
-    <div class="table-card-header">
-      <h2 id="reqTableTitle">All Requests (0)</h2>
-      <p>Requests Lists</p>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="reqTableBody"></tbody>
-    </table>
-    <div class="empty-state" id="reqEmpty" style="display:none;">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/>
-      </svg>
-      <p>No pending requests.</p>
-    </div>
-  </div>
-</main>
+    /* ─── AUTH CHECK ─── */
+    const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
+    if (!user || !user.role) window.location.href = 'login_register_page.html';
+    if (user.role !== 'admin') window.location.href = 'user-home.html';
 
-<!-- DELETE ADMIN MODAL -->
-<div class="modal-overlay" id="deleteAdminModal">
-  <div class="modal">
-    <div class="modal-del-body">
-      <div class="del-icon-wrap danger">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
-        </svg>
-      </div>
-      <h3>Remove Admin</h3>
-      <p>Are you sure you want to remove <strong id="deleteAdminName"></strong>?<br>They will lose admin access.</p>
-    </div>
-    <div class="modal-del-footer">
-      <button class="btn-cancel" onclick="closeModal('deleteAdminModal')">Cancel</button>
-      <button class="btn-delete" onclick="confirmDeleteAdmin()">Remove</button>
-    </div>
-  </div>
-</div>
+    /* ─── STATE ─── */
+    let admins = [];
+    let requests = [];
+    let deletingAdminId = null;
+    let rejectingReqId = null;
+    let approvingReqId = null;
+    let searchQuery = '';
 
-<!-- REJECT REQUEST MODAL -->
-<div class="modal-overlay" id="rejectModal">
-  <div class="modal">
-    <div class="modal-del-body">
-      <div class="del-icon-wrap danger">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <circle cx="12" cy="12" r="9"/>
-          <line x1="15" y1="9" x2="9" y2="15"/>
-          <line x1="9" y1="9" x2="15" y2="15"/>
-        </svg>
-      </div>
-      <h3>Reject Request</h3>
-      <p>Are you sure you want to reject <strong id="rejectReqName"></strong>?<br>This will deny their admin access.</p>
-    </div>
-    <div class="modal-del-footer">
-      <button class="btn-cancel" onclick="closeModal('rejectModal')">Cancel</button>
-      <button class="btn-delete" onclick="confirmReject()">Reject</button>
-    </div>
-  </div>
-</div>
-
-<!-- APPROVE REQUEST MODAL -->
-<div class="modal-overlay" id="approveModal">
-  <div class="modal">
-    <div class="modal-del-body">
-      <div class="del-icon-wrap success">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <circle cx="12" cy="12" r="9"/>
-          <polyline points="8 12 11 15 16 9"/>
-        </svg>
-      </div>
-      <h3>Approve Request</h3>
-      <p>Grant admin access to <strong id="approveReqName"></strong>?<br>They will be able to manage the system.</p>
-    </div>
-    <div class="modal-del-footer">
-      <button class="btn-cancel" onclick="closeModal('approveModal')">Cancel</button>
-      <button class="btn-approve" onclick="confirmApprove()">Approve</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <polyline points="20 6 9 17 4 12"/>
-  </svg>
-  <span id="toastMsg"></span>
-</div>
-
-<script>
-  /* ─── CONFIG ─── */
-  const API_BASE = 'https://gift-recommendation-system-dqbx.onrender.com';
-
-  /* ─── AUTH CHECK ─── */
-  const user = JSON.parse(sessionStorage.getItem('giver_user') || '{}');
-  if (!user || !user.role) window.location.href = 'login_register_page.html';
-  if (user.role !== 'admin') window.location.href = 'user-home.html';
-
-  /* ─── STATE ─── */
-  let admins          = [];
-  let requests        = [];
-  let deletingAdminId = null;
-  let rejectingReqId  = null;
-  let approvingReqId  = null;
-  let searchQuery     = '';
-
-  /* ─── FETCH DATA FROM API ─── */
-  async function loadAll() {
-    setTableLoading('adminTableBody', 4);
-    setTableLoading('reqTableBody', 4);
-    try {
-      const [adminsRes, reqsRes] = await Promise.all([
-        fetch(`${API_BASE}/api/admin/list`),
-        fetch(`${API_BASE}/api/admin/requests`)
-      ]);
-      admins   = adminsRes.ok   ? await adminsRes.json()  : [];
-      requests = reqsRes.ok     ? await reqsRes.json()    : [];
-    } catch(e) {
-      showToast('Cannot connect to server.', 'error');
-      admins   = [];
-      requests = [];
+    /* ─── FETCH DATA FROM API ─── */
+    async function loadAll() {
+      setTableLoading('adminTableBody', 4);
+      setTableLoading('reqTableBody', 4);
+      try {
+        const [adminsRes, reqsRes] = await Promise.all([
+          fetch(`${API_BASE}/api/admin/list`),
+          fetch(`${API_BASE}/api/admin/requests`)
+        ]);
+        admins = adminsRes.ok ? await adminsRes.json() : [];
+        requests = reqsRes.ok ? await reqsRes.json() : [];
+      } catch (e) {
+        showToast('Cannot connect to server.', 'error');
+        admins = [];
+        requests = [];
+      }
+      renderAdmins();
+      renderRequests();
     }
-    renderAdmins();
-    renderRequests();
-  }
 
-  /* ─── LOADING SKELETON ─── */
-  function setTableLoading(tbodyId, cols) {
-    const tbody = document.getElementById(tbodyId);
-    tbody.innerHTML = Array(3).fill(`
+    /* ─── LOADING SKELETON ─── */
+    function setTableLoading(tbodyId, cols) {
+      const tbody = document.getElementById(tbodyId);
+      tbody.innerHTML = Array(3).fill(`
       <tr>
         ${Array(cols).fill(`<td><span style="display:inline-block;width:80%;height:14px;background:#e8e2d8;border-radius:4px;"></span></td>`).join('')}
       </tr>
     `).join('');
-  }
-
-  /* ─── RENDER ADMINS ─── */
-  function renderAdmins() {
-    const tbody = document.getElementById('adminTableBody');
-    const empty = document.getElementById('adminEmpty');
-    const title = document.getElementById('adminTableTitle');
-
-    const q = searchQuery.toLowerCase();
-    const filtered = admins.filter(a =>
-      (a.name || '').toLowerCase().includes(q) ||
-      (a.email || '').toLowerCase().includes(q)
-    );
-
-    title.textContent = `All Admin (${filtered.length})`;
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = '';
-      empty.style.display = 'block';
-      return;
     }
-    empty.style.display = 'none';
 
-    tbody.innerHTML = filtered.map((a, idx) => `
+    /* ─── RENDER ADMINS ─── */
+    function renderAdmins() {
+      const tbody = document.getElementById('adminTableBody');
+      const empty = document.getElementById('adminEmpty');
+      const title = document.getElementById('adminTableTitle');
+
+      const q = searchQuery.toLowerCase();
+      const filtered = admins.filter(a =>
+        (a.name || '').toLowerCase().includes(q) ||
+        (a.email || '').toLowerCase().includes(q)
+      );
+
+      title.textContent = `All Admin (${filtered.length})`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      tbody.innerHTML = filtered.map((a, idx) => `
       <tr>
         <td><span class="priority-badge">${idx + 1}</span></td>
         <td style="font-weight:500;">${escHtml(a.name)}</td>
@@ -736,30 +866,30 @@
         </td>
       </tr>
     `).join('');
-  }
-
-  /* ─── RENDER REQUESTS ─── */
-  function renderRequests() {
-    const tbody = document.getElementById('reqTableBody');
-    const empty = document.getElementById('reqEmpty');
-    const title = document.getElementById('reqTableTitle');
-
-    const q = searchQuery.toLowerCase();
-    const filtered = requests.filter(r =>
-      (r.name || '').toLowerCase().includes(q) ||
-      (r.email || '').toLowerCase().includes(q)
-    );
-
-    title.textContent = `All Requests (${filtered.length})`;
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = '';
-      empty.style.display = 'block';
-      return;
     }
-    empty.style.display = 'none';
 
-    tbody.innerHTML = filtered.map(r => `
+    /* ─── RENDER REQUESTS ─── */
+    function renderRequests() {
+      const tbody = document.getElementById('reqTableBody');
+      const empty = document.getElementById('reqEmpty');
+      const title = document.getElementById('reqTableTitle');
+
+      const q = searchQuery.toLowerCase();
+      const filtered = requests.filter(r =>
+        (r.name || '').toLowerCase().includes(q) ||
+        (r.email || '').toLowerCase().includes(q)
+      );
+
+      title.textContent = `All Requests (${filtered.length})`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      tbody.innerHTML = filtered.map(r => `
       <tr>
         <td style="font-weight:500;">${escHtml(r.name)}</td>
         <td style="color:var(--text-secondary);">${escHtml(r.email)}</td>
@@ -778,367 +908,114 @@
         </td>
       </tr>
     `).join('');
-  }
-
-  /* ─── SEARCH ─── */
-  function applySearch() {
-    searchQuery = document.getElementById('searchInput').value;
-    renderAdmins();
-    renderRequests();
-  }
-
-  /* ─── DELETE / DEMOTE ADMIN ─── */
-  function openDeleteAdminModal(id, name) {
-    deletingAdminId = id;
-    document.getElementById('deleteAdminName').textContent = '"' + name + '"';
-    openModal('deleteAdminModal');
-  }
-
-  async function confirmDeleteAdmin() {
-    if (!deletingAdminId) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/demote/${deletingAdminId}`, { method: 'PUT' });
-      const data = await res.json();
-      if (!res.ok) { showToast(data.message || 'Error removing admin.', 'error'); return; }
-      showToast('Admin removed successfully.', 'success');
-      closeModal('deleteAdminModal');
-      await loadAll();
-    } catch(e) {
-      showToast('Cannot connect to server.', 'error');
     }
-  }
 
-  /* ─── APPROVE REQUEST ─── */
-  function openApproveModal(id, name) {
-    approvingReqId = id;
-    document.getElementById('approveReqName').textContent = '"' + name + '"';
-    openModal('approveModal');
-  }
-
-  async function confirmApprove() {
-    if (!approvingReqId) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/promote/${approvingReqId}`, { method: 'PUT' });
-      const data = await res.json();
-      if (!res.ok) { showToast(data.message || 'Error approving request.', 'error'); return; }
-      showToast('Request approved. Admin added.', 'success');
-      closeModal('approveModal');
-      await loadAll();
-    } catch(e) {
-      showToast('Cannot connect to server.', 'error');
+    /* ─── SEARCH ─── */
+    function applySearch() {
+      searchQuery = document.getElementById('searchInput').value;
+      renderAdmins();
+      renderRequests();
     }
-  }
 
-  /* ─── REJECT REQUEST ─── */
-  function openRejectModal(id, name) {
-    rejectingReqId = id;
-    document.getElementById('rejectReqName').textContent = '"' + name + '"';
-    openModal('rejectModal');
-  }
-
-  async function confirmReject() {
-    if (!rejectingReqId) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/reject/${rejectingReqId}`, { method: 'PUT' });
-      const data = await res.json();
-      if (!res.ok) { showToast(data.message || 'Error rejecting request.', 'error'); return; }
-      showToast('Request rejected.', 'success');
-      closeModal('rejectModal');
-      await loadAll();
-    } catch(e) {
-      showToast('Cannot connect to server.', 'error');
+    /* ─── DELETE / DEMOTE ADMIN ─── */
+    function openDeleteAdminModal(id, name) {
+      deletingAdminId = id;
+      document.getElementById('deleteAdminName').textContent = '"' + name + '"';
+      openModal('deleteAdminModal');
     }
-  }
 
-  /* ─── MODAL HELPERS ─── */
-  function openModal(id)  { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    async function confirmDeleteAdmin() {
+      if (!deletingAdminId) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/demote/${deletingAdminId}`, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.message || 'Error removing admin.', 'error'); return; }
+        showToast('Admin removed successfully.', 'success');
+        closeModal('deleteAdminModal');
+        await loadAll();
+      } catch (e) {
+        showToast('Cannot connect to server.', 'error');
+      }
+    }
 
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-  });
+    /* ─── APPROVE REQUEST ─── */
+    function openApproveModal(id, name) {
+      approvingReqId = id;
+      document.getElementById('approveReqName').textContent = '"' + name + '"';
+      openModal('approveModal');
+    }
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
-  });
+    async function confirmApprove() {
+      if (!approvingReqId) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/promote/${approvingReqId}`, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.message || 'Error approving request.', 'error'); return; }
+        showToast('Request approved. Admin added.', 'success');
+        closeModal('approveModal');
+        await loadAll();
+      } catch (e) {
+        showToast('Cannot connect to server.', 'error');
+      }
+    }
 
-  /* ─── TOAST ─── */
-  let toastTimer;
-  function showToast(msg, type = 'success') {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    toast.className = 'toast ' + type + ' show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
+    /* ─── REJECT REQUEST ─── */
+    function openRejectModal(id, name) {
+      rejectingReqId = id;
+      document.getElementById('rejectReqName').textContent = '"' + name + '"';
+      openModal('rejectModal');
+    }
 
-  /* ─── UTILS ─── */
-  function escHtml(str) {
-    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+    async function confirmReject() {
+      if (!rejectingReqId) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/reject/${rejectingReqId}`, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.message || 'Error rejecting request.', 'error'); return; }
+        showToast('Request rejected.', 'success');
+        closeModal('rejectModal');
+        await loadAll();
+      } catch (e) {
+        showToast('Cannot connect to server.', 'error');
+      }
+    }
 
-  function logout() {
-    sessionStorage.removeItem('giver_user');
-    window.location.href = 'login_register_page.html';
-  }
+    /* ─── MODAL HELPERS ─── */
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-  /* ─── INIT ─── */
-  loadAll();
-</script>
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+      el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
+    });
+
+    /* ─── TOAST ─── */
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.className = 'toast ' + type + ' show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    /* ─── UTILS ─── */
+    function escHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function logout() {
+      sessionStorage.removeItem('giver_user');
+      window.location.href = 'login_register_page.html';
+    }
+
+    /* ─── INIT ─── */
+    loadAll();
+  </script>
 
 </body>
-</html>
 
-
-  /* ─── STORAGE KEYS ─── */
-  const ADMINS_KEY   = 'giver_admins';
-  const REQUESTS_KEY = 'giver_admin_requests';
-
-  /* ─── DEFAULT ADMIN DATA ─── */
-  const DEFAULT_ADMINS = [
-    { id: 1, name: 'Mark',    email: 'mark@admin.com',    priority: 1, createdAt: '2025-01-01' },
-    { id: 2, name: 'adminwfh', email: 'adminwfh@admin.com', priority: 2, createdAt: '2025-01-02' },
-  ];
-
-  /* ─── LOAD / SAVE ─── */
-  function loadAdmins() {
-    try {
-      const raw = localStorage.getItem(ADMINS_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch(e) {}
-    localStorage.setItem(ADMINS_KEY, JSON.stringify(DEFAULT_ADMINS));
-    return [...DEFAULT_ADMINS];
-  }
-
-  function saveAdmins() {
-    localStorage.setItem(ADMINS_KEY, JSON.stringify(admins));
-  }
-
-  function loadRequests() {
-    try {
-      const raw = localStorage.getItem(REQUESTS_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch(e) {}
-    // Seed demo request
-    const demo = [
-      { id: 101, name: 'Alice',  email: 'alice@example.com',  status: 'pending', requestedAt: '2025-06-01' },
-    ];
-    localStorage.setItem(REQUESTS_KEY, JSON.stringify(demo));
-    return demo;
-  }
-
-  function saveRequests() {
-    localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
-  }
-
-  let admins   = loadAdmins();
-  let requests = loadRequests();
-  let deletingAdminId  = null;
-  let rejectingReqId   = null;
-  let approvingReqId   = null;
-  let searchQuery      = '';
-
-  /* ─── RENDER ADMINS ─── */
-  function renderAdmins() {
-    const tbody = document.getElementById('adminTableBody');
-    const empty = document.getElementById('adminEmpty');
-    const title = document.getElementById('adminTableTitle');
-
-    const q = searchQuery.toLowerCase();
-    const filtered = admins.filter(a =>
-      a.name.toLowerCase().includes(q) || a.email.toLowerCase().includes(q)
-    );
-
-    // Re-assign priority display (sorted by priority)
-    filtered.sort((a, b) => a.priority - b.priority);
-
-    title.textContent = `All Admin (${filtered.length})`;
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-
-    tbody.innerHTML = filtered.map((a, idx) => `
-      <tr>
-        <td><span class="priority-badge">${idx + 1}</span></td>
-        <td style="font-weight:500;">${escHtml(a.name)}</td>
-        <td style="color:var(--text-secondary);">${escHtml(a.email)}</td>
-        <td>
-          <div class="actions-cell">
-            <button class="action-btn del" title="Remove admin" onclick="openDeleteAdminModal(${a.id})">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
-              </svg>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-  /* ─── RENDER REQUESTS ─── */
-  function renderRequests() {
-    const tbody = document.getElementById('reqTableBody');
-    const empty = document.getElementById('reqEmpty');
-    const title = document.getElementById('reqTableTitle');
-
-    const q = searchQuery.toLowerCase();
-    const filtered = requests.filter(r =>
-      r.name.toLowerCase().includes(q) || r.email.toLowerCase().includes(q)
-    );
-
-    title.textContent = `All Requests (${filtered.length})`;
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-
-    tbody.innerHTML = filtered.map(r => {
-      const isPending = r.status === 'pending';
-      const statusBadge = isPending
-        ? `<span class="status-badge pending"><span class="status-dot"></span>Pending</span>`
-        : `<span class="status-badge active"><span class="status-dot"></span>Approved</span>`;
-
-      const actions = isPending
-        ? `<div class="actions-cell">
-            <button class="action-btn-text approve" onclick="openApproveModal(${r.id})">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Approve</span>
-            </button>
-            <button class="action-btn-text reject" onclick="openRejectModal(${r.id})">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              <span>Reject</span>
-            </button>
-           </div>`
-        : `<div class="actions-cell" style="color:var(--text-secondary);font-size:13px;">Approved</div>`;
-
-      return `
-        <tr>
-          <td style="font-weight:500;">${escHtml(r.name)}</td>
-          <td style="color:var(--text-secondary);">${escHtml(r.email)}</td>
-          <td>${statusBadge}</td>
-          <td>${actions}</td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  /* ─── SEARCH ─── */
-  function applySearch() {
-    searchQuery = document.getElementById('searchInput').value;
-    renderAdmins();
-    renderRequests();
-  }
-
-  /* ─── DELETE ADMIN ─── */
-  function openDeleteAdminModal(id) {
-    deletingAdminId = id;
-    const a = admins.find(x => x.id === id);
-    document.getElementById('deleteAdminName').textContent = '"' + a.name + '"';
-    openModal('deleteAdminModal');
-  }
-
-  function confirmDeleteAdmin() {
-    admins = admins.filter(x => x.id !== deletingAdminId);
-    // Reassign priorities
-    admins.forEach((a, i) => a.priority = i + 1);
-    saveAdmins();
-    closeModal('deleteAdminModal');
-    renderAdmins();
-    showToast('Admin removed successfully.', 'success');
-  }
-
-  /* ─── APPROVE REQUEST ─── */
-  function openApproveModal(id) {
-    approvingReqId = id;
-    const r = requests.find(x => x.id === id);
-    document.getElementById('approveReqName').textContent = '"' + r.name + '"';
-    openModal('approveModal');
-  }
-
-  function confirmApprove() {
-    const req = requests.find(x => x.id === approvingReqId);
-    if (req) {
-      req.status = 'approved';
-      // Add to admins list
-      const nextId = admins.length ? Math.max(...admins.map(a => a.id)) + 1 : 1;
-      const nextPriority = admins.length + 1;
-      admins.push({
-        id: nextId,
-        name: req.name,
-        email: req.email,
-        priority: nextPriority,
-        createdAt: new Date().toISOString().split('T')[0]
-      });
-      saveAdmins();
-      saveRequests();
-    }
-    closeModal('approveModal');
-    renderAdmins();
-    renderRequests();
-    showToast('Request approved. Admin added.', 'success');
-  }
-
-  /* ─── REJECT REQUEST ─── */
-  function openRejectModal(id) {
-    rejectingReqId = id;
-    const r = requests.find(x => x.id === id);
-    document.getElementById('rejectReqName').textContent = '"' + r.name + '"';
-    openModal('rejectModal');
-  }
-
-  function confirmReject() {
-    requests = requests.filter(x => x.id !== rejectingReqId);
-    saveRequests();
-    closeModal('rejectModal');
-    renderRequests();
-    showToast('Request rejected.', 'success');
-  }
-
-  /* ─── MODAL HELPERS ─── */
-  function openModal(id)  { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
-  });
-
-  /* ─── TOAST ─── */
-  let toastTimer;
-  function showToast(msg, type = 'success') {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    toast.className = 'toast ' + type + ' show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
-
-  /* ─── UTILS ─── */
-  function escHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function logout() {
-    sessionStorage.removeItem('giver_user');
-    window.location.href = 'login_register_page.html';
-  }
-
-  /* ─── INIT ─── */
-  renderAdmins();
-  renderRequests();
-</script>
-
-</body>
 </html>
