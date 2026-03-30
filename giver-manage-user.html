@@ -28,7 +28,9 @@
       --success-bg: #eafaf1;
     }
 
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -88,9 +90,20 @@
       transition: all 0.18s ease;
     }
 
-    .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
-    .nav-links a.active { color: var(--accent); font-weight: 500; }
-    .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
+
+    .nav-links a.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .nav-links li:last-child a:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
 
     /* MAIN */
     main {
@@ -149,7 +162,10 @@
       transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .search-input::placeholder { color: var(--text-secondary); }
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
+
     .search-input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
@@ -176,8 +192,18 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    .filter-tab:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent-hover); }
-    .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+    .filter-tab:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-hover);
+    }
+
+    .filter-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 500;
+    }
 
     /* TABLE CARD */
     .table-card {
@@ -211,7 +237,10 @@
     }
 
     /* TABLE */
-    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
 
     table {
       width: 100%;
@@ -231,16 +260,27 @@
       border-bottom: 1px solid var(--border);
     }
 
-    thead th:first-child { padding-left: 32px; }
-    thead th:last-child { padding-right: 32px; text-align: right; }
+    thead th:first-child {
+      padding-left: 32px;
+    }
+
+    thead th:last-child {
+      padding-right: 32px;
+      text-align: right;
+    }
 
     tbody tr {
       border-bottom: 1px solid var(--border);
       transition: background 0.15s ease;
     }
 
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #f7f4ef; }
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #f7f4ef;
+    }
 
     tbody td {
       padding: 16px 16px;
@@ -248,8 +288,13 @@
       vertical-align: middle;
     }
 
-    tbody td:first-child { padding-left: 32px; }
-    tbody td:last-child { padding-right: 32px; }
+    tbody td:first-child {
+      padding-left: 32px;
+    }
+
+    tbody td:last-child {
+      padding-right: 32px;
+    }
 
     /* AVATAR */
     .user-avatar {
@@ -274,8 +319,14 @@
       gap: 12px;
     }
 
-    .user-name { font-weight: 500; }
-    .user-username { font-size: 12px; color: var(--text-secondary); }
+    .user-name {
+      font-weight: 500;
+    }
+
+    .user-username {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
 
     /* ROLE BADGE */
     .role-badge {
@@ -354,8 +405,15 @@
       color: var(--text-secondary);
     }
 
-    .empty-state svg { margin-bottom: 16px; opacity: 0.35; }
-    .empty-state p { font-size: 14px; font-weight: 300; }
+    .empty-state svg {
+      margin-bottom: 16px;
+      opacity: 0.35;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      font-weight: 300;
+    }
 
     /* MODAL OVERLAY */
     .modal-overlay {
@@ -373,7 +431,10 @@
       transition: opacity 0.22s ease;
     }
 
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
 
     .modal {
       background: var(--card-bg);
@@ -386,7 +447,9 @@
       transition: transform 0.22s ease;
     }
 
-    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
 
     .modal-del-body {
       padding: 32px 28px 12px;
@@ -403,8 +466,15 @@
       margin: 0 auto 16px;
     }
 
-    .del-icon-wrap.danger { background: var(--danger-bg); color: var(--danger); }
-    .del-icon-wrap.promote-icon { background: var(--accent-light); color: var(--accent-hover); }
+    .del-icon-wrap.danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .del-icon-wrap.promote-icon {
+      background: var(--accent-light);
+      color: var(--accent-hover);
+    }
 
     .modal-del-body h3 {
       font-family: 'Cormorant Garamond', serif;
@@ -439,7 +509,9 @@
       transition: all 0.15s ease;
     }
 
-    .btn-cancel:hover { background: var(--btn-hover); }
+    .btn-cancel:hover {
+      background: var(--btn-hover);
+    }
 
     .btn-delete {
       padding: 10px 22px;
@@ -454,7 +526,9 @@
       transition: all 0.15s ease;
     }
 
-    .btn-delete:hover { background: #a93226; }
+    .btn-delete:hover {
+      background: #a93226;
+    }
 
     .btn-promote {
       padding: 10px 22px;
@@ -469,7 +543,9 @@
       transition: all 0.15s ease;
     }
 
-    .btn-promote:hover { background: var(--accent-hover); }
+    .btn-promote:hover {
+      background: var(--accent-hover);
+    }
 
     /* TOAST */
     .toast {
@@ -492,24 +568,50 @@
       pointer-events: none;
     }
 
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .toast.success svg { color: #6fcf97; }
-    .toast.error svg { color: #eb5757; }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success svg {
+      color: #6fcf97;
+    }
+
+    .toast.error svg {
+      color: #eb5757;
+    }
 
     /* ANIMATION */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 900px) {
-      nav { padding: 0 24px; }
-      main { padding: 40px 24px 60px; }
+      nav {
+        padding: 0 24px;
+      }
+
+      main {
+        padding: 40px 24px 60px;
+      }
     }
 
     @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .filter-tabs { flex-wrap: wrap; }
+      .nav-links {
+        display: none;
+      }
+
+      .filter-tabs {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -524,15 +626,15 @@
     </a>
     <ul class="nav-links">
       <li><a href="giver-dashboard.html">
-          <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/home.png" style="width:15px;height:15px;object-fit:contain;">
           Dashboard
         </a></li>
       <li><a href="giver-manage-gifts.html">
-          <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;">
           Gifts
         </a></li>
       <li><a href="giver-manage-categories.html">
-          <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;">
           Categories
         </a></li>
       <li><a href="giver-manage-rules.html">
@@ -544,15 +646,15 @@
           Vocabulary
         </a></li>
       <li><a href="giver-manage-admin.html">
-          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;">
           Admin
         </a></li>
       <li><a href="giver-manage-user.html" class="active">
-          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;">
           Users
         </a></li>
       <li><a href="#" onclick="logout()">
-          <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;">
+          <img src="icon/enter.png" style="width:15px;height:15px;object-fit:contain;">
           Logout
         </a></li>
     </ul>
@@ -567,8 +669,8 @@
 
     <!-- SEARCH -->
     <div class="search-wrap">
-      <img src="icon/group (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
-      <input type="text" class="search-input" placeholder="Search by name, username or email…" id="searchInput" oninput="applyFilter()">
+      <input type="text" class="search-input" placeholder="Search by name, username or email…" id="searchInput"
+        oninput="applyFilter()">
     </div>
 
 
@@ -705,15 +807,15 @@
 
       tbody.innerHTML = filtered.map((u, idx) => {
         const initial = (u.name || u.username || '?')[0];
-        const isSelf  = u._id === sessionUser.id;
+        const isSelf = u._id === sessionUser.id;
 
         const promoteBtn = `<button class="action-btn promote" title="Promote to Admin" onclick="openPromoteModal('${u._id}','${escHtml(u.name)}')">
-               <img src="icon/enter (1).png" style="width:14px;height:14px;object-fit:contain;" alt="icon">
+               <img src="icon/group (1).png" style="width:14px;height:14px;object-fit:contain;" alt="icon">
              </button>`;
 
         const deleteBtn = !isSelf
           ? `<button class="action-btn del" title="Delete user" onclick="openDeleteModal('${u._id}','${escHtml(u.name)}')">
-               <img src="icon/group (1).png" style="width:14px;height:14px;object-fit:contain;" alt="icon">
+               <img src="icon/delete.png" style="width:14px;height:14px;object-fit:contain;" alt="icon">
              </button>`
           : '';
 
@@ -794,7 +896,7 @@
 
 
     /* ─── MODAL HELPERS ─── */
-    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
     document.querySelectorAll('.modal-overlay').forEach(el => {

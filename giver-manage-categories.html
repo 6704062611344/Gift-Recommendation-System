@@ -1,591 +1,697 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giver — Manage Categories</title>
-<link rel="icon" href="icon/surprise (1).png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ece4;
-    --card-bg: #faf8f4;
-    --border: #e2ddd5;
-    --text-primary: #1c1a17;
-    --text-secondary: #7a7268;
-    --accent: #b8965a;
-    --accent-light: #e8dcc8;
-    --accent-hover: #9a7a44;
-    --btn-bg: #ede8df;
-    --btn-hover: #e0d9cd;
-    --shadow: 0 1px 3px rgba(28,26,23,0.06), 0 4px 16px rgba(28,26,23,0.04);
-    --shadow-hover: 0 4px 12px rgba(28,26,23,0.1), 0 16px 40px rgba(28,26,23,0.08);
-    --danger: #c0392b;
-    --danger-bg: #fdf0ee;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giver — Manage Categories</title>
+  <link rel="icon" href="icon/surprise (1).png" type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ece4;
+      --card-bg: #faf8f4;
+      --border: #e2ddd5;
+      --text-primary: #1c1a17;
+      --text-secondary: #7a7268;
+      --accent: #b8965a;
+      --accent-light: #e8dcc8;
+      --accent-hover: #9a7a44;
+      --btn-bg: #ede8df;
+      --btn-hover: #e0d9cd;
+      --shadow: 0 1px 3px rgba(28, 26, 23, 0.06), 0 4px 16px rgba(28, 26, 23, 0.04);
+      --shadow-hover: 0 4px 12px rgba(28, 26, 23, 0.1), 0 16px 40px rgba(28, 26, 23, 0.08);
+      --danger: #c0392b;
+      --danger-bg: #fdf0ee;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+    }
 
-  /* NAV */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 200;
-  }
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
 
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    list-style: none;
-  }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
 
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.18s ease;
-  }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
 
-  .nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
-  .nav-links a.active { color: var(--accent); font-weight: 500; }
-  .nav-links li:last-child a:hover { color: var(--danger); background: var(--danger-bg); }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
 
-  /* MAIN */
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 56px 48px 80px;
-  }
+    .nav-links a.active {
+      color: var(--accent);
+      font-weight: 500;
+    }
 
-  .page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 32px;
-    animation: fadeUp 0.4s ease both;
-  }
+    .nav-links li:last-child a:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
 
-  .page-header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-  }
+    /* MAIN */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 48px 80px;
+    }
 
-  .page-header p {
-    color: var(--text-secondary);
-    margin-top: 6px;
-    font-size: 15px;
-    font-weight: 300;
-  }
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s ease both;
+    }
 
-  .add-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 12px 22px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
 
-  .add-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,150,90,0.3); }
+    .page-header p {
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 300;
+    }
 
-  /* SEARCH */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 32px;
-    animation: fadeUp 0.4s ease 0.05s both;
-  }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
 
-  .search-wrap svg {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    pointer-events: none;
-  }
+    .add-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184, 150, 90, 0.3);
+    }
 
-  .search-input {
-    width: 100%;
-    padding: 13px 16px 13px 44px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
-  }
+    /* SEARCH */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s ease 0.05s both;
+    }
 
-  .search-input::placeholder { color: var(--text-secondary); }
-  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,150,90,0.12); }
+    .search-wrap svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
 
-  /* GRID */
-  .categories-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    animation: fadeUp 0.4s ease 0.1s both;
-  }
+    .search-input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
 
-  /* CATEGORY CARD */
-  .cat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px 24px 22px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-  }
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
 
-  .cat-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-    border-color: var(--accent-light);
-  }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
 
-  .cat-info { flex: 1; min-width: 0; }
+    /* GRID */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      animation: fadeUp 0.4s ease 0.1s both;
+    }
 
-  .cat-name {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-  }
+    /* CATEGORY CARD */
+    .cat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 24px 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
 
-  .cat-desc {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 300;
-  }
+    .cat-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: var(--accent-light);
+    }
 
-  .cat-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+    .cat-info {
+      flex: 1;
+      min-width: 0;
+    }
 
-  .action-btn {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
+    .cat-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
 
-  .action-btn.edit:hover { background: var(--accent-light); border-color: var(--accent); }
-  .action-btn.del:hover { background: var(--danger-bg); border-color: #f0c4be; }
+    .cat-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
 
-  /* EMPTY */
-  .empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 64px 32px;
-    color: var(--text-secondary);
-  }
-  .empty-state p { font-size: 14px; font-weight: 300; margin-top: 12px; }
+    .cat-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
 
-  /* MODAL */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(28,26,23,0.45);
-    backdrop-filter: blur(4px);
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.22s ease;
-  }
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
 
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .action-btn.edit:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
 
-  .modal {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    width: 100%;
-    max-width: 460px;
-    box-shadow: 0 20px 60px rgba(28,26,23,0.18);
-    transform: translateY(20px) scale(0.97);
-    transition: transform 0.22s ease;
-  }
+    .action-btn.del:hover {
+      background: var(--danger-bg);
+      border-color: #f0c4be;
+    }
 
-  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    /* EMPTY */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--text-secondary);
+    }
 
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 28px 20px;
-    border-bottom: 1px solid var(--border);
-  }
+    .empty-state p {
+      font-size: 14px;
+      font-weight: 300;
+      margin-top: 12px;
+    }
 
-  .modal-header h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-  }
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 23, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
 
-  .modal-close {
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
-    border: none; background: var(--btn-bg);
-    border-radius: 8px; cursor: pointer; color: var(--text-secondary);
-    transition: all 0.15s ease;
-  }
-  .modal-close:hover { background: var(--btn-hover); color: var(--text-primary); }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; }
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 20px 60px rgba(28, 26, 23, 0.18);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.22s ease;
+    }
 
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
 
-  .form-label {
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--text-secondary);
-  }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+    }
 
-  .form-input, .form-textarea {
-    width: 100%;
-    padding: 11px 14px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.18s, box-shadow 0.18s;
-  }
+    .modal-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+    }
 
-  .form-textarea { resize: vertical; min-height: 80px; }
-  .form-input:focus, .form-textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(184,150,90,0.12);
-  }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--btn-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+    }
 
-  .modal-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 16px 28px 24px;
-  }
+    .modal-close:hover {
+      background: var(--btn-hover);
+      color: var(--text-primary);
+    }
 
-  .btn-cancel {
-    padding: 10px 20px;
-    background: var(--btn-bg);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    color: var(--text-primary);
-    transition: all 0.15s ease;
-  }
-  .btn-cancel:hover { background: var(--btn-hover); }
+    .modal-body {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
 
-  .btn-save {
-    padding: 10px 22px;
-    background: var(--accent);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-save:hover { background: var(--accent-hover); }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-  /* DELETE MODAL */
-  .modal-del-body {
-    padding: 28px 28px 8px;
-    text-align: center;
-  }
+    .form-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-secondary);
+    }
 
-  .del-icon-wrap {
-    width: 56px; height: 56px;
-    background: var(--danger-bg);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-    color: var(--danger);
-  }
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
 
-  .modal-del-body h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
 
-  .modal-del-body p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 300;
-    line-height: 1.6;
-  }
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 150, 90, 0.12);
+    }
 
-  .modal-del-footer {
-    display: flex;
-    gap: 10px;
-    padding: 20px 28px 28px;
-    justify-content: center;
-  }
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 28px 24px;
+    }
 
-  .btn-delete {
-    padding: 10px 22px;
-    background: var(--danger);
-    border: none;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .btn-delete:hover { background: #a93226; }
+    .btn-cancel {
+      padding: 10px 20px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
 
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 400;
-    background: var(--text-primary);
-    color: #fff;
-    padding: 13px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    box-shadow: 0 8px 24px rgba(28,26,23,0.2);
-    transform: translateY(16px);
-    opacity: 0;
-    transition: all 0.25s ease;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+    .btn-cancel:hover {
+      background: var(--btn-hover);
+    }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .btn-save {
+      padding: 10px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
 
-  @media (max-width: 768px) {
-    .categories-grid { grid-template-columns: 1fr; }
-    nav { padding: 0 24px; }
-    main { padding: 40px 24px 60px; }
-  }
-</style>
+    .btn-save:hover {
+      background: var(--accent-hover);
+    }
+
+    /* DELETE MODAL */
+    .modal-del-body {
+      padding: 28px 28px 8px;
+      text-align: center;
+    }
+
+    .del-icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: var(--danger-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--danger);
+    }
+
+    .modal-del-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .modal-del-body p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .modal-del-footer {
+      display: flex;
+      gap: 10px;
+      padding: 20px 28px 28px;
+      justify-content: center;
+    }
+
+    .btn-delete {
+      padding: 10px 22px;
+      background: var(--danger);
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete:hover {
+      background: #a93226;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 400;
+      background: var(--text-primary);
+      color: #fff;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.2);
+      transform: translateY(16px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        padding: 0 24px;
+      }
+
+      main {
+        padding: 40px 24px 60px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<nav>
-  <a class="logo" href="giver-dashboard.html">
-    <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;">
-    Giver
-  </a>
-  <ul class="nav-links">
-    <li><a href="giver-dashboard.html">
-      <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Dashboard
-    </a></li>
-    <li><a href="giver-manage-gifts.html">
-      <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Gifts
-    </a></li>
-    <li><a href="giver-manage-categories.html" class="active">
-      <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;">
-      Categories
-    </a></li>
-    <li><a href="giver-manage-rules.html">
-      <img src="icon/setting (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Rules
-    </a></li>
-    <li><a href="giver-manage-vocabulary.html">
-      <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;">
-      Vocabulary
-    </a></li>
-    <li><a href="giver-manage-admin.html">
-      <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Admin
-    </a></li>
-    <li><a href="giver-manage-user.html">
-      <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Users
-    </a></li>
-    <li><a href="#" onclick="logout()">
-      <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;">
-      Logout
-    </a></li>
-  </ul>
-</nav>
+  <nav>
+    <a class="logo" href="giver-dashboard.html">
+      <img src="icon/surprise (1).png" style="width:32px;height:32px;object-fit:contain;">
+      Giver
+    </a>
+    <ul class="nav-links">
+      <li><a href="giver-dashboard.html">
+          <img src="icon/home.png" style="width:15px;height:15px;object-fit:contain;">
+          Dashboard
+        </a></li>
+      <li><a href="giver-manage-gifts.html">
+          <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;">
+          Gifts
+        </a></li>
+      <li><a href="giver-manage-categories.html" class="active">
+          <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;">
+          Categories
+        </a></li>
+      <li><a href="giver-manage-rules.html">
+          <img src="icon/setting (1).png" style="width:15px;height:15px;object-fit:contain;">
+          Rules
+        </a></li>
+      <li><a href="giver-manage-vocabulary.html">
+          <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;">
+          Vocabulary
+        </a></li>
+      <li><a href="giver-manage-admin.html">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;">
+          Admin
+        </a></li>
+      <li><a href="giver-manage-user.html">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;">
+          Users
+        </a></li>
+      <li><a href="#" onclick="logout()">
+          <img src="icon/enter.png" style="width:15px;height:15px;object-fit:contain;">
+          Logout
+        </a></li>
+    </ul>
+  </nav>
 
-<main>
-  <div class="page-header">
-    <div>
-      <h1>Manage Categories</h1>
-      <p>Organize gifts into categories</p>
-    </div>
-    <button class="add-btn" onclick="openAddModal()">
-      <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
-      Add Categories
-    </button>
-  </div>
-
-  <div class="search-wrap">
-    <img src="icon/categories.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
-    <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="filterCategories()">
-  </div>
-
-  <div class="categories-grid" id="categoriesGrid"></div>
-</main>
-
-<!-- ADD/EDIT MODAL -->
-<div class="modal-overlay" id="catModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="modalTitle">Add Category</h3>
-      <button class="modal-close" onclick="closeModal('catModal')">
-        <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+  <main>
+    <div class="page-header">
+      <div>
+        <h1>Manage Categories</h1>
+        <p>Organize gifts into categories</p>
+      </div>
+      <button class="add-btn" onclick="openAddModal()">
+        <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        Add Categories
       </button>
     </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Category ID</label>
-        <input type="text" class="form-input" id="catId" placeholder="e.g. C01">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Category Name</label>
-        <input type="text" class="form-input" id="catName" placeholder="e.g. Electronics">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="catDesc" placeholder="Describe this category..."></textarea>
-      </div>
+
+    <div class="search-wrap">
+      <input type="text" class="search-input" placeholder="Search" id="searchInput" oninput="filterCategories()">
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal('catModal')">Cancel</button>
-      <button class="btn-save" onclick="saveCategory()">Save</button>
+
+    <div class="categories-grid" id="categoriesGrid"></div>
+  </main>
+
+  <!-- ADD/EDIT MODAL -->
+  <div class="modal-overlay" id="catModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add Category</h3>
+        <button class="modal-close" onclick="closeModal('catModal')">
+          <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Category ID</label>
+          <input type="text" class="form-input" id="catId" placeholder="e.g. C01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category Name</label>
+          <input type="text" class="form-input" id="catName" placeholder="e.g. Electronics">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="catDesc" placeholder="Describe this category..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('catModal')">Cancel</button>
+        <button class="btn-save" onclick="saveCategory()">Save</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- DELETE MODAL -->
-<div class="modal-overlay" id="deleteModal">
-  <div class="modal">
-    <div class="modal-del-body">
-      <div class="del-icon-wrap">
-        <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-del-body">
+        <div class="del-icon-wrap">
+          <img src="icon/surprise (1).png" style="width:24px;height:24px;object-fit:contain;" alt="icon">
+        </div>
+        <h3>Delete Category</h3>
+        <p>Are you sure you want to delete <strong id="deleteCatName"></strong>?<br>This action cannot be undone.</p>
       </div>
-      <h3>Delete Category</h3>
-      <p>Are you sure you want to delete <strong id="deleteCatName"></strong>?<br>This action cannot be undone.</p>
-    </div>
-    <div class="modal-del-footer">
-      <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
-      <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      <div class="modal-del-footer">
+        <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <img src="icon/delete.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
-  <span id="toastMsg"></span>
-</div>
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <img src="icon/delete.png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
+    <span id="toastMsg"></span>
+  </div>
 
-<script>
-  const API = '/api/categories';
-  let allCategories = [];
-  let editingId = null;
-  let deletingId = null;
+  <script>
+    const API = '/api/categories';
+    let allCategories = [];
+    let editingId = null;
+    let deletingId = null;
 
-  // ── Fetch & Render ──────────────────────────────────────────────────────────
-  async function loadCategories() {
-    try {
-      const res = await fetch(API);
-      allCategories = await res.json();
-      renderGrid(allCategories);
-    } catch (err) {
-      showToast('ไม่สามารถโหลดข้อมูลได้', 'error');
+    // ── Fetch & Render ──────────────────────────────────────────────────────────
+    async function loadCategories() {
+      try {
+        const res = await fetch(API);
+        allCategories = await res.json();
+        renderGrid(allCategories);
+      } catch (err) {
+        showToast('ไม่สามารถโหลดข้อมูลได้', 'error');
+      }
     }
-  }
 
-  function renderGrid(data) {
-    const grid = document.getElementById('categoriesGrid');
-    if (!data.length) {
-      grid.innerHTML = `<div class="empty-state"><img src="icon/categories.png" style="width:40px;height:40px;object-fit:contain;" alt="icon"><p>No categories found.</p></div>`;
-      return;
-    }
-    grid.innerHTML = data.map(c => `
+    function renderGrid(data) {
+      const grid = document.getElementById('categoriesGrid');
+      if (!data.length) {
+        grid.innerHTML = `<div class="empty-state"><img src="icon/categories.png" style="width:40px;height:40px;object-fit:contain;" alt="icon"><p>No categories found.</p></div>`;
+        return;
+      }
+      grid.innerHTML = data.map(c => `
       <div class="cat-card">
         <div class="cat-info">
           <div class="cat-name">${c.category_name} <span style="font-size:12px;color:var(--text-secondary);font-weight:300;">(${c.category_id})</span></div>
@@ -601,110 +707,111 @@
         </div>
       </div>
     `).join('');
-  }
+    }
 
-  function filterCategories() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    renderGrid(allCategories.filter(c =>
-      (c.category_name || '').toLowerCase().includes(q) ||
-      (c.category_description || '').toLowerCase().includes(q) ||
-      (c.category_id || '').toLowerCase().includes(q)
-    ));
-  }
+    function filterCategories() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      renderGrid(allCategories.filter(c =>
+        (c.category_name || '').toLowerCase().includes(q) ||
+        (c.category_description || '').toLowerCase().includes(q) ||
+        (c.category_id || '').toLowerCase().includes(q)
+      ));
+    }
 
-  // ── Add/Edit Modal ──────────────────────────────────────────────────────────
-  function openAddModal() {
-    editingId = null;
-    document.getElementById('modalTitle').textContent = 'Add Category';
-    document.getElementById('catId').value = '';
-    document.getElementById('catId').disabled = false;
-    document.getElementById('catName').value = '';
-    document.getElementById('catDesc').value = '';
-    openModal('catModal');
-  }
+    // ── Add/Edit Modal ──────────────────────────────────────────────────────────
+    function openAddModal() {
+      editingId = null;
+      document.getElementById('modalTitle').textContent = 'Add Category';
+      document.getElementById('catId').value = '';
+      document.getElementById('catId').disabled = false;
+      document.getElementById('catName').value = '';
+      document.getElementById('catDesc').value = '';
+      openModal('catModal');
+    }
 
-  function openEditModal(id) {
-    editingId = id;
-    const c = allCategories.find(x => x._id === id);
-    document.getElementById('modalTitle').textContent = 'Edit Category';
-    document.getElementById('catId').value = c.category_id;
-    document.getElementById('catId').disabled = true; // ไม่ให้แก้ ID
-    document.getElementById('catName').value = c.category_name;
-    document.getElementById('catDesc').value = c.category_description || '';
-    openModal('catModal');
-  }
+    function openEditModal(id) {
+      editingId = id;
+      const c = allCategories.find(x => x._id === id);
+      document.getElementById('modalTitle').textContent = 'Edit Category';
+      document.getElementById('catId').value = c.category_id;
+      document.getElementById('catId').disabled = true; // ไม่ให้แก้ ID
+      document.getElementById('catName').value = c.category_name;
+      document.getElementById('catDesc').value = c.category_description || '';
+      openModal('catModal');
+    }
 
-  async function saveCategory() {
-    const category_id   = document.getElementById('catId').value.trim();
-    const category_name = document.getElementById('catName').value.trim();
-    const category_description = document.getElementById('catDesc').value.trim();
-    if (!category_name) { showToast('กรุณากรอกชื่อ Category', 'error'); return; }
+    async function saveCategory() {
+      const category_id = document.getElementById('catId').value.trim();
+      const category_name = document.getElementById('catName').value.trim();
+      const category_description = document.getElementById('catDesc').value.trim();
+      if (!category_name) { showToast('กรุณากรอกชื่อ Category', 'error'); return; }
 
-    try {
-      if (editingId) {
-        await fetch(`${API}/${editingId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category_name, category_description })
-        });
-        showToast('อัปเดต Category สำเร็จ');
-      } else {
-        if (!category_id) { showToast('กรุณากรอก Category ID', 'error'); return; }
-        const res = await fetch(API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category_id, category_name, category_description })
-        });
-        if (!res.ok) { const d = await res.json(); showToast(d.message, 'error'); return; }
-        showToast('เพิ่ม Category สำเร็จ');
-      }
-      closeModal('catModal');
-      loadCategories();
-    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
-  }
+      try {
+        if (editingId) {
+          await fetch(`${API}/${editingId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category_name, category_description })
+          });
+          showToast('อัปเดต Category สำเร็จ');
+        } else {
+          if (!category_id) { showToast('กรุณากรอก Category ID', 'error'); return; }
+          const res = await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category_id, category_name, category_description })
+          });
+          if (!res.ok) { const d = await res.json(); showToast(d.message, 'error'); return; }
+          showToast('เพิ่ม Category สำเร็จ');
+        }
+        closeModal('catModal');
+        loadCategories();
+      } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
+    }
 
-  // ── Delete Modal ────────────────────────────────────────────────────────────
-  function openDeleteModal(id, name) {
-    deletingId = id;
-    document.getElementById('deleteCatName').textContent = `"${name}"`;
-    openModal('deleteModal');
-  }
+    // ── Delete Modal ────────────────────────────────────────────────────────────
+    function openDeleteModal(id, name) {
+      deletingId = id;
+      document.getElementById('deleteCatName').textContent = `"${name}"`;
+      openModal('deleteModal');
+    }
 
-  async function confirmDelete() {
-    try {
-      await fetch(`${API}/${deletingId}`, { method: 'DELETE' });
-      closeModal('deleteModal');
-      showToast('ลบ Category สำเร็จ');
-      loadCategories();
-    } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
-  }
+    async function confirmDelete() {
+      try {
+        await fetch(`${API}/${deletingId}`, { method: 'DELETE' });
+        closeModal('deleteModal');
+        showToast('ลบ Category สำเร็จ');
+        loadCategories();
+      } catch (err) { showToast('เกิดข้อผิดพลาด', 'error'); }
+    }
 
-  // ── Utilities ───────────────────────────────────────────────────────────────
-  function openModal(id) { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    // ── Utilities ───────────────────────────────────────────────────────────────
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-  document.querySelectorAll('.modal-overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
-  });
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+      el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(el => el.classList.remove('open'));
+    });
 
-  let toastTimer;
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    toast.className = 'toast show';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.className = 'toast show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
 
-  function logout() {
-    sessionStorage.removeItem('giver_user');
-    window.location.href = 'login_register_page.html';
-  }
+    function logout() {
+      sessionStorage.removeItem('giver_user');
+      window.location.href = 'login_register_page.html';
+    }
 
-  loadCategories();
-</script>
+    loadCategories();
+  </script>
 </body>
+
 </html>

@@ -739,15 +739,15 @@
     </a>
     <ul class="nav-links">
       <li><a href="giver-dashboard.html">
-          <img src="icon/home (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/home.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Dashboard
         </a></li>
       <li><a href="giver-manage-gifts.html">
-          <img src="icon/package (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/gift.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Gifts
         </a></li>
       <li><a href="giver-manage-categories.html">
-          <img src="icon/categories.png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/categories (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Categories
         </a></li>
       <li><a href="giver-manage-rules.html">
@@ -759,15 +759,15 @@
           Vocabulary
         </a></li>
       <li><a href="giver-manage-admin.html">
-          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Admin
         </a></li>
       <li><a href="giver-manage-user.html">
-          <img src="icon/group (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/group.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Users
         </a></li>
       <li><a href="#" onclick="logout()">
-          <img src="icon/enter (1).png" style="width:15px;height:15px;object-fit:contain;" alt="">
+          <img src="icon/enter.png" style="width:15px;height:15px;object-fit:contain;" alt="">
           Logout
         </a></li>
     </ul>
@@ -781,14 +781,13 @@
         <p>Define terms and synonyms for better matching</p>
       </div>
       <button class="add-btn" id="addTermBtn" onclick="openAddModal()">
-        <img src="icon/surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+        <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
         + Add Term
       </button>
     </div>
 
     <!-- SEARCH -->
     <div class="search-wrap">
-      <img src="icon/surprise (1).png" style="width:16px;height:16px;object-fit:contain;" alt="icon">
       <input type="text" class="search-input" id="searchInput" placeholder="Search" oninput="filterVocab()">
     </div>
 
@@ -818,7 +817,7 @@
       <div class="modal-header">
         <h3 id="modalTitle">Add Term</h3>
         <button class="modal-close" onclick="closeModal('termModal')">
-          <img src="icon/surprise (1).png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
+          <img src="icon/book.png" style="width:15px;height:15px;object-fit:contain;" alt="icon">
         </button>
       </div>
       <div class="modal-body">
@@ -891,7 +890,7 @@
       try {
         const res = await fetch('/api/categories');
         allCategories = await res.json();
-      } catch (e) {}
+      } catch (e) { }
     }
 
     function getCategoryName(id) {
